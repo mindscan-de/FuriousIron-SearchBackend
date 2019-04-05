@@ -1,6 +1,6 @@
 # FuriousIron-SearchBackend
 
-FuriousIron-SearchBackend is a simple search engine backend. At te moment this is a completely
+FuriousIron-SearchBackend is a simple search engine backend. At the moment this is a completely
 private educational project and not fit for any purpose whatsoever.
 
 ## The Idea
@@ -20,7 +20,9 @@ The FuriousIron-Frontend project needs a simple backend to provide search result
 the metadata and the content - which might move to a completely different project (Content-Delivery)).
 
 * Retrieve the queries
+* Query parsing
 * Answer queries with searchresults
+* (ranking - might be out of scope yet / might also not be done here but at a different step)
 * Content-Delivery
 ** Provide meta data on search results
 ** Provide content data on search results
