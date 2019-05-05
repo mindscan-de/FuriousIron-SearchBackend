@@ -15,7 +15,7 @@ stored on the disk, in order to implement a RESTful service for a complete searc
 main goal is to determine, what kind of forward and inverse indexes are required to build a 
 complete code search engine.
 
-Since I don't want to implement a web-server right now, I picked a technology, which i could
+Since I don't want to implement a web-server right now, so I picked a technology, which i could
 find a simple tutorial for.
 
 A big "Thank you!" goes to [o7planning.org](https://o7planning.org/de/11199/die-anleitung-zum-java-restful-web-services-fur-den-anfanger) for providing a useful tutorial.
@@ -49,6 +49,10 @@ I also like to defer unnecessary architectural decisions as long they do not nee
 do not expect me to provide a full architecture, or a full grown idea. It will either evolve or die.
 
 That said, please remember this is a private educational project.
+
+## Current URL
+
+http://localhost:8080/SearchBackend/rest/search/123
 
 ## License
 
