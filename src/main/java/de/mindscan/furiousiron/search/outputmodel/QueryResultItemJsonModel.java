@@ -36,7 +36,13 @@ public class QueryResultItemJsonModel {
     public QueryResultItemJsonModel( String queryResultSimpleFilename, String queryResultFilePath ) {
         this.queryResultSimpleFilename = queryResultSimpleFilename;
         this.queryResultFilePath = queryResultFilePath;
-
     }
 
+    public String getQueryResultSimpleFilename() {
+        return queryResultSimpleFilename;
+    }
+
+    public String getQueryResultFilePath() {
+        return queryResultFilePath;
+    }
 }
