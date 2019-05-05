@@ -26,9 +26,9 @@
 package de.mindscan.furiousiron.searchbackend;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.MatrixParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import com.google.gson.Gson;
 
@@ -43,7 +43,7 @@ public class SearchRESTfulService {
     @Path( "/result" )
     @GET
     @Produces( "application/json" )
-    public String getQueryResult_JSON( @MatrixParam( "q" ) String query ) {
+    public String getQueryResult_JSON( @QueryParam( "q" ) String query ) {
         QueryResultJsonModel result = new QueryResultJsonModel();
 
         System.out.println( "q:=" + query );
