@@ -5,14 +5,24 @@ private educational project and not fit for any purpose whatsoever.
 
 ## The Idea
 
-A Search-Frontend simply needs a Search-Backend, which provides the search frontend with some
-kind of content / answers. I could use a ready technology, but since I want to experiment a
-little, I decided to implement a SearchBackend on my own.
+The Search-Frontend (FuriousIron-Frontend) needs a Search-Backend, which provides the frontend 
+with some kind of search content/answers. I decided to give Jersey + Tomcat a try to provide a 
+RESTful API, since it seems to me to be the easiest solution to get the whole pipeline running.
+Later adjustments are a planned part of this journey.
 
-Neiher the architecture nor the technology is decided yet.
-
-The main goal is to determine what kind of forward and inverse indexes are required to implement
+The main goal of the SearchBackend is to make use of the inverse indexes and caches, that are
+stored on the disk, to implement a RESTful service, to implement a complete search engine. The
+main goal is to determine, what kind of forward and inverse indexes are required to implement
 a complete search engine.
+
+Since I don't want to implement a web-server right now, I picked a technology, which i could
+find a simple tutorial for.
+
+A big "Thank you!" goes to [o7planning.org](https://o7planning.org/de/11199/die-anleitung-zum-java-restful-web-services-fur-den-anfanger) for providing a useful tutorial.
+
+What I hope for is, either I will develop a code search engine, or make informed decisions on
+how to implement a code search engine using ready stacks, like ElasticSearch. But I also want
+to interface some ML components and I don't want to get stuck on a certain API and its behavior.
 
 ## MVP
 
@@ -24,8 +34,8 @@ the metadata and the content - which might move to a completely different projec
 * Answer queries with searchresults
 * (ranking - might be out of scope yet / might also not be done here but at a different step)
 * Content-Delivery
-** Provide meta data on search results
-** Provide content data on search results
+  * Provide meta data on search results
+  * Provide content data on search results
 * Works completely in memory and indexes are read on startup
 * Since this peoject is considered a proof of concept, i won't implement any type of persistence nor use Databases
 
