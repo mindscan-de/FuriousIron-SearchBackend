@@ -29,8 +29,10 @@ package de.mindscan.furiousiron.search.outputmodel;
  * 
  */
 public class QueryResultJsonModel {
-    private int numberOfQeueryResults = 2;
-    private QueryResultItemJsonModel[] queryResultItems = new QueryResultItemJsonModel[] { new QueryResultItemJsonModel( "README.md", "FuriousIron" ),
+    private int numberOfQeueryResults = 3;
+    private QueryResultItemJsonModel[] queryResultItems = new QueryResultItemJsonModel[] { //
+                    new QueryResultItemJsonModel( "README.md", "FuriousIron" ), //
+                    new QueryResultItemJsonModel( "HelloWorld.md", "FuriousIron-SearchBackend" ), //
                     new QueryResultItemJsonModel( "detail.component.ts.txt", "FuriousIron" ) };
 
 }
