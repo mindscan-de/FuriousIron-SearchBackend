@@ -25,31 +25,48 @@
  */
 package de.mindscan.furiousiron.searchbackend;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
+
 import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import com.google.gson.Gson;
 
+import de.mindscan.furiousiron.search.Search;
+import de.mindscan.furiousiron.search.SearchResultCandidates;
+import de.mindscan.furiousiron.search.outputmodel.QueryResultItemJsonModel;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultJsonModel;
 
 /**
  * 
  */
-@Path( "/search" )
+@javax.ws.rs.Path( "/search" )
 public class SearchRESTfulService {
 
-    @Path( "/result" )
+    // Example URL: http://localhost:8080/SearchBackend/rest/search/result?q=123
+    @javax.ws.rs.Path( "/result" )
     @GET
     @Produces( "application/json" )
     public String getQueryResult_JSON( @QueryParam( "q" ) String query ) {
-        QueryResultJsonModel result = new QueryResultJsonModel();
+        Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
+
+        Search search = new Search( indexFolder );
+
+        Collection<SearchResultCandidates> resultCandidates = search.search( query );
+
+        QueryResultJsonModel jsonResult = new QueryResultJsonModel();
+        for (SearchResultCandidates candidate : resultCandidates) {
+            jsonResult.addQueryResultItem(
+                            new QueryResultItemJsonModel( candidate.getMetadata().getSimpleFilename(), candidate.getMetadata().getRelativePath() ) );
+        }
 
         System.out.println( "q:=" + query );
 
         Gson gson = new Gson();
-        return gson.toJson( result );
+        return gson.toJson( jsonResult );
     }
 
     // @MatrixParam("q") String query

@@ -25,23 +25,27 @@
  */
 package de.mindscan.furiousiron.search.outputmodel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  */
 public class QueryResultJsonModel {
-    private int numberOfQeueryResults = 3;
 
-    private QueryResultItemJsonModel[] queryResultItems = new QueryResultItemJsonModel[] { //
-                    new QueryResultItemJsonModel( "README.md", "FuriousIron" ), //
-                    new QueryResultItemJsonModel( "HelloWorld.md", "FuriousIron-SearchBackend" ), //
-                    new QueryResultItemJsonModel( "detail.component.ts.txt", "FuriousIron" ) };
+    private int numberOfQeueryResults;
+    private List<QueryResultItemJsonModel> queryResultItems = new ArrayList<>();
 
     public int getNumberOfQeueryResults() {
         return numberOfQeueryResults;
     }
 
-    public QueryResultItemJsonModel[] getQueryResultItems() {
+    public List<QueryResultItemJsonModel> getQueryResultItems() {
         return queryResultItems;
     }
 
+    public void addQueryResultItem( QueryResultItemJsonModel item ) {
+        queryResultItems.add( item );
+        numberOfQeueryResults = queryResultItems.size();
+    }
 }

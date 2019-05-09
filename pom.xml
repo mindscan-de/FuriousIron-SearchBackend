@@ -15,13 +15,14 @@
   
   
   <dependencies>
-  
-<!--   	<dependency>
-  	  	<groupId>de.mindscan.furiousiron</groupId>
-  		<artifactId>FuriousIron-Indexer</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
- -->  	
+
+		<!--  run  'mvn2 install' on the Indexer Project before running this project. -->  
+	   	<dependency>
+	  	  	<groupId>de.mindscan.furiousiron</groupId>
+	  		<artifactId>FuriousIron-Indexer</artifactId>
+	  		<version>0.0.1-SNAPSHOT</version>
+	  	</dependency>
+  	
   		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
             <groupId>javax.servlet</groupId>
