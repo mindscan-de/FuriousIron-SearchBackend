@@ -25,9 +25,14 @@
  */
 package de.mindscan.furiousiron.searchbackend;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import de.mindscan.furiousiron.search.Search;
 
 /**
  * 
@@ -40,9 +45,10 @@ public class CachedContentRESTfulService {
     @Produces( "text/plain" )
     public String getCachedResult( @QueryParam( "p" ) String path ) {
 
-        System.out.println( "We should provide content of:" + path );
+        Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
 
-        return "Content could not be retrieved";
+        Search search = new Search( indexFolder );
+        return search.getDocumentContent( path );
     }
 
 }
