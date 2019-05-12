@@ -32,6 +32,8 @@ public class QueryResultItemJsonModel {
 
     private String queryResultSimpleFilename;
     private String queryResultFilePath;
+    private long numberOfLinesInFile;
+    private long fileSize;
 
     public QueryResultItemJsonModel( String queryResultSimpleFilename, String queryResultFilePath ) {
         this.queryResultSimpleFilename = queryResultSimpleFilename;
@@ -44,5 +46,21 @@ public class QueryResultItemJsonModel {
 
     public String getQueryResultFilePath() {
         return queryResultFilePath;
+    }
+
+    public long getNumberOfLinesInFile() {
+        return numberOfLinesInFile;
+    }
+
+    public void setNumberOfLinesInFile( long numberOfLinesInFile ) {
+        this.numberOfLinesInFile = numberOfLinesInFile;
+    }
+
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize( long fileSize ) {
+        this.fileSize = fileSize;
     }
 }

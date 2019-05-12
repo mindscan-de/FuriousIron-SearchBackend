@@ -35,6 +35,7 @@ import javax.ws.rs.QueryParam;
 
 import com.google.gson.Gson;
 
+import de.mindscan.furiousiron.document.DocumentMetadata;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultItemJsonModel;
@@ -57,16 +58,26 @@ public class SearchRESTfulService {
 
         Collection<SearchResultCandidates> resultCandidates = search.search( query );
 
-        QueryResultJsonModel jsonResult = new QueryResultJsonModel();
-        for (SearchResultCandidates candidate : resultCandidates) {
-            jsonResult.addQueryResultItem(
-                            new QueryResultItemJsonModel( candidate.getMetadata().getSimpleFilename(), candidate.getMetadata().getRelativePath() ) );
-        }
+        QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 
         System.out.println( "q:=" + query );
 
         Gson gson = new Gson();
         return gson.toJson( jsonResult );
+    }
+
+    private QueryResultJsonModel convertResultsToOutputModel( Collection<SearchResultCandidates> resultCandidates ) {
+        QueryResultJsonModel jsonResult = new QueryResultJsonModel();
+        for (SearchResultCandidates candidate : resultCandidates) {
+            DocumentMetadata metadata = candidate.getMetadata();
+
+            QueryResultItemJsonModel item = new QueryResultItemJsonModel( metadata.getSimpleFilename(), metadata.getRelativePath() );
+            item.setFileSize( metadata.getFileSize() );
+            item.setNumberOfLinesInFile( metadata.getNumberOfLines() );
+
+            jsonResult.addQueryResultItem( item );
+        }
+        return jsonResult;
     }
 
     // @MatrixParam("q") String query
