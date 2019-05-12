@@ -74,6 +74,7 @@ public class SearchRESTfulService {
             QueryResultItemJsonModel item = new QueryResultItemJsonModel( metadata.getSimpleFilename(), metadata.getRelativePath() );
             item.setFileSize( metadata.getFileSize() );
             item.setNumberOfLinesInFile( metadata.getNumberOfLines() );
+            item.setClassifierMap( metadata.getClassifierMap() );
 
             jsonResult.addQueryResultItem( item );
         }

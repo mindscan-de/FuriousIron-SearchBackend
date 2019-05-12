@@ -25,6 +25,9 @@
  */
 package de.mindscan.furiousiron.search.outputmodel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 
  */
@@ -34,10 +37,12 @@ public class QueryResultItemJsonModel {
     private String queryResultFilePath;
     private long numberOfLinesInFile;
     private long fileSize;
+    private Map<String, String> classifierMap;
 
     public QueryResultItemJsonModel( String queryResultSimpleFilename, String queryResultFilePath ) {
         this.queryResultSimpleFilename = queryResultSimpleFilename;
         this.queryResultFilePath = queryResultFilePath;
+        this.classifierMap = new HashMap<>();
     }
 
     public String getQueryResultSimpleFilename() {
@@ -62,5 +67,13 @@ public class QueryResultItemJsonModel {
 
     public void setFileSize( long fileSize ) {
         this.fileSize = fileSize;
+    }
+
+    public Map<String, String> getClassifierMap() {
+        return classifierMap;
+    }
+
+    public void setClassifierMap( Map<String, String> classifierMap ) {
+        this.classifierMap = classifierMap;
     }
 }
