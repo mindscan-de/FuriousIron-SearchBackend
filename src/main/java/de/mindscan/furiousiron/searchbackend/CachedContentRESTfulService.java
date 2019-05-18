@@ -49,10 +49,14 @@ public class CachedContentRESTfulService {
     @GET
     @Produces( "text/plain" )
     public String getCachedContent( @QueryParam( "p" ) String path ) {
-
         Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
 
         Search search = new Search( indexFolder );
+
+        // TODO: do not use exceptions for normal workflow, so that if the document is not avail, measures can be taken here...
+        // Maybe the getDocumentContent could provide an Optional, which means that the content is either available
+        // and if not, then another action must be taken, by this method
+
         return search.getDocumentContent( path );
     }
 
