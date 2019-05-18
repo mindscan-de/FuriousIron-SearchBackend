@@ -35,8 +35,8 @@ the metadata and the content - which might move to a completely different projec
 * Answer queries with searchresults
 * (ranking - might be out of scope yet / might also not be done here but at a different step)
 * Content-Delivery
-  * Provide meta data on search results
-  * Provide content data on search results
+  * Provide meta data on search results [Done]
+  * Provide content data on search results [Done]
 * Works completely in memory and indexes are read on startup
 * Since this project is considered a proof of concept, i won't implement any type of sophisticated persistence nor use Databases
 
