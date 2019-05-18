@@ -35,15 +35,20 @@ import javax.ws.rs.QueryParam;
 import de.mindscan.furiousiron.search.Search;
 
 /**
+ * This service provides cached content. 
+ * 
+ * The content is retrieved from the local document cache. This service is required for the ability of the 
+ * user to have a look at the document in the browser.
  * 
  */
 @javax.ws.rs.Path( "/cached" )
 public class CachedContentRESTfulService {
 
+    // example URL is: localhost:8081/SearchBackend/rest/cached/content/?p={THE PATH COMES HERE} 
     @javax.ws.rs.Path( "/content" )
     @GET
     @Produces( "text/plain" )
-    public String getCachedResult( @QueryParam( "p" ) String path ) {
+    public String getCachedContent( @QueryParam( "p" ) String path ) {
 
         Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
 
