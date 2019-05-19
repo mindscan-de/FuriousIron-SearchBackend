@@ -35,6 +35,8 @@ public class EmptyNode implements QueryNode {
 
     /** 
      * {@inheritDoc}
+     * 
+     * Always returns an empty String.
      */
     @Override
     public String getContent() {
@@ -43,6 +45,8 @@ public class EmptyNode implements QueryNode {
 
     /** 
      * {@inheritDoc}
+     * 
+     * Always returns false.
      */
     @Override
     public boolean hasChildren() {
@@ -51,6 +55,8 @@ public class EmptyNode implements QueryNode {
 
     /** 
      * {@inheritDoc}
+     * 
+     * Always returns an empty List.
      */
     @Override
     public Collection<QueryNode> getChildren() {
