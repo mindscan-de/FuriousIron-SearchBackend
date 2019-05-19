@@ -40,6 +40,8 @@ import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultItemJsonModel;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultJsonModel;
+import de.mindscan.furiousiron.search.query.ast.QueryNode;
+import de.mindscan.furiousiron.search.query.executor.QueryExecutor;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 
 /**
@@ -58,7 +60,8 @@ public class SearchRESTfulService {
         Search search = new Search( indexFolder );
 
         QueryParser queryParser = new QueryParser();
-        queryParser.parseQuery( query );
+        QueryNode parsedAST = queryParser.parseQuery( query );
+        QueryExecutor.execute( search, parsedAST );
 
         Collection<SearchResultCandidates> resultCandidates = search.search( query );
 
