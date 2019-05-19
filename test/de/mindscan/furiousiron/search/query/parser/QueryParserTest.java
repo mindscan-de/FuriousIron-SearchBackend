@@ -114,5 +114,17 @@ public class QueryParserTest {
         assertThat( content, equalTo( "test" ) );
     }
 
+//    @Test
+//    public void testParseQuery_StringContainsTwoWords_returnsAndNode() {
+//        // Arrange
+//        QueryParser queryParser = new QueryParser();
+//
+//        // Act
+//        QueryNode result = queryParser.parseQuery( "test elastic" );
+//
+//        // Assert
+//        assertThat( result, is( instanceOf( AndNode.class ) ) );
+//    }
+
 // tpxu_method
 }
