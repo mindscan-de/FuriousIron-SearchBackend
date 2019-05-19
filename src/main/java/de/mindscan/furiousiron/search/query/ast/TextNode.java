@@ -25,6 +25,9 @@
  */
 package de.mindscan.furiousiron.search.query.ast;
 
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * 
  */
@@ -46,6 +49,22 @@ public class TextNode implements QueryNode {
     @Override
     public String getContent() {
         return word;
+    }
+
+    /** 
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasChildren() {
+        return false;
+    }
+
+    /** 
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<QueryNode> getChildren() {
+        return Collections.emptyList();
     }
 
 }

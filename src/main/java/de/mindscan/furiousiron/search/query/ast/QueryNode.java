@@ -25,6 +25,8 @@
  */
 package de.mindscan.furiousiron.search.query.ast;
 
+import java.util.Collection;
+
 /**
  * 
  */
@@ -32,4 +34,7 @@ public interface QueryNode {
 
     String getContent();
 
+    boolean hasChildren();
+
+    Collection<QueryNode> getChildren();
 }
