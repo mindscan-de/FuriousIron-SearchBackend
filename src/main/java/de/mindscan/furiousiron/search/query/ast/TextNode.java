@@ -23,11 +23,11 @@
  * SOFTWARE.
  * 
  */
-package de.mindscan.furiousiron.search.queryparser.ast;
+package de.mindscan.furiousiron.search.query.ast;
 
 /**
  * 
  */
-public class EmptyNode {
+public class TextNode implements QueryNode {
 
 }

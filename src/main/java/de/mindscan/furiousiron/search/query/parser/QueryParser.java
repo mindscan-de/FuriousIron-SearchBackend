@@ -23,16 +23,21 @@
  * SOFTWARE.
  * 
  */
-package de.mindscan.furiousiron.search.queryparser;
+package de.mindscan.furiousiron.search.query.parser;
 
-import de.mindscan.furiousiron.search.queryparser.ast.EmptyNode;
+import de.mindscan.furiousiron.search.query.ast.EmptyNode;
+import de.mindscan.furiousiron.search.query.ast.QueryNode;
 
 /**
  * 
  */
 public class QueryParser {
 
-    public EmptyNode parse( String string ) {
+    public QueryNode parseQuery( String string ) {
+        if (string == null || string.isEmpty()) {
+            return new EmptyNode();
+        }
+
         return new EmptyNode();
     }
 

@@ -1,5 +1,5 @@
 /**
- *
+ * 
  * MIT License
  *
  * Copyright (c) 2019 Maxim Gansert, Mindscan
@@ -21,43 +21,13 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
+ * 
  */
+package de.mindscan.furiousiron.search.query.ast;
 
-package de.mindscan.furiousiron.search.queryparser;
-
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-import org.junit.Test;
-
-import de.mindscan.furiousiron.search.queryparser.ast.EmptyNode;
-
-public class QueryParserTest {
-
-    @Test
-    public void testParseQuery_emptyString_returnsEmptyNode() {
-        // Arrange
-        QueryParser queryParser = new QueryParser();
-
-        // Act
-        EmptyNode result = queryParser.parse( "" );
-
-        // Assert
-        assertThat( result, is( instanceOf( EmptyNode.class ) ) );
-    }
-
-    @Test
-    public void testParseQuery_nullAsString_returnsEmptyNode() {
-        // Arrange
-        QueryParser queryParser = new QueryParser();
-
-        // Act
-        EmptyNode result = queryParser.parse( null );
-
-        // Assert
-        assertThat( result, is( instanceOf( EmptyNode.class ) ) );
-    }
+/**
+ * 
+ */
+public interface QueryNode {
 
 }
