@@ -76,7 +76,7 @@ public class QueryParserTest {
     }
 
     @Test
-    public void testParseQuery_StringContainsWordTest_returnsTextNodeContainsHasWordTest() {
+    public void testParseQuery_StringContainsWordTest_returnsTextNodeHasWordTest() {
         // Arrange
         QueryParser queryParser = new QueryParser();
 
@@ -89,7 +89,7 @@ public class QueryParserTest {
     }
 
     @Test
-    public void testParseQuery_StringContainsWordDifferentWord_returnsTextNodeContainsHasWordTest() {
+    public void testParseQuery_StringContainsWordDifferentWord_returnsTextNodeContainingDifferentWord() {
         // Arrange
         QueryParser queryParser = new QueryParser();
 
@@ -99,6 +99,19 @@ public class QueryParserTest {
         // Assert
         String content = result.getContent();
         assertThat( content, equalTo( "differentword" ) );
+    }
+
+    @Test
+    public void testParseQuery_StringContainsWordTestWithSpaces_returnsTextNodeContainsHasWordTest() {
+        // Arrange
+        QueryParser queryParser = new QueryParser();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( " test " );
+
+        // Assert
+        String content = result.getContent();
+        assertThat( content, equalTo( "test" ) );
     }
 
 // tpxu_method
