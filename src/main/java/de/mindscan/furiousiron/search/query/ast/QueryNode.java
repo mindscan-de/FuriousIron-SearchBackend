@@ -30,4 +30,6 @@ package de.mindscan.furiousiron.search.query.ast;
  */
 public interface QueryNode {
 
+    String getContent();
+
 }
