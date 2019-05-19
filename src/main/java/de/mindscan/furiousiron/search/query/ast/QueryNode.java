@@ -34,6 +34,10 @@ public interface QueryNode {
 
     String getContent();
 
+    /**
+     * This method tells, whether this current QueryNode has children or not. 
+     * @return <code>true</code> iff getChildren is not empty
+     */
     boolean hasChildren();
 
     Collection<QueryNode> getChildren();
