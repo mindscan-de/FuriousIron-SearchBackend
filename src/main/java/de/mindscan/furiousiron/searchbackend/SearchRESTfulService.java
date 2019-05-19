@@ -61,9 +61,7 @@ public class SearchRESTfulService {
 
         QueryParser queryParser = new QueryParser();
         QueryNode parsedAST = queryParser.parseQuery( query );
-        QueryExecutor.execute( search, parsedAST );
-
-        Collection<SearchResultCandidates> resultCandidates = search.search( query );
+        Collection<SearchResultCandidates> resultCandidates = QueryExecutor.execute( search, parsedAST );
 
         QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 

@@ -25,20 +25,27 @@
  */
 package de.mindscan.furiousiron.search.query.executor;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import de.mindscan.furiousiron.search.Search;
+import de.mindscan.furiousiron.search.SearchResultCandidates;
+import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 
 /**
- * 
+ * This class will execute a query AST. 
  */
 public class QueryExecutor {
 
-    /**
-     * @param search
-     * @param parsedAST
-     */
-    public static void execute( Search search, QueryNode parsedAST ) {
+    public static Collection<SearchResultCandidates> execute( Search search, QueryNode parsedAST ) {
+        if (parsedAST instanceof EmptyNode) {
+            return Collections.emptyList();
+        }
 
+        Collection<SearchResultCandidates> resultCandidates = search.search( parsedAST.getContent() );
+
+        return resultCandidates;
     }
 
 }
