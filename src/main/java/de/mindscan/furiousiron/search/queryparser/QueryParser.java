@@ -32,10 +32,6 @@ import de.mindscan.furiousiron.search.queryparser.ast.EmptyNode;
  */
 public class QueryParser {
 
-    /**
-     * @param string
-     * @return 
-     */
     public EmptyNode parse( String string ) {
         return new EmptyNode();
     }
