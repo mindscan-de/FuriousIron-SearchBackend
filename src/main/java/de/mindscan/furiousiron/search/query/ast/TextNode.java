@@ -30,12 +30,22 @@ package de.mindscan.furiousiron.search.query.ast;
  */
 public class TextNode implements QueryNode {
 
+    private String word;
+
+    /**
+     * @param string
+     */
+    public TextNode( String word ) {
+        this.word = word;
+
+    }
+
     /** 
      * {@inheritDoc}
      */
     @Override
     public String getContent() {
-        return "test";
+        return word;
     }
 
 }

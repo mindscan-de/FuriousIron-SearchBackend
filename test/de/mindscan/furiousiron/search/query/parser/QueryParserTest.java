@@ -88,5 +88,18 @@ public class QueryParserTest {
         assertThat( content, equalTo( "test" ) );
     }
 
+    @Test
+    public void testParseQuery_StringContainsWordDifferentWord_returnsTextNodeContainsHasWordTest() {
+        // Arrange
+        QueryParser queryParser = new QueryParser();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "differentword" );
+
+        // Assert
+        String content = result.getContent();
+        assertThat( content, equalTo( "differentword" ) );
+    }
+
 // tpxu_method
 }

@@ -39,7 +39,7 @@ public class QueryParser {
             return new EmptyNode();
         }
 
-        return new TextNode();
+        return new TextNode( string );
     }
 
 }
