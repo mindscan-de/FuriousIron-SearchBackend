@@ -40,6 +40,7 @@ import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultItemJsonModel;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultJsonModel;
+import de.mindscan.furiousiron.search.query.parser.QueryParser;
 
 /**
  * 
@@ -55,6 +56,9 @@ public class SearchRESTfulService {
         Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
 
         Search search = new Search( indexFolder );
+
+        QueryParser queryParser = new QueryParser();
+        queryParser.parseQuery( query );
 
         Collection<SearchResultCandidates> resultCandidates = search.search( query );
 
