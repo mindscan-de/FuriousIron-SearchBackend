@@ -27,17 +27,17 @@ behavior.
 
 ## MVP
 
-The FuriousIron-Frontend project needs a simple backend to provide search results (and probably 
+The FuriousIron-Front-end project needs a simple backend to provide search results (and probably 
 the metadata and the content - which might move to a completely different project (Content-Delivery)).
 
-* Retrieve the queries
+* Retrieve the queries [Done]
 * Query parsing
-* Answer queries with searchresults
+* Answer queries with search-results [Done]
 * (ranking - might be out of scope yet / might also not be done here but at a different step)
 * Content-Delivery
   * Provide meta data on search results [Done]
   * Provide content data on search results [Done]
-* Works completely in memory and indexes are read on startup
+* Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 * Since this project is considered a proof of concept, i won't implement any type of sophisticated persistence nor use Databases
 
 Simplicity is key. Because you can change a minimal product much faster and adapt that to your needs,
@@ -52,7 +52,7 @@ That said, please remember this is a private educational project.
 
 ## Current URL
 
-http://localhost:8080/SearchBackend/rest/search/123
+http://localhost:8080/SearchBackend/rest/search/result?q=123
 
 ## License
 
