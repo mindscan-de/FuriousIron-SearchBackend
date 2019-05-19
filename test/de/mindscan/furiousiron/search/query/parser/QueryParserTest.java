@@ -34,6 +34,7 @@ import org.junit.Test;
 
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
+import de.mindscan.furiousiron.search.query.ast.TextNode;
 
 public class QueryParserTest {
 
@@ -61,17 +62,17 @@ public class QueryParserTest {
         assertThat( result, is( instanceOf( EmptyNode.class ) ) );
     }
 
-//    @Test
-//    public void testParseQuery_StringContainsWordTest_returnsTextNode() {
-//        // Arrange
-//        QueryParser queryParser = new QueryParser();
-//
-//        // Act
-//        QueryNode result = queryParser.parseQuery( "test" );
-//
-//        // Assert
-//        assertThat( result, is( instanceOf( TextNode.class ) ) );
-//    }
+    @Test
+    public void testParseQuery_StringContainsWordTest_returnsTextNode() {
+        // Arrange
+        QueryParser queryParser = new QueryParser();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "test" );
+
+        // Assert
+        assertThat( result, is( instanceOf( TextNode.class ) ) );
+    }
 
 // tpxu_method
 }

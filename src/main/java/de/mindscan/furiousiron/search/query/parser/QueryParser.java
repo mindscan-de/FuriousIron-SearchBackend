@@ -27,6 +27,7 @@ package de.mindscan.furiousiron.search.query.parser;
 
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
+import de.mindscan.furiousiron.search.query.ast.TextNode;
 
 /**
  * 
@@ -38,7 +39,7 @@ public class QueryParser {
             return new EmptyNode();
         }
 
-        return new EmptyNode();
+        return new TextNode();
     }
 
 }
