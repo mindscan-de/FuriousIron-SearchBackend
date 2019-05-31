@@ -31,6 +31,7 @@ import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.tokenizer.QueryToken;
+import de.mindscan.furiousiron.search.query.tokenizer.QueryTokenizer;
 import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
 
 /**
@@ -43,10 +44,7 @@ public class QueryParser {
             return new EmptyNode();
         }
 
-        // List<QueryToken> tokenizedQuery = QueryTokenizer.tokenize( queryString );
-        // return parseQueryTokens(tokenizedQuery);
-
-        return new TextNode( queryString.trim() );
+        return parseQueryTokens( QueryTokenizer.tokenize( queryString ) );
     }
 
     public QueryNode parseQueryTokens( List<QueryToken> tokenizedQuery ) {
