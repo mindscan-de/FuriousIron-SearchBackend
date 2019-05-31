@@ -51,6 +51,14 @@ public class QueryTokenizer {
         for (int index = 0; index < charsAsArray.length; index++) {
             char currentChar = charsAsArray[index];
 
+            // if in exact text mode and not quote
+            // - just add char to currentToken and proceed with next char
+            // if in exact text mode and is quote
+            // - end current token and save proceed with next char
+            // if not in exact text mode and is quote
+            // - set new current token and proceed with next char
+            // else
+
             if (isWhiteSpace( currentChar )) {
                 processResult( result, currentToken );
                 currentToken = null;
