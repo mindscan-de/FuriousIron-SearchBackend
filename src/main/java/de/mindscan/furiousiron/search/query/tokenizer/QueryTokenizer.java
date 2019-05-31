@@ -76,11 +76,16 @@ public class QueryTokenizer {
 
             if (Character.isLetterOrDigit( currentChar ) || Character.isIdeographic( currentChar )) {
                 if (currentToken == null) {
-                    // create a new CurrentToken
-
+                    currentToken = new TextQueryToken();
                 }
+
+                // add currentChar to the currentToken
+                currentToken.addChar( currentChar );
             }
         }
+
+        processResult( result, currentToken );
+        currentToken = null;
 
         return result;
     }

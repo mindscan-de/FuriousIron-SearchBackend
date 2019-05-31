@@ -25,15 +25,29 @@
  */
 package de.mindscan.furiousiron.search.query.tokenizer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  */
-public interface QueryToken {
+public class TextQueryToken implements QueryToken {
+
+    List<Character> queryData;
 
     /**
-     * @param currentChar
+     * 
      */
-    default void addChar( char currentChar ) {
+    public TextQueryToken() {
+        queryData = new ArrayList<>();
+    }
+
+    /** 
+     * {@inheritDoc}
+     */
+    @Override
+    public void addChar( char currentChar ) {
+        queryData.add( currentChar );
     }
 
 }

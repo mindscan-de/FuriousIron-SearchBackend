@@ -67,4 +67,37 @@ public class QueryTokenizerTest {
         assertThat( result, contains( instanceOf( MinusQueryToken.class ) ) );
     }
 
+    @Test
+    public void testTokenize_containsOneWord_ListContainsATextQueryToken() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = QueryTokenizer.tokenize( "one" );
+
+        // assert
+        assertThat( result, contains( instanceOf( TextQueryToken.class ) ) );
+    }
+
+    @Test
+    public void testTokenize_containsTwoWords_ListContainsTwoTextQueryToken() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = QueryTokenizer.tokenize( "one two" );
+
+        // assert
+        assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
+    }
+
+    @Test
+    public void testTokenize_containsTwoWordsAndPlus_ListContainsTwoTextTokenAndOnePlusToken() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = QueryTokenizer.tokenize( "one +two" );
+
+        // assert
+        assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( PlusQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
+    }
+
 }
