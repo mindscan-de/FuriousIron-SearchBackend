@@ -36,4 +36,11 @@ public interface QueryToken {
     default void addChar( char currentChar ) {
     }
 
+    /**
+     * @return
+     */
+    default String getTokenValue() {
+        return "";
+    }
+
 }

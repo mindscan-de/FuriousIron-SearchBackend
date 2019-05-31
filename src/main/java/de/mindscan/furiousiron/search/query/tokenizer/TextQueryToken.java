@@ -62,4 +62,15 @@ public class TextQueryToken implements QueryToken {
         queryData.add( currentChar );
     }
 
+    @Override
+    public String getTokenValue() {
+        StringBuffer buffer = new StringBuffer();
+
+        for (Character character : queryData) {
+            buffer.append( character );
+        }
+
+        return buffer.toString();
+    }
+
 }

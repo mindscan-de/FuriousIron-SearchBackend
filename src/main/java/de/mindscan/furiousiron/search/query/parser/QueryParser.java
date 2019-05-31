@@ -25,21 +25,45 @@
  */
 package de.mindscan.furiousiron.search.query.parser;
 
+import java.util.List;
+
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
+import de.mindscan.furiousiron.search.query.tokenizer.QueryToken;
+import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
 
 /**
  * 
  */
 public class QueryParser {
 
-    public QueryNode parseQuery( String string ) {
-        if (string == null || string.isEmpty()) {
+    public QueryNode parseQuery( String queryString ) {
+        if (queryString == null || queryString.isEmpty()) {
             return new EmptyNode();
         }
 
-        return new TextNode( string.trim() );
+        // List<QueryToken> tokenizedQuery = QueryTokenizer.tokenize( queryString );
+        // return parseQueryTokens(tokenizedQuery);
+
+        return new TextNode( queryString.trim() );
+    }
+
+    public QueryNode parseQueryTokens( List<QueryToken> tokenizedQuery ) {
+        if (tokenizedQuery.isEmpty()) {
+            return new EmptyNode();
+        }
+
+        QueryNode result = null;
+
+        for (QueryToken queryToken : tokenizedQuery) {
+            // first text node wins
+            if (queryToken instanceof TextQueryToken) {
+                return new TextNode( queryToken.getTokenValue() );
+            }
+        }
+
+        return result;
     }
 
 }

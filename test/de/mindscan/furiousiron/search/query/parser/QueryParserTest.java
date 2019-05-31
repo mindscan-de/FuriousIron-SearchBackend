@@ -31,11 +31,17 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.Test;
 
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
+import de.mindscan.furiousiron.search.query.tokenizer.QueryToken;
+import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
 
 public class QueryParserTest {
 
@@ -115,7 +121,7 @@ public class QueryParserTest {
     }
 
 //    @Test
-//    public void testParseQuery_StringContainsTwoWords_returnsAndNode() {
+//    public void testParseQuery_StringContainsTwoWords_returnsOrNode() {
 //        // Arrange
 //        QueryParser queryParser = new QueryParser();
 //
@@ -123,8 +129,39 @@ public class QueryParserTest {
 //        QueryNode result = queryParser.parseQuery( "test elastic" );
 //
 //        // Assert
-//        assertThat( result, is( instanceOf( AndNode.class ) ) );
+//        assertThat( result, is( instanceOf( OrNode.class ) ) );
 //    }
+
+    // ====================================================
+    // Token parsing
+    // ====================================================
+
+    @Test
+    public void testParseQueryTokens_emptyTokenList_returnsEmptyNode() throws Exception {
+        // arrange
+        QueryParser parser = new QueryParser();
+        List<QueryToken> tokenizedQuery = Collections.emptyList();
+
+        // act
+        QueryNode result = parser.parseQueryTokens( tokenizedQuery );
+
+        // assert
+        assertThat( result, is( instanceOf( EmptyNode.class ) ) );
+    }
+
+    @Test
+    public void testParseQuery_ContainsOneTextToken_returnsTextNode() throws Exception {
+        // arrange
+        QueryParser parser = new QueryParser();
+        List<QueryToken> tokenizedQuery = new ArrayList<>();
+        tokenizedQuery.add( new TextQueryToken( "test" ) );
+
+        // act
+        QueryNode result = parser.parseQueryTokens( tokenizedQuery );
+
+        // assert
+        assertThat( result, is( instanceOf( TextNode.class ) ) );
+    }
 
 // tpxu_method
 }
