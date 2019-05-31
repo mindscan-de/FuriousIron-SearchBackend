@@ -42,6 +42,18 @@ public class TextQueryToken implements QueryToken {
         queryData = new ArrayList<>();
     }
 
+    /**
+     * @param string
+     */
+    public TextQueryToken( String string ) {
+        queryData = new ArrayList<>();
+
+        char[] charArray = string.toCharArray();
+        for (char c : charArray) {
+            addChar( c );
+        }
+    }
+
     /** 
      * {@inheritDoc}
      */
