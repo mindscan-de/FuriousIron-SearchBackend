@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class TextQueryToken implements QueryToken {
 
-    List<Character> queryData;
+    private List<Character> queryData;
 
     /**
      * 

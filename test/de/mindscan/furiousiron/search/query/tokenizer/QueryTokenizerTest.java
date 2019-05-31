@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+@SuppressWarnings( "unchecked" )
 public class QueryTokenizerTest {
 
     @Test
@@ -98,6 +99,18 @@ public class QueryTokenizerTest {
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( PlusQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
+    }
+
+    @Test
+    public void testTokenize_containsThreeWordsAndPlusAndMinus_ListContainsTwoTextTokenAndOnePlusToken() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = QueryTokenizer.tokenize( "one +two -three" );
+
+        // assert
+        assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( PlusQueryToken.class ), instanceOf( TextQueryToken.class ),
+                        instanceOf( MinusQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
     }
 
 }
