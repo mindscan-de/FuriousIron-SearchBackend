@@ -113,4 +113,15 @@ public class QueryTokenizerTest {
                         instanceOf( MinusQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
     }
 
+    @Test
+    public void testTokenize_containsTest_ListContainsTwoTextTokenAndOnePlusToken() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = QueryTokenizer.tokenize( "test -\"test\"" );
+
+        // assert
+        assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( MinusQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
+    }
+
 }
