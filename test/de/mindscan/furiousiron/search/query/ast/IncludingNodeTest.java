@@ -48,4 +48,30 @@ public class IncludingNodeTest {
         assertThat( result, contains( innerNode ) );
     }
 
+    @Test
+    public void testToString_CtorOnlyWithEmptyNode_containsEmptyNode() throws Exception {
+        // arrange
+        QueryNode innerNode = new EmptyNode();
+        QueryNode node = new IncludingNode( innerNode );
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'INCLUDING', [ [ 'EMPTY' ] ] ]" ) );
+    }
+
+    @Test
+    public void testToString_CtorOnlyWithTextNode_containsTextNode() throws Exception {
+        // arrange
+        QueryNode innerNode = new TextNode( "test" );
+        QueryNode node = new IncludingNode( innerNode );
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'INCLUDING', [ [ 'TEXT', 'test' ] ] ]" ) );
+    }
+
 }
