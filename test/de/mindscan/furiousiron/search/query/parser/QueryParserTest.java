@@ -163,5 +163,31 @@ public class QueryParserTest {
         assertThat( result, is( instanceOf( TextNode.class ) ) );
     }
 
+    // 
+
+    @Test
+    public void testParseQuery_EmptyString_expectASTSerializationIsOnlyEmptyNode() {
+        // Arrange
+        QueryParser queryParser = new QueryParser();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "" );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'EMPTY' ]" ) );
+    }
+
+    @Test
+    public void testParseQuery_nullAsString_expectASTSerializationIsOnlyEmptyNode() {
+        // Arrange
+        QueryParser queryParser = new QueryParser();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( null );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'EMPTY' ]" ) );
+    }
+
 // tpxu_method
 }
