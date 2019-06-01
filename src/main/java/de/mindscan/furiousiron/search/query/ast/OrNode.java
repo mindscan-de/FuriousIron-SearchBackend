@@ -80,7 +80,7 @@ public class OrNode implements QueryNode {
         StringBuffer sb = new StringBuffer();
 
         // print and Node
-        sb.append( "[ 'OR'," );
+        sb.append( "[ 'OR', " );
 
         // start of child list
         sb.append( "[ " );
