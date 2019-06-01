@@ -67,4 +67,22 @@ public class TextNode implements QueryNode {
         return Collections.emptyList();
     }
 
+    /** 
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+
+        // print and Node
+        sb.append( "[ 'TEXT', '" );
+
+        sb.append( word );
+
+        // end of Node
+        sb.append( "' ]" );
+
+        return sb.toString();
+    }
+
 }

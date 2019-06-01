@@ -63,4 +63,12 @@ public class EmptyNode implements QueryNode {
         return Collections.emptyList();
     }
 
+    /** 
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "[ 'EMPTY' ]";
+    }
+
 }

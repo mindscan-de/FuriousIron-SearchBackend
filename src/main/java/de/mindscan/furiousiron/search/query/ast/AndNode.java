@@ -28,6 +28,7 @@ package de.mindscan.furiousiron.search.query.ast;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -69,6 +70,31 @@ public class AndNode implements QueryNode {
     @Override
     public Collection<QueryNode> getChildren() {
         return children;
+    }
+
+    /** 
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+
+        // print and Node
+        sb.append( "[ 'AND', " );
+
+        // start of child list
+        sb.append( "[ " );
+
+        List<String> allNodesAsString = children.stream().map( QueryNode::toString ).collect( Collectors.toList() );
+        sb.append( String.join( ", ", allNodesAsString ) );
+
+        // end of child list
+        sb.append( " ]" );
+
+        // end of Node
+        sb.append( " ]" );
+
+        return sb.toString();
     }
 
 }
