@@ -83,4 +83,40 @@ public class TextNodeTest {
         assertThat( result, equalTo( "BBB" ) );
     }
 
+    @Test
+    public void testToString_CtorWithEmptyWord_() throws Exception {
+        // arrange
+        TextNode node = new TextNode( "" );
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'TEXT', '' ]" ) );
+    }
+
+    @Test
+    public void testToString_CtorWithAAAWord_() throws Exception {
+        // arrange
+        TextNode node = new TextNode( "AAA" );
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'TEXT', 'AAA' ]" ) );
+    }
+
+    @Test
+    public void testToString_CtorWithBBBWord_() throws Exception {
+        // arrange
+        TextNode node = new TextNode( "BBB" );
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'TEXT', 'BBB' ]" ) );
+    }
+
 }
