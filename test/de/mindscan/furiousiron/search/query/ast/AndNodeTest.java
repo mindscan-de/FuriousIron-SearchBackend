@@ -81,9 +81,7 @@ public class AndNodeTest {
 
     @Test
     public void testHasChildren_CtorWithNonEmptyList_returnsTrue() throws Exception {
-        // arrange
-        List<QueryNode> nonEmptyList = new ArrayList<>();
-        nonEmptyList.add( new TextNode( "test" ) );
+        List<QueryNode> nonEmptyList = createListWithTestTextNode();
 
         AndNode node = new AndNode( nonEmptyList );
 
@@ -96,10 +94,7 @@ public class AndNodeTest {
 
     @Test
     public void testGetChildren_CtorWithNonEmptyList_returnsDifferentInstance() throws Exception {
-        // arrange
-        List<QueryNode> nonEmptyList = new ArrayList<>();
-        TextNode textNode = new TextNode( "test" );
-        nonEmptyList.add( textNode );
+        List<QueryNode> nonEmptyList = createListWithTestTextNode();
 
         AndNode node = new AndNode( nonEmptyList );
 
@@ -112,10 +107,7 @@ public class AndNodeTest {
 
     @Test
     public void testGetChildren_CtorWithListContainingOneElement_returnsAListWithOneElement() throws Exception {
-        // arrange
-        List<QueryNode> nonEmptyList = new ArrayList<>();
-        TextNode textNode = new TextNode( "test" );
-        nonEmptyList.add( textNode );
+        List<QueryNode> nonEmptyList = createListWithTestTextNode();
 
         AndNode node = new AndNode( nonEmptyList );
 
@@ -129,11 +121,7 @@ public class AndNodeTest {
     @Test
     public void testGetChildren_CtorWithListContainingTwoElements_returnsAListWithTwoElement() throws Exception {
         // arrange
-        List<QueryNode> nonEmptyList = new ArrayList<>();
-        TextNode textNode = new TextNode( "first" );
-        TextNode textNode2 = new TextNode( "second" );
-        nonEmptyList.add( textNode );
-        nonEmptyList.add( textNode2 );
+        List<QueryNode> nonEmptyList = createListWithFirstAndSecondTextNode();
 
         AndNode node = new AndNode( nonEmptyList );
 
@@ -160,6 +148,74 @@ public class AndNodeTest {
 
         // assert
         assertThat( result, contains( textNode, textNode2 ) );
+    }
+
+    @Test
+    public void testToString_CtorOnly_expectAndNodeWithEmptyChildList() throws Exception {
+        // arrange
+        AndNode node = new AndNode();
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'AND', [  ] ]" ) );
+    }
+
+    @Test
+    public void testToString_CtorWithListContainingOneEmptyElement_expectAndNodeWithEmptyElement() throws Exception {
+        // arrange
+        List<QueryNode> nonEmptyList = new ArrayList<>();
+        nonEmptyList.add( new EmptyNode() );
+
+        AndNode node = new AndNode( nonEmptyList );
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'AND', [ [ 'EMPTY' ] ] ]" ) );
+    }
+
+    @Test
+    public void testToString_CtorWithListContainingOneTestElement_expectAndNodeWithTestTextElement() throws Exception {
+        // arrange
+        List<QueryNode> nonEmptyList = createListWithTestTextNode();
+
+        AndNode node = new AndNode( nonEmptyList );
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'AND', [ [ 'TEXT', 'test' ] ] ]" ) );
+    }
+
+    @Test
+    public void testToString_CtorWithListContainingTwoElements_expectAndNodeWithFirstAndSecondTextElement() throws Exception {
+        // arrange
+        List<QueryNode> nonEmptyList = createListWithFirstAndSecondTextNode();
+
+        AndNode node = new AndNode( nonEmptyList );
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'AND', [ [ 'TEXT', 'first' ], [ 'TEXT', 'second' ] ] ]" ) );
+    }
+
+    private List<QueryNode> createListWithTestTextNode() {
+        List<QueryNode> nonEmptyList = new ArrayList<>();
+        nonEmptyList.add( new TextNode( "test" ) );
+        return nonEmptyList;
+    }
+
+    private List<QueryNode> createListWithFirstAndSecondTextNode() {
+        List<QueryNode> nonEmptyList = new ArrayList<>();
+        nonEmptyList.add( new TextNode( "first" ) );
+        nonEmptyList.add( new TextNode( "second" ) );
+        return nonEmptyList;
     }
 
 }
