@@ -35,10 +35,29 @@ import de.mindscan.furiousiron.search.query.tokenizer.QueryTokenizer;
 import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
 
 /**
+ * This class implements a simple Parser for the query string. It will compile a query string into an 
+ * query AST representation. The AST will later be used for ranking and for the calculation of the 
+ * query strategy.
  * 
+ * So this is classic parser stuff:
+ * 
+ * - Use a lexer/tokenizer to create lexical tokens of the input (in our case a query string)
+ * - parse the lexed tokens and build an AST from it
+ * - (maybe optimize the AST)
+ * - (build multiple graphs from it, first a query graph (which can be executed to calculate the results), and a second for ranking) 
+ * 
+ * Maybe later will go for a more sophisticated way, like using a parser generator, and write an 
+ * EBNF grammar. But for the moment a handwritten parser looks like the way to go. Since i want 
+ * later to describe properties of the source code I am searching for, I might need a different 
+ * EBNF grammar anyway. 
  */
 public class QueryParser {
 
+    /**
+     * Parses the given query String.
+     * @param queryString the query string which needs to be parsed
+     * @return the corresponding AST of the query string. 
+     */
     public QueryNode parseQuery( String queryString ) {
         if (queryString == null || queryString.isEmpty()) {
             return new EmptyNode();
@@ -47,7 +66,7 @@ public class QueryParser {
         return parseQueryTokens( QueryTokenizer.tokenize( queryString ) );
     }
 
-    public QueryNode parseQueryTokens( List<QueryToken> tokenizedQuery ) {
+    QueryNode parseQueryTokens( List<QueryToken> tokenizedQuery ) {
         if (tokenizedQuery.isEmpty()) {
             return new EmptyNode();
         }
