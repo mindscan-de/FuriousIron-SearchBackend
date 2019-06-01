@@ -86,4 +86,16 @@ public class EmptyNodeTest {
         assertThat( result, empty() );
     }
 
+    @Test
+    public void testToString_CtorOnly_returnsSerializationOfEmptyNode() throws Exception {
+        // arrange
+        EmptyNode node = new EmptyNode();
+
+        // act
+        String result = node.toString();
+
+        // assert
+        assertThat( result, equalTo( "[ 'EMPTY' ]" ) );
+    }
+
 }
