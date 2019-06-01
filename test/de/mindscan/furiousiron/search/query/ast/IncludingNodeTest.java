@@ -13,7 +13,7 @@ public class IncludingNodeTest {
     @Test
     public void testHasChildren_CtorOnly_returnsTrue() throws Exception {
         // arrange
-        IncludingNode node = new IncludingNode( new EmptyNode() );
+        QueryNode node = new IncludingNode( new EmptyNode() );
 
         // act
         boolean result = node.hasChildren();
@@ -26,7 +26,7 @@ public class IncludingNodeTest {
     public void testGetChildren_CtorOnlyWithEmptyNode_containsSameInstance() throws Exception {
         // arrange
         QueryNode innerNode = new EmptyNode();
-        IncludingNode node = new IncludingNode( innerNode );
+        QueryNode node = new IncludingNode( innerNode );
 
         // act
         Collection<QueryNode> result = node.getChildren();
