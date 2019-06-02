@@ -44,6 +44,11 @@ public class AndNode implements QueryNode {
         children = new ArrayList<>();
     }
 
+    public AndNode( QueryNode innerNode ) {
+        children = new ArrayList<>();
+        children.add( innerNode );
+    }
+
     public AndNode( List<QueryNode> nodes ) {
         children = new ArrayList<>( nodes );
     }
