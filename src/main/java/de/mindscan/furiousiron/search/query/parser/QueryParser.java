@@ -25,11 +25,17 @@
  */
 package de.mindscan.furiousiron.search.query.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import de.mindscan.furiousiron.search.query.ast.AndNode;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
+import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
+import de.mindscan.furiousiron.search.query.ast.IncludingNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
+import de.mindscan.furiousiron.search.query.tokenizer.MinusQueryToken;
+import de.mindscan.furiousiron.search.query.tokenizer.PlusQueryToken;
 import de.mindscan.furiousiron.search.query.tokenizer.QueryToken;
 import de.mindscan.furiousiron.search.query.tokenizer.QueryTokenizer;
 import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
@@ -71,16 +77,72 @@ public class QueryParser {
             return new EmptyNode();
         }
 
-        QueryNode result = null;
-
-        for (QueryToken queryToken : tokenizedQuery) {
-            // first text node wins
-            if (queryToken instanceof TextQueryToken) {
-                return new TextNode( queryToken.getTokenValue() );
-            }
+        // collect subtrees
+        List<QueryNode> astCollector = new ArrayList<>();
+        for (int currentTokenIndex = 0; currentTokenIndex < tokenizedQuery.size(); currentTokenIndex++) {
+            currentTokenIndex = collectNextAST( currentTokenIndex, tokenizedQuery, astCollector );
         }
 
-        return result;
+        // build composite tree / optimize tree
+        switch (astCollector.size()) {
+            case 0:
+                return new EmptyNode();
+            case 1:
+                return astCollector.get( 0 );
+            default:
+                return buildOptimizedTree( astCollector );
+        }
+
+    }
+
+    private QueryNode buildOptimizedTree( List<QueryNode> astCollector ) {
+        return astCollector.get( 0 );
+    }
+
+    private int collectNextAST( int currentTokenIndex, List<QueryToken> tokenizedQuery, List<QueryNode> astCollector ) {
+        int lastReadTokenIndex = currentTokenIndex;
+        QueryToken currentToken = tokenizedQuery.get( lastReadTokenIndex );
+
+        if (currentToken instanceof TextQueryToken) {
+            // this? add TEXT
+            // this? add OR/INCLUDING/TEXT 
+            astCollector.add( new TextNode( currentToken.getTokenValue() ) );
+
+            return lastReadTokenIndex;
+        }
+        else if (currentToken instanceof MinusQueryToken) {
+            // add AND/EXCLUDING/TEXT
+            QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
+
+            if (peekNextToken instanceof TextQueryToken) {
+                astCollector.add( new AndNode( new ExcludingNode( new TextNode( peekNextToken.getTokenValue() ) ) ) );
+                lastReadTokenIndex++;
+                return lastReadTokenIndex;
+            }
+            else {
+                // Error AST?
+                return lastReadTokenIndex;
+            }
+        }
+        else if (currentToken instanceof PlusQueryToken) {
+            // add AND/INCLUDING/TEXT
+            QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
+
+            if (peekNextToken instanceof TextQueryToken) {
+                astCollector.add( new AndNode( new IncludingNode( new TextNode( peekNextToken.getTokenValue() ) ) ) );
+                lastReadTokenIndex++;
+                return lastReadTokenIndex;
+            }
+            else {
+                // error AST?
+                return lastReadTokenIndex;
+            }
+        }
+        else {
+            // something else happens
+        }
+
+        return lastReadTokenIndex;
     }
 
 }
