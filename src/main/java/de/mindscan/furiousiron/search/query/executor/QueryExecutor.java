@@ -32,6 +32,7 @@ import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
+import de.mindscan.furiousiron.search.query.ast.TextNode;
 
 /**
  * This class will execute a query AST. 
@@ -41,6 +42,11 @@ public class QueryExecutor {
     public static Collection<SearchResultCandidates> execute( Search search, QueryNode parsedAST ) {
         if (parsedAST instanceof EmptyNode) {
             return Collections.emptyList();
+        }
+
+        // simple mode 
+        if (parsedAST instanceof TextNode) {
+            return search.search( parsedAST.getContent() );
         }
 
         Collection<SearchResultCandidates> resultCandidates = search.search( parsedAST.getContent() );
