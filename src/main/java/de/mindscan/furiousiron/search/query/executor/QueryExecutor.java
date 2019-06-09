@@ -34,7 +34,6 @@ import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.ast.AndNode;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
-import de.mindscan.furiousiron.search.query.ast.IncludingNode;
 import de.mindscan.furiousiron.search.query.ast.OrNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
@@ -69,40 +68,12 @@ public class QueryExecutor {
     private static Collection<SearchResultCandidates> processAndNode( Search search, AndNode parsedAST ) {
         Set<SearchResultCandidates> andset = new TreeSet<>();
 
-        // maybe a bit tricky.
-        // get those with and and with including
-
-        // subtract all with excluding in same level...
-
         return andset;
     }
 
     private static Collection<SearchResultCandidates> processOrNode( Search search, OrNode parsedAST ) {
-        Set<SearchResultCandidates> orset = new TreeSet<>();
 
-        Collection<QueryNode> children = parsedAST.getChildren();
-        for (QueryNode queryNode : children) {
-            if (queryNode instanceof IncludingNode) {
-                Collection<QueryNode> includingchildren = queryNode.getChildren();
-                for (QueryNode queryNode2 : includingchildren) {
-                    if (queryNode2 instanceof TextNode) {
-                        orset.addAll( processTextNode( search, (TextNode) queryNode2 ) );
-                    }
-                    if (queryNode2 instanceof OrNode) {
-                        orset.addAll( processOrNode( search, (OrNode) queryNode2 ) );
-                    }
-                    if (queryNode2 instanceof AndNode) {
-                        orset.addAll( processAndNode( search, (AndNode) queryNode2 ) );
-                    }
-                }
-            }
-            else {
-                // TODO: raise concern over Tree...
-                // we could maybe calculate the de morgan rules to work on the correct tree... subtree
-                // how to calculate or/excluding/text
-                // or similar
-            }
-        }
+        Set<SearchResultCandidates> orset = new TreeSet<>();
 
         return orset;
     }
