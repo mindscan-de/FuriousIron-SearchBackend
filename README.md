@@ -33,12 +33,10 @@ the metadata and the content - which might move to a completely different projec
 * Retrieve the queries [Done]
 * Query parsing
 * Answer queries with search-results [Done]
-* (ranking - might be out of scope yet / might also not be done here but at a different step)
 * Content-Delivery
   * Provide meta data on search results [Done]
   * Provide content data on search results [Done]
-* Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
-* Since this project is considered a proof of concept, i won't implement any type of sophisticated persistence nor use Databases
+* Since this project is considered a proof of concept, i won't implement any type of sophisticated persistence nor use a Databases [Done]
 
 Simplicity is key. Because you can change a minimal product much faster and adapt that to your needs,
 as your needs begin to grow. Because I prefer having a whole pipeline working, the goal is to not 
@@ -49,6 +47,13 @@ I also like to defer unnecessary architectural decisions as long they do not nee
 do not expect me to provide a full architecture, or a full grown idea. It will either evolve or die.
 
 That said, please remember this is a private educational project.
+
+## Nice to have
+
+* Query Parsing: Exact Searches
+  * implement something +test -"@test"
+* Ranking results (might be out of scope yet / might also not be done here but at a different step)
+* Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 
 ## Current URL
 
