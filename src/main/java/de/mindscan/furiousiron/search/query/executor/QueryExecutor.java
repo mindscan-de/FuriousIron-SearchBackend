@@ -52,14 +52,14 @@ import de.mindscan.furiousiron.search.query.ast.TextNode;
 public class QueryExecutor {
 
     public static Collection<SearchResultCandidates> execute( Search search, QueryNode parsedAST ) {
-        if (parsedAST instanceof EmptyNode) {
-            return Collections.emptyList();
-        }
-
         return processNode( search, parsedAST ).values();
     }
 
     private static Map<String, SearchResultCandidates> processNode( Search search, QueryNode node ) {
+        if (node instanceof EmptyNode) {
+            return Collections.emptyMap();
+        }
+
         if (node instanceof TextNode) {
             return processTextNode( search, (TextNode) node );
         }
