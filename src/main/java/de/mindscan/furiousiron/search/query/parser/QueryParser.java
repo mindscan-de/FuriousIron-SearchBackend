@@ -77,26 +77,12 @@ public class QueryParser {
             return new EmptyNode();
         }
 
-        // collect subtrees
         List<QueryNode> astCollector = new ArrayList<>();
         for (int currentTokenIndex = 0; currentTokenIndex < tokenizedQuery.size(); currentTokenIndex++) {
             currentTokenIndex = collectNextAST( currentTokenIndex, tokenizedQuery, astCollector );
         }
 
-        // build composite tree / optimize tree
-        switch (astCollector.size()) {
-            case 0:
-                return new EmptyNode();
-            case 1:
-                return astCollector.get( 0 );
-            default:
-                return buildOptimizedTree( astCollector );
-        }
-
-    }
-
-    private QueryNode buildOptimizedTree( List<QueryNode> astCollector ) {
-        return astCollector.get( 0 );
+        return composeFullAST( astCollector );
     }
 
     private int collectNextAST( int currentTokenIndex, List<QueryToken> tokenizedQuery, List<QueryNode> astCollector ) {
@@ -143,6 +129,21 @@ public class QueryParser {
         }
 
         return lastReadTokenIndex;
+    }
+
+    private QueryNode composeFullAST( List<QueryNode> astCollector ) {
+        switch (astCollector.size()) {
+            case 0:
+                return new EmptyNode();
+            case 1:
+                return astCollector.get( 0 );
+            default:
+                return buildOptimizedTree( astCollector );
+        }
+    }
+
+    private QueryNode buildOptimizedTree( List<QueryNode> astCollector ) {
+        return astCollector.get( 0 );
     }
 
 }
