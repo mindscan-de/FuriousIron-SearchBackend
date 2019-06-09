@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
@@ -191,7 +190,6 @@ public class QueryParserTest {
     }
 
     @Test
-    @Ignore( "Not yet implemented" )
     public void testParseQuery_TwoWordsOR_expectASTSerialization() {
         // Arrange
         QueryParser queryParser = new QueryParser();
@@ -200,11 +198,10 @@ public class QueryParserTest {
         QueryNode result = queryParser.parseQuery( "first second" );
 
         // Assert
-        assertThat( result.toString(), equalTo( "[ 'OR', [ [ 'INCLUDING', [ 'TEXT', 'first' ] ], [ 'INCLUDING', [ 'TEXT', 'second' ] ] ]" ) );
+        assertThat( result.toString(), equalTo( "[ 'OR', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
     }
 
     @Test
-    @Ignore( "Not yet implemented" )
     public void testParseQuery_TwoWordsAND_expectOnlyASTSerializationOfFirstElement() {
         // Arrange
         QueryParser queryParser = new QueryParser();
@@ -213,11 +210,10 @@ public class QueryParserTest {
         QueryNode result = queryParser.parseQuery( "first +second" );
 
         // Assert
-        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ 'TEXT', 'first' ] ], [ 'INCLUDING', [ 'TEXT', 'second' ] ] ]" ) );
+        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
     }
 
     @Test
-    @Ignore( "Not yet implemented" )
     public void testParseQuery_TwoWordsButNotSecond_expectOnlyASTSerializationOfFirstElement() {
         // Arrange
         QueryParser queryParser = new QueryParser();
@@ -226,7 +222,7 @@ public class QueryParserTest {
         QueryNode result = queryParser.parseQuery( "first -second" );
 
         // Assert
-        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ 'TEXT', 'first' ] ], [ 'EXCLUDING', [ 'TEXT', 'second' ] ] ]" ) );
+        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'EXCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
     }
 
 // tpxu_method
