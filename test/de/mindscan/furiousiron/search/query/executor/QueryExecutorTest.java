@@ -24,7 +24,7 @@ public class QueryExecutorTest {
         QueryExecutor.execute( search, ast );
 
         // assert
-        Mockito.verify( search, times( 1 ) ).search( SEARCHTERM1 );
+        Mockito.verify( search, times( 1 ) ).searchToMap( SEARCHTERM1 );
     }
 
     @Test
@@ -37,7 +37,7 @@ public class QueryExecutorTest {
         QueryExecutor.execute( search, ast );
 
         // assert
-        Mockito.verify( search, times( 1 ) ).search( SEARCHTERM2 );
+        Mockito.verify( search, times( 1 ) ).searchToMap( SEARCHTERM2 );
     }
 
 }

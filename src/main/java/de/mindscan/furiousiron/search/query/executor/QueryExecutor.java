@@ -28,12 +28,17 @@ package de.mindscan.furiousiron.search.query.executor;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.ast.AndNode;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
+import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
+import de.mindscan.furiousiron.search.query.ast.IncludingNode;
 import de.mindscan.furiousiron.search.query.ast.OrNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
@@ -48,33 +53,95 @@ public class QueryExecutor {
             return Collections.emptyList();
         }
 
-        if (parsedAST instanceof TextNode) {
-            return processTextNode( search, (TextNode) parsedAST ).values();
+        return processNode( search, parsedAST ).values();
+    }
+
+    private static Map<String, SearchResultCandidates> processNode( Search search, QueryNode node ) {
+        if (node instanceof TextNode) {
+            return processTextNode( search, (TextNode) node );
         }
 
-        if (parsedAST instanceof OrNode) {
-            return processOrNode( search, (OrNode) parsedAST ).values();
+        if (node instanceof OrNode) {
+            return processOrNode( search, (OrNode) node );
         }
 
-        if (parsedAST instanceof AndNode) {
-            return processAndNode( search, (AndNode) parsedAST ).values();
+        if (node instanceof AndNode) {
+            return processAndNode( search, (AndNode) node );
         }
 
-        Collection<SearchResultCandidates> resultCandidates = search.search( parsedAST.getContent() );
-
-        return resultCandidates;
+        throw new RuntimeException( "The Tree is not well formatted." );
     }
 
     private static Map<String, SearchResultCandidates> processAndNode( Search search, AndNode parsedAST ) {
-        Map<String, SearchResultCandidates> andset = new HashMap<>();
+        if (parsedAST.getChildren().isEmpty()) {
+            return Collections.emptyMap();
+        }
 
-        return andset;
+        Map<String, SearchResultCandidates> andMap = new HashMap<>();
+        boolean isFirst = true;
+        for (QueryNode node : parsedAST.getChildren()) {
+            if (node instanceof IncludingNode) {
+                Collection<QueryNode> includeNodeChildren = node.getChildren();
+                for (QueryNode queryNode : includeNodeChildren) {
+                    Map<String, SearchResultCandidates> nodeResults = processNode( search, queryNode );
+                    intersectMaps( andMap, nodeResults, isFirst );
+                    isFirst = false;
+                }
+            }
+            else if (node instanceof ExcludingNode) {
+                Collection<QueryNode> excludeNodeChildren = node.getChildren();
+                for (QueryNode queryNode : excludeNodeChildren) {
+                    Map<String, SearchResultCandidates> nodeResults = processNode( search, queryNode );
+                    excludeMaps( andMap, nodeResults );
+                }
+            }
+            else {
+                // TODO: process like an include Node?
+            }
+        }
+
+        return andMap;
+    }
+
+    private static void intersectMaps( Map<String, SearchResultCandidates> andMap, Map<String, SearchResultCandidates> nodeResults, boolean isFirst ) {
+        if (!isFirst) {
+            // calculate intersection
+            Set<String> removeKeys = new HashSet<>();
+            for (Entry<String, SearchResultCandidates> andSetEntry : andMap.entrySet()) {
+                if (!nodeResults.containsKey( andSetEntry.getKey() )) {
+                    removeKeys.add( andSetEntry.getKey() );
+                }
+            }
+
+            // remove non intersecting keys from andMap
+            for (String key : removeKeys) {
+                andMap.remove( key );
+            }
+        }
+        else {
+            andMap.putAll( nodeResults );
+        }
+    }
+
+    private static void excludeMaps( Map<String, SearchResultCandidates> andMap, Map<String, SearchResultCandidates> nodeResults ) {
+        // calculate intersection
+        Set<String> removeKeys = new HashSet<>();
+        for (Entry<String, SearchResultCandidates> andSetEntry : andMap.entrySet()) {
+            if (nodeResults.containsKey( andSetEntry.getKey() )) {
+                removeKeys.add( andSetEntry.getKey() );
+            }
+        }
+
+        // remove intersecting keys from andMap
+        for (String key : removeKeys) {
+            andMap.remove( key );
+        }
     }
 
     private static Map<String, SearchResultCandidates> processOrNode( Search search, OrNode parsedAST ) {
-        Map<String, SearchResultCandidates> orset = new HashMap<>();
+        Map<String, SearchResultCandidates> orMap = new HashMap<>();
 
-        return orset;
+        return orMap;
     }
 
     private static Map<String, SearchResultCandidates> processTextNode( Search search, TextNode parsedAST ) {
