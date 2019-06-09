@@ -32,6 +32,7 @@ the metadata and the content - which might move to a completely different projec
 
 * Retrieve the queries [Done]
 * Query parsing [Done]
+  * QueryExample working now: "getoutput -stream -@test" [Done]
 * Answer queries with search-results [Done]
 * Content-Delivery
   * Provide meta data on search results [Done]
