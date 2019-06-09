@@ -27,8 +27,8 @@ package de.mindscan.furiousiron.search.query.executor;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
@@ -49,15 +49,15 @@ public class QueryExecutor {
         }
 
         if (parsedAST instanceof TextNode) {
-            return processTextNode( search, (TextNode) parsedAST );
+            return processTextNode( search, (TextNode) parsedAST ).values();
         }
 
         if (parsedAST instanceof OrNode) {
-            return processOrNode( search, (OrNode) parsedAST );
+            return processOrNode( search, (OrNode) parsedAST ).values();
         }
 
         if (parsedAST instanceof AndNode) {
-            return processAndNode( search, (AndNode) parsedAST );
+            return processAndNode( search, (AndNode) parsedAST ).values();
         }
 
         Collection<SearchResultCandidates> resultCandidates = search.search( parsedAST.getContent() );
@@ -65,21 +65,20 @@ public class QueryExecutor {
         return resultCandidates;
     }
 
-    private static Collection<SearchResultCandidates> processAndNode( Search search, AndNode parsedAST ) {
-        Set<SearchResultCandidates> andset = new TreeSet<>();
+    private static Map<String, SearchResultCandidates> processAndNode( Search search, AndNode parsedAST ) {
+        Map<String, SearchResultCandidates> andset = new HashMap<>();
 
         return andset;
     }
 
-    private static Collection<SearchResultCandidates> processOrNode( Search search, OrNode parsedAST ) {
-
-        Set<SearchResultCandidates> orset = new TreeSet<>();
+    private static Map<String, SearchResultCandidates> processOrNode( Search search, OrNode parsedAST ) {
+        Map<String, SearchResultCandidates> orset = new HashMap<>();
 
         return orset;
     }
 
-    private static Collection<SearchResultCandidates> processTextNode( Search search, TextNode parsedAST ) {
-        return search.search( parsedAST.getContent() );
+    private static Map<String, SearchResultCandidates> processTextNode( Search search, TextNode parsedAST ) {
+        return search.searchToMap( parsedAST.getContent() );
     }
 
 }
