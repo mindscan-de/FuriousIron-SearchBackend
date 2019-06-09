@@ -31,7 +31,7 @@ The FuriousIron-Front-end project needs a simple backend to provide search resul
 the metadata and the content - which might move to a completely different project (Content-Delivery)).
 
 * Retrieve the queries [Done]
-* Query parsing
+* Query parsing [Done]
 * Answer queries with search-results [Done]
 * Content-Delivery
   * Provide meta data on search results [Done]
