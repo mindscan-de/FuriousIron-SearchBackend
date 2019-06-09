@@ -44,7 +44,10 @@ import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
 
 /**
- * This class will execute a query AST. 
+ * This class will execute a query AST. Attention this is not optimized. Intersect, Minus(Exclude), Union could be implemented 
+ * via Skip-Lists, and documentId should be sorted by value, so that they can be processed in linear time.
+ * 
+ * This seems to be good enough for the moment.
  */
 public class QueryExecutor {
 
@@ -96,11 +99,61 @@ public class QueryExecutor {
                 }
             }
             else {
-                // TODO: process like an include Node?
+                // process all other types of nodes as include Node.
+                Collection<QueryNode> includeNodeChildren = node.getChildren();
+                for (QueryNode queryNode : includeNodeChildren) {
+                    Map<String, SearchResultCandidates> nodeResults = processNode( search, queryNode );
+                    intersectMaps( andMap, nodeResults, isFirst );
+                    isFirst = false;
+                }
             }
         }
 
         return andMap;
+    }
+
+    private static Map<String, SearchResultCandidates> processOrNode( Search search, OrNode parsedAST ) {
+        if (parsedAST.getChildren().isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, SearchResultCandidates> orMap = new HashMap<>();
+
+        for (QueryNode node : parsedAST.getChildren()) {
+            if (node instanceof IncludingNode) {
+                Collection<QueryNode> includeNodeChildren = node.getChildren();
+                for (QueryNode queryNode : includeNodeChildren) {
+                    Map<String, SearchResultCandidates> nodeResults = processNode( search, queryNode );
+                    unionMaps( orMap, nodeResults );
+                }
+            }
+            else if (node instanceof ExcludingNode) {
+                // this is something impossible yet for me...
+                // intentionally left blank
+            }
+            else {
+                // treat all others node types as OR
+                Collection<QueryNode> includeNodeChildren = node.getChildren();
+                for (QueryNode queryNode : includeNodeChildren) {
+                    Map<String, SearchResultCandidates> nodeResults = processNode( search, queryNode );
+                    unionMaps( orMap, nodeResults );
+                }
+            }
+        }
+
+        return orMap;
+    }
+
+    private static Map<String, SearchResultCandidates> processTextNode( Search search, TextNode parsedAST ) {
+        return search.searchToMap( parsedAST.getContent() );
+    }
+
+    private static void unionMaps( Map<String, SearchResultCandidates> orMap, Map<String, SearchResultCandidates> nodeResults ) {
+        for (Entry<String, SearchResultCandidates> entry : nodeResults.entrySet()) {
+            if (!orMap.containsKey( entry.getKey() )) {
+                orMap.put( entry.getKey(), entry.getValue() );
+            }
+        }
     }
 
     private static void intersectMaps( Map<String, SearchResultCandidates> andMap, Map<String, SearchResultCandidates> nodeResults, boolean isFirst ) {
@@ -136,16 +189,6 @@ public class QueryExecutor {
         for (String key : removeKeys) {
             andMap.remove( key );
         }
-    }
-
-    private static Map<String, SearchResultCandidates> processOrNode( Search search, OrNode parsedAST ) {
-        Map<String, SearchResultCandidates> orMap = new HashMap<>();
-
-        return orMap;
-    }
-
-    private static Map<String, SearchResultCandidates> processTextNode( Search search, TextNode parsedAST ) {
-        return search.searchToMap( parsedAST.getContent() );
     }
 
 }
