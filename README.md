@@ -30,14 +30,14 @@ behavior.
 The FuriousIron-Front-end project needs a simple backend to provide search results (and probably 
 the metadata and the content - which might move to a completely different project (Content-Delivery)).
 
-* Retrieve the queries [Done]
-* Query parsing [Done]
-  * QueryExample working now: "getoutput -stream -@test" [Done]
-* Answer queries with search-results [Done]
+* Retrieve the queries __[done]__
+* Query parsing __[done]__
+  * QueryExample working now: "getoutput -stream -@test" __[done]__
+* Answer queries with search-results __[done]__
 * Content-Delivery
-  * Provide meta data on search results [Done]
-  * Provide content data on search results [Done]
-* Since this project is considered a proof of concept, i won't implement any type of sophisticated persistence nor use a Databases [Done]
+  * Provide meta data on search results __[done]__
+  * Provide content data on search results __[done]__
+* Since this project is considered a proof of concept, i won't implement any type of sophisticated persistence nor use a Databases __[done]__
 
 Simplicity is key. Because you can change a minimal product much faster and adapt that to your needs,
 as your needs begin to grow. Because I prefer having a whole pipeline working, the goal is to not 
