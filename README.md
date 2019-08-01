@@ -56,6 +56,19 @@ That said, please remember this is a private educational project.
 * Ranking results (might be out of scope yet / might also not be done here but at a different step)
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 
+## What needs to be done next
+
+* The performance is not yet satisfying but good enough for the first prototype, But I came to the conclusion that the word search in the document is done way too early 
+  * I am happy with the trigram index, but its use can be optimized. Instead of searching "aword" and then "anotherword" by 
+    looking for trigrams of "aword" then look for documents in this subset, containing "aword" and then search for 
+    documents with "anotherwords" the trigrams should be processed like this: collect documents containing "aword" 
+    and trigrams for "anotherword" and then look up words in this possible documents and look for both words. This 
+    should reduce the lookup of the words by a big margin, because documents containing "aword" are more then documents 
+    containing "awo", "wor", "ord" and "ano" ... "ord", so there is less caches to crawl for an AND (INCLUDES) search.
+    
+    so the strategy must be changed from looking up word by word for each searchterm and combine the results by boolean logic,
+    the trigram search will filter more documents upfront. before the   
+
 ## Current URL
 
 http://localhost:8080/SearchBackend/rest/search/result?q=123
