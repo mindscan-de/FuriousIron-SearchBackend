@@ -55,6 +55,7 @@ That said, please remember this is a private educational project.
   * implement something +test -"@test"
 * Ranking results (might be out of scope yet / might also not be done here but at a different step)
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
+* Using two strategies (a technical and an abstract one), one to find the documentids, especially if, multiple search terms are combined via and, that should increase the reject rate for documents, so fewer word lookups are necessary. currently a simple strategy is done, look for each document look for each word, and then these lists are combined... This is not very efficient. The single word search is extended into a multi word search, which was fast to implement but slow at runtime.
 
 ## What needs to be done next
 
@@ -67,7 +68,7 @@ That said, please remember this is a private educational project.
     containing "awo", "wor", "ord" and "ano" ... "ord", so there is less caches to crawl for an AND (INCLUDES) search.
     
     so the strategy must be changed from looking up word by word for each searchterm and combine the results by boolean logic,
-    the trigram search will filter more documents upfront. before the   
+    the trigram search will filter more documents upfront. (better reject rate - on index trigram level (fast), instead of document wordlist level (slow)) 
 
 ## Current URL
 
