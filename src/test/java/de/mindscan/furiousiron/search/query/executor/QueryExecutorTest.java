@@ -2,7 +2,7 @@ package de.mindscan.furiousiron.search.query.executor;
 
 import static org.mockito.Mockito.times;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import de.mindscan.furiousiron.search.Search;

@@ -25,16 +25,17 @@
  */
 package de.mindscan.furiousiron.search.query.ast;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.Assert.assertThat;
 
 import java.util.Collection;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EmptyNodeTest {
 
@@ -47,7 +48,7 @@ public class EmptyNodeTest {
         String result = node.getContent();
 
         // assert
-        assertThat( result, isEmptyString() );
+        assertThat( result, is( emptyString() ) );
     }
 
     @Test

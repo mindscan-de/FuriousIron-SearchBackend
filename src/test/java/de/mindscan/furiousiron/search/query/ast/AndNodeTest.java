@@ -1,39 +1,64 @@
+/**
+ *
+ * MIT License
+ *
+ * Copyright (c) 2019 Maxim Gansert, Mindscan
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
 package de.mindscan.furiousiron.search.query.ast;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class OrNodeTest {
+public class AndNodeTest {
 
     @Test
     public void testGetContent_EmptyCtor_returnsEmptyString() throws Exception {
         // arrange
-        OrNode node = new OrNode();
+        AndNode node = new AndNode();
 
         // act
         String result = node.getContent();
 
         // assert
-        assertThat( result, isEmptyString() );
+        assertThat( result, is( emptyString() ) );
     }
 
     @Test
     public void testHasChildren_EmptyCtor_returnsFalse() throws Exception {
         // arrange
-        OrNode node = new OrNode();
+        AndNode node = new AndNode();
 
         // act
         boolean result = node.hasChildren();
@@ -45,7 +70,7 @@ public class OrNodeTest {
     @Test
     public void testHasChildren_CtorWithEmptyList_returnsFalse() throws Exception {
         // arrange
-        OrNode node = new OrNode( Collections.emptyList() );
+        AndNode node = new AndNode( Collections.emptyList() );
 
         // act
         boolean result = node.hasChildren();
@@ -56,9 +81,9 @@ public class OrNodeTest {
 
     @Test
     public void testHasChildren_CtorWithNonEmptyList_returnsTrue() throws Exception {
-        // arrange
         List<QueryNode> nonEmptyList = createListWithTestTextNode();
-        OrNode node = new OrNode( nonEmptyList );
+
+        AndNode node = new AndNode( nonEmptyList );
 
         // act
         boolean result = node.hasChildren();
@@ -69,9 +94,9 @@ public class OrNodeTest {
 
     @Test
     public void testGetChildren_CtorWithNonEmptyList_returnsDifferentInstance() throws Exception {
-        // arrange
         List<QueryNode> nonEmptyList = createListWithTestTextNode();
-        OrNode node = new OrNode( nonEmptyList );
+
+        AndNode node = new AndNode( nonEmptyList );
 
         // act
         Collection<QueryNode> result = node.getChildren();
@@ -82,9 +107,9 @@ public class OrNodeTest {
 
     @Test
     public void testGetChildren_CtorWithListContainingOneElement_returnsAListWithOneElement() throws Exception {
-        // arrange
         List<QueryNode> nonEmptyList = createListWithTestTextNode();
-        OrNode node = new OrNode( nonEmptyList );
+
+        AndNode node = new AndNode( nonEmptyList );
 
         // act
         Collection<QueryNode> result = node.getChildren();
@@ -97,7 +122,8 @@ public class OrNodeTest {
     public void testGetChildren_CtorWithListContainingTwoElements_returnsAListWithTwoElement() throws Exception {
         // arrange
         List<QueryNode> nonEmptyList = createListWithFirstAndSecondTextNode();
-        OrNode node = new OrNode( nonEmptyList );
+
+        AndNode node = new AndNode( nonEmptyList );
 
         // act
         Collection<QueryNode> result = node.getChildren();
@@ -115,7 +141,7 @@ public class OrNodeTest {
         nonEmptyList.add( textNode );
         nonEmptyList.add( textNode2 );
 
-        OrNode node = new OrNode( nonEmptyList );
+        AndNode node = new AndNode( nonEmptyList );
 
         // act
         Collection<QueryNode> result = node.getChildren();
@@ -125,58 +151,58 @@ public class OrNodeTest {
     }
 
     @Test
-    public void testToString_CtorOnly_expectOrNodeWithEmptyChildList() throws Exception {
+    public void testToString_CtorOnly_expectAndNodeWithEmptyChildList() throws Exception {
         // arrange
-        OrNode node = new OrNode();
+        AndNode node = new AndNode();
 
         // act
         String result = node.toString();
 
         // assert
-        assertThat( result, equalTo( "[ 'OR', [  ] ]" ) );
+        assertThat( result, equalTo( "[ 'AND', [  ] ]" ) );
     }
 
     @Test
-    public void testToString_CtorWithListContainingOneEmptyElement_expectOrNodeWithEmptyElement() throws Exception {
+    public void testToString_CtorWithListContainingOneEmptyElement_expectAndNodeWithEmptyElement() throws Exception {
         // arrange
         List<QueryNode> nonEmptyList = new ArrayList<>();
         nonEmptyList.add( new EmptyNode() );
 
-        OrNode node = new OrNode( nonEmptyList );
+        AndNode node = new AndNode( nonEmptyList );
 
         // act
         String result = node.toString();
 
         // assert
-        assertThat( result, equalTo( "[ 'OR', [ [ 'EMPTY' ] ] ]" ) );
+        assertThat( result, equalTo( "[ 'AND', [ [ 'EMPTY' ] ] ]" ) );
     }
 
     @Test
-    public void testToString_CtorWithListContainingOneTestElement_expectOrNodeWithTestTextElement() throws Exception {
+    public void testToString_CtorWithListContainingOneTestElement_expectAndNodeWithTestTextElement() throws Exception {
         // arrange
         List<QueryNode> nonEmptyList = createListWithTestTextNode();
 
-        OrNode node = new OrNode( nonEmptyList );
+        AndNode node = new AndNode( nonEmptyList );
 
         // act
         String result = node.toString();
 
         // assert
-        assertThat( result, equalTo( "[ 'OR', [ [ 'TEXT', 'test' ] ] ]" ) );
+        assertThat( result, equalTo( "[ 'AND', [ [ 'TEXT', 'test' ] ] ]" ) );
     }
 
     @Test
-    public void testToString_CtorWithListContainingTwoElements_expectOrNodeWithFirstAndSecondTextElement() throws Exception {
+    public void testToString_CtorWithListContainingTwoElements_expectAndNodeWithFirstAndSecondTextElement() throws Exception {
         // arrange
         List<QueryNode> nonEmptyList = createListWithFirstAndSecondTextNode();
 
-        OrNode node = new OrNode( nonEmptyList );
+        AndNode node = new AndNode( nonEmptyList );
 
         // act
         String result = node.toString();
 
         // assert
-        assertThat( result, equalTo( "[ 'OR', [ [ 'TEXT', 'first' ], [ 'TEXT', 'second' ] ] ]" ) );
+        assertThat( result, equalTo( "[ 'AND', [ [ 'TEXT', 'first' ], [ 'TEXT', 'second' ] ] ]" ) );
     }
 
     private List<QueryNode> createListWithTestTextNode() {
