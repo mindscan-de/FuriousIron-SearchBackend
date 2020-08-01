@@ -2,3 +2,6 @@
 /bin/
 /target/
 /.project
+/src/main/webapp/frontend/*
+/src/main/webapp/frontend/**
+
