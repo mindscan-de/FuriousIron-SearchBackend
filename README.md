@@ -72,7 +72,11 @@ That said, please remember this is a private educational project.
 
 ## Current URL
 
-http://localhost:8080/SearchBackend/rest/search/result?q=123
+http://localhost:8000/SearchBackend/rest/search/result?q=123
+
+## Use the FuriousIron-Frontend
+
+http://localhost:8000/SearchBackend/frontend/
 
 ## License
 
