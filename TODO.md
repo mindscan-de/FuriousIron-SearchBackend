@@ -42,5 +42,34 @@ going through the whole trigram catalog. If we calculate the join of two rare it
 is even smaller, repeat that until the rejection rate is below a certain threshold and then just
 return the candidate documents. if the list is already small. The next step can take care of it.
 
-Even through sorting according to the predicted length of the results, we can improve the speed of
-the search by at least one or two magnitudes.  
+Even through sorting according to the predicted number of the results, we can improve the speed of
+the search by at least one or two orders of magnitude.
+
+Also we can reduce later the number of comparisons, if the result candidate lists for the trigrams 
+are highly unbalanced. Then the second (larger) list uses a skiplist implementation. And makes a 
+binary tree search in between two skiplist entry points.
+
+Rough estimate if two lists are sorted: 
+
+this will reduce the number of comparisons to log_2(largecount / shortcount) * shortcount
+naive treesearch log2(1000)*10 -> 100 Comparisons 
+comparisons instead of n+m comarisons 1000+10 => naive 1010 merge sort comparisons 
+10 * (log2(1000/10)) -> approximately 70 comparisons best case is obviously 10 comparisons
+For obvious reasons we don't want to hash all 1010 elements. but maybe we should? because we need 
+to know whether a document-id is in a collection of a larger collection (Bloom filter?) for each
+trigram also?
+
+we want a high reject rate at very low costs.
+
+So the calculation of the joint set can also be improved by a lot, by using different techniques,
+to maintain a high reject rate in case of large data. For each documentid which is maybe in the
+large dataset, we can do a treesearch, for an even more unbalanced dataset, because we only look
+for the maybe documents.
+
+3 means log_2(1000/3) = 27 comparisons. instead of 3*log_2(1000) = 30
+
+
+after reducing the candidates down to a few, we can then use the more expensive search methods
+over a wordlist of a candidate, whether we can find the word in the document.
+
+If yes, we can search the document. and provide context of the search result as well.
