@@ -38,4 +38,9 @@ look at these words or their trigrams? If we prefer the rarest items over the ce
 candidate list is already short, so we don't need to do the rejects if only less than 1 percent of 
 the result candidates would be rejected by this rule? So if we can order them by prediction of
 finding them in the index, we maybe can stop reducing the number of candidates earlier even before 
-going through the whole trigram catalog.  
+going through the whole trigram catalog. If we calculate the join of two rare items, the joined set
+is even smaller, repeat that until the rejection rate is below a certain threshold and then just
+return the candidate documents. if the list is already small. The next step can take care of it.
+
+Even through sorting according to the predicted length of the results, we can improve the speed of
+the search by at least one or two magnitudes.  
