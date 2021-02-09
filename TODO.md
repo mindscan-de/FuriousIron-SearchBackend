@@ -73,3 +73,6 @@ after reducing the candidates down to a few, we can then use the more expensive 
 over a wordlist of a candidate, whether we can find the word in the document.
 
 If yes, we can search the document. and provide context of the search result as well.
+
+The first step would be to "compile" the first, lets call it semantic search tree, into a 
+technical tree. 
