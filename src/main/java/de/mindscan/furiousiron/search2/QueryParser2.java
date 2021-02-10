@@ -27,6 +27,8 @@ package de.mindscan.furiousiron.search2;
 
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
+import de.mindscan.furiousiron.search2.corequery.ast.CoreQueryNode;
+import de.mindscan.furiousiron.search2.corequery.ast.EmptyCoreNode;
 
 /**
  * 
@@ -40,8 +42,14 @@ public class QueryParser2 {
         return parsedAST;
     }
 
-    public void compileCoreSearch( QueryNode ast ) {
+    public CoreQueryNode compileCoreSearch( QueryNode ast ) {
+        if (ast == null) {
+            return new EmptyCoreNode();
+        }
+
         // Compile parsedAST into a technical AST
+
+        return null;
     }
 
     public void compileLexicalSearch( QueryNode ast ) {
