@@ -27,9 +27,11 @@ package de.mindscan.furiousiron.search2;
 
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
+import de.mindscan.furiousiron.search.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 import de.mindscan.furiousiron.search2.corequery.ast.CoreQueryNode;
 import de.mindscan.furiousiron.search2.corequery.ast.EmptyCoreNode;
+import de.mindscan.furiousiron.search2.corequery.ast.TrigramsCoreNode;
 
 /**
  * 
@@ -53,12 +55,15 @@ public class QueryParser2 {
         }
 
         // Compile parsedAST into a technical AST
+        if (ast instanceof TextNode) {
+            return new TrigramsCoreNode( ast.getContent() );
+        }
 
         return null;
     }
 
     public void compileLexicalSearch( QueryNode ast ) {
-        // compile parsedAST into a semantic search descriptio
+        // compile parsedAST into a semantic search description
     }
 
     public void search( String query ) {
