@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.jupiter.api.Test;
 
+import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search2.corequery.ast.CoreQueryNode;
 import de.mindscan.furiousiron.search2.corequery.ast.EmptyCoreNode;
 
@@ -18,6 +19,18 @@ public class QueryParser2Test {
 
         // act
         CoreQueryNode result = parser2.compileCoreSearch( null );
+
+        // assert
+        assertThat( result, is( instanceOf( EmptyCoreNode.class ) ) );
+    }
+
+    @Test
+    public void testCompileCoreSearch_inputTreeIsEmptyNode_expectEmptyCoreNode() {
+        // arrange
+        QueryParser2 parser2 = new QueryParser2();
+
+        // act
+        CoreQueryNode result = parser2.compileCoreSearch( new EmptyNode() );
 
         // assert
         assertThat( result, is( instanceOf( EmptyCoreNode.class ) ) );
