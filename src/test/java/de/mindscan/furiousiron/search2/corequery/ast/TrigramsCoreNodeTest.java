@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 import java.util.Collection;
@@ -118,6 +119,18 @@ public class TrigramsCoreNodeTest {
 
         // assert
         assertThat( result, empty() );
+    }
+
+    @Test
+    public void testGetTrigrams_ContainsSearch_expectContainsAllTrigrams() throws Exception {
+        // arrange
+        TrigramsCoreNode node = new TrigramsCoreNode( "search" );
+
+        // act
+        Collection<String> result = node.getTrigrams();
+
+        // assert
+        assertThat( result, containsInAnyOrder( "sea", "ear", "arc", "rch" ) );
     }
 
 }

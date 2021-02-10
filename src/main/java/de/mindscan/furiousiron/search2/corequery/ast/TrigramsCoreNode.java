@@ -33,6 +33,9 @@ import de.mindscan.furiousiron.indexer.SimpleWordUtils;
 
 /**
  * 
+ * A TrigramCoreNode represents a CodeQuery for items candidates which include 
+ * all given trigrams.
+ *   
  */
 public class TrigramsCoreNode implements CoreQueryNode {
 
