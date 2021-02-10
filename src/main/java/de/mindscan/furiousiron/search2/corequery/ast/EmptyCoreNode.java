@@ -58,8 +58,7 @@ public class EmptyCoreNode implements CoreQueryNode {
      */
     @Override
     public Collection<String> getTrigrams() {
-        // TODO Auto-generated method stub
-        return null;
+        return Collections.emptyList();
     }
 
 }
