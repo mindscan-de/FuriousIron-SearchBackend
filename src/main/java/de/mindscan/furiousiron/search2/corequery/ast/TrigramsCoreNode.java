@@ -56,4 +56,13 @@ public class TrigramsCoreNode implements CoreQueryNode {
         return Collections.emptyList();
     }
 
+    /** 
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<String> getTrigrams() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

@@ -34,4 +34,6 @@ public interface CoreQueryNode {
     boolean hasChildren();
 
     Collection<CoreQueryNode> getChildren();
+
+    Collection<String> getTrigrams();
 }
