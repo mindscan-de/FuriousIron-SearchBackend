@@ -2,7 +2,9 @@ package de.mindscan.furiousiron.search2.corequery.ast;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 import java.util.Collection;
 
@@ -53,6 +55,66 @@ public class TrigramsCoreNodeTest {
 
         // act
         Collection<CoreQueryNode> result = node.getChildren();
+
+        // assert
+        assertThat( result, empty() );
+    }
+
+    @Test
+    public void testGetTrigrams_EmptyWord_expectEmptyCollection() throws Exception {
+        // arrange
+        TrigramsCoreNode node = new TrigramsCoreNode( "" );
+
+        // act
+        Collection<String> result = node.getTrigrams();
+
+        // assert
+        assertThat( result, empty() );
+    }
+
+    @Test
+    public void testGetTrigrams_WordWithThreeLetters_expectEmptyCollection() throws Exception {
+        // arrange
+        TrigramsCoreNode node = new TrigramsCoreNode( "aaa" );
+
+        // act
+        Collection<String> result = node.getTrigrams();
+
+        // assert
+        assertThat( result, not( empty() ) );
+    }
+
+    @Test
+    public void testGetTrigrams_WordWithThreeLetters_expectCollectionContainsWord() throws Exception {
+        // arrange
+        TrigramsCoreNode node = new TrigramsCoreNode( "aaa" );
+
+        // act
+        Collection<String> result = node.getTrigrams();
+
+        // assert
+        assertThat( result, contains( "aaa" ) );
+    }
+
+    @Test
+    public void testGetTrigrams_DifferentWordWithThreeLetters_expectCollectionContainsWord() throws Exception {
+        // arrange
+        TrigramsCoreNode node = new TrigramsCoreNode( "abc" );
+
+        // act
+        Collection<String> result = node.getTrigrams();
+
+        // assert
+        assertThat( result, contains( "abc" ) );
+    }
+
+    @Test
+    public void testGetTrigrams_DifferentWordWithTwoLetters_expectEmptyCollection() throws Exception {
+        // arrange
+        TrigramsCoreNode node = new TrigramsCoreNode( "ab" );
+
+        // act
+        Collection<String> result = node.getTrigrams();
 
         // assert
         assertThat( result, empty() );

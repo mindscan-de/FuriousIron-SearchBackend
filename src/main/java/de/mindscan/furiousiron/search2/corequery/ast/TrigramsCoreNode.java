@@ -27,17 +27,22 @@ package de.mindscan.furiousiron.search2.corequery.ast;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.stream.Collectors;
+
+import de.mindscan.furiousiron.indexer.SimpleWordUtils;
 
 /**
  * 
  */
 public class TrigramsCoreNode implements CoreQueryNode {
 
+    private final Collection<String> trigrams;
+
     /**
      * @param content
      */
     public TrigramsCoreNode( String content ) {
-        // TODO: build trigrams from content
+        this.trigrams = SimpleWordUtils.getUniqueTrigramsFromWord( content );
     }
 
     /** 
@@ -61,8 +66,7 @@ public class TrigramsCoreNode implements CoreQueryNode {
      */
     @Override
     public Collection<String> getTrigrams() {
-        // TODO Auto-generated method stub
-        return null;
+        return trigrams.stream().collect( Collectors.toSet() );
     }
 
 }
