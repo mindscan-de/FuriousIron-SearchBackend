@@ -25,7 +25,15 @@
  */
 package de.mindscan.furiousiron.search2;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import de.mindscan.furiousiron.search.query.ast.AndNode;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
+import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
+import de.mindscan.furiousiron.search.query.ast.IncludingNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
@@ -57,6 +65,29 @@ public class QueryParser2 {
         // Compile parsedAST into a technical AST
         if (ast instanceof TextNode) {
             return new TrigramsCoreNode( ast.getContent() );
+        }
+
+        if (ast instanceof AndNode) {
+            Set<String> includedwords = new HashSet<String>();
+
+            // collect each word
+            for (QueryNode queryNode : ast.getChildren()) {
+                CoreQueryNode t = this.compileCoreSearch( queryNode );
+                includedwords.addAll( t.getTrigrams() );
+            }
+            List<String> l = includedwords.stream().collect( Collectors.toList() );
+            return new TrigramsCoreNode( l );
+        }
+
+        if (ast instanceof ExcludingNode) {
+            return new EmptyCoreNode();
+        }
+
+        if (ast instanceof IncludingNode) {
+            for (QueryNode queryNode : ast.getChildren()) {
+                return this.compileCoreSearch( queryNode );
+            }
+            return new EmptyCoreNode();
         }
 
         return null;
