@@ -34,6 +34,7 @@ import de.mindscan.furiousiron.search.query.ast.AndNode;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.search.query.ast.IncludingNode;
+import de.mindscan.furiousiron.search.query.ast.OrNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
@@ -79,7 +80,13 @@ public class QueryParser2 {
             return new TrigramsCoreNode( l );
         }
 
+        if (ast instanceof OrNode) {
+            // We really don't support Or nodes right now.
+            throw new RuntimeException( "Or Optimization is not implemented yet" );
+        }
+
         if (ast instanceof ExcludingNode) {
+            // We don't support excludingn on this level right now.
             return new EmptyCoreNode();
         }
 
