@@ -27,6 +27,7 @@ package de.mindscan.furiousiron.search2.corequery.ast;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import de.mindscan.furiousiron.indexer.SimpleWordUtils;
@@ -46,6 +47,13 @@ public class TrigramsCoreNode implements CoreQueryNode {
      */
     public TrigramsCoreNode( String content ) {
         this.trigrams = SimpleWordUtils.getUniqueTrigramsFromWord( content );
+    }
+
+    /**
+     * @param includedwords
+     */
+    public TrigramsCoreNode( List<String> includedwords ) {
+        this.trigrams = SimpleWordUtils.getUniqueTrigramsFromWordList( includedwords );
     }
 
     /** 
