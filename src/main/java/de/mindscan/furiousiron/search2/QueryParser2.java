@@ -115,11 +115,18 @@ public class QueryParser2 {
 
         // coreCandidates = coreSearchAST.searchCoreCandidates();
         // result is DocumentIDs candidate list
-        Set<String> coreDocumentIDCandidates = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
+        Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
+
+        // ----------------------------------------------------------------------
+        // We have some coreCandidates now, but some of the document may still 
+        // miss trigrams which might still not be filtered out, but it was too
+        // expensive to look through large document'id lists, we might need an 
+        // indicator, whether we have used a shortcut
+        // ----------------------------------------------------------------------
 
         /* semanticSearchAST = */ this.compileLexicalSearch( ast );
 
-        // TODO: semanticSearchAST.filterToResults(coreCandidates);
+        // TODO: semanticSearchAST.filterToResults(coreCandidatesDocumentIDs);
 
         // TODO: lexical search and look at each "document"
         // filter documents by wordlists and return a list of documents and their state, 
