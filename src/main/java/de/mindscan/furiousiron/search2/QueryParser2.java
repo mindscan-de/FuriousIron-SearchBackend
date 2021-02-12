@@ -25,11 +25,13 @@
  */
 package de.mindscan.furiousiron.search2;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.query.ast.AndNode;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
@@ -104,14 +106,16 @@ public class QueryParser2 {
         // compile parsedAST into a semantic search description
     }
 
-    public void search( String query ) {
+    public void search( Search search, String query ) {
         QueryNode ast = this.compileSearchTreeFromQuery( query );
 
-        /* coreSearchAST = */ this.compileCoreSearch( ast );
+        CoreQueryNode coreSearchAST = this.compileCoreSearch( ast );
 
-        // TODO: coreCandidates = coreSearchAST.searchCoreCandidates();
+        Collection<String> theTrigrams = coreSearchAST.getTrigrams();
 
+        // coreCandidates = coreSearchAST.searchCoreCandidates();
         // result is DocumentIDs candidate list
+        Set<String> coreDocumentIDCandidates = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
 
         /* semanticSearchAST = */ this.compileLexicalSearch( ast );
 
