@@ -175,12 +175,24 @@ public class QueryParser2 {
     boolean matchWordlistToAst( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
-            // if it is directly included
-            if (documentWordlist.contains( ast.getContent() )) {
+            String wordToSearch = ast.getContent();
+
+            // if it is directly contained
+            if (documentWordlist.contains( wordToSearch )) {
                 return true;
             }
 
-            // 
+            int wordToSearchLength = wordToSearch.length();
+
+            for (String documentWord : documentWordlist) {
+                if (documentWord.length() > wordToSearchLength) {
+                    if (documentWord.contains( wordToSearch )) {
+                        return true;
+                    }
+                }
+            }
+
+            // it is neither contained fully nor partially. 
             return false;
         }
 

@@ -126,6 +126,40 @@ public class QueryParser2Test {
         assertThat( result, equalTo( false ) );
     }
 
+    @Test
+    public void testMatchWordlistToAst_SingleWordContainedInWordlistPartially_returnsTrue() throws Exception {
+        // arrange
+        QueryParser2 parser2 = new QueryParser2();
+        // part of "package"
+        QueryNode ast = parser2.compileSearchTreeFromQuery( "ackage" );
+
+        List<String> wordlist = buildWordlist();
+
+        // act
+        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+
+        // assert
+        assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testMatchWordlistToAst_SingleWordContainedInWordlistPartiallyANDUPPERCASE_returnsTrue() throws Exception {
+        // arrange
+        QueryParser2 parser2 = new QueryParser2();
+
+        // part of "package" - The word we are looking for is always in lowercase in the wordlists / this is part of the realtree.
+        // TODO: has to be incorporated....
+        QueryNode ast = parser2.compileSearchTreeFromQuery( "ACKAGE".toLowerCase() );
+
+        List<String> wordlist = buildWordlist();
+
+        // act
+        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+
+        // assert
+        assertThat( result, equalTo( true ) );
+    }
+
     private List<String> buildWordlist() {
         return Arrays.asList( "package", "org", "common", "import", "java", "nio", "charset", "util", "resourcebundle", "junit", "test", "public", "class",
                         "resourcebundlereadtest", "@test", "void", "bundle", "getbundle", "\"org", "exception", "new", "resourcebundlecontrol", "forname",
