@@ -162,6 +162,7 @@ public class QueryParser2 {
             List<String> documentWordlist = search.getDocumentWordlist( documentID );
 
             // TODO: check, if the AST matches the documentWordlist.
+            // ast must be optimized for speed also / in and-constructions the longest words should be first
             boolean result = matchWordlistToAst( ast, documentWordlist );
 
             // TODO: add the matching document 
@@ -172,6 +173,9 @@ public class QueryParser2 {
         return retained;
     }
 
+    // TODO: for performance reasons the longest words should be checked first
+    //       shorter words are more likely to be occuring the wordlist
+    // TODO  wordlists should be organized by wordsize in a TreeSet
     boolean matchWordlistToAst( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
