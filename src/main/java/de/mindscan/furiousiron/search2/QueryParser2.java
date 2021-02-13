@@ -200,9 +200,35 @@ public class QueryParser2 {
             return false;
         }
 
-        System.out.println( ast.toString() );
+        if (ast instanceof AndNode) {
+            if (ast.hasChildren()) {
+                Collection<QueryNode> children = ast.getChildren();
+                for (QueryNode queryNode : children) {
+                    // early exit in case of a "false" - no need to check further if word is not found.
+                    if (!matchWordlistToAst( queryNode, documentWordlist )) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else {
+                return true;
+            }
+        }
+
+        if (ast instanceof IncludingNode) {
+            if (ast.hasChildren()) {
+                QueryNode first = ast.getChildren().iterator().next();
+                return matchWordlistToAst( first, documentWordlist );
+            }
+            else {
+                return true;
+            }
+        }
+
+        System.out.println( "XXX: " + ast.toString() );
         // okay this is interesting...
 
-        return true;
+        return false;
     }
 }
