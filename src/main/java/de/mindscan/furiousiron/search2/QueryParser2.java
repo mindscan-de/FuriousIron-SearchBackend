@@ -226,6 +226,16 @@ public class QueryParser2 {
             }
         }
 
+        if (ast instanceof ExcludingNode) {
+            if (ast.hasChildren()) {
+                QueryNode first = ast.getChildren().iterator().next();
+                return !matchWordlistToAst( first, documentWordlist );
+            }
+            else {
+                return false;
+            }
+        }
+
         System.out.println( "XXX: " + ast.toString() );
         // okay this is interesting...
 

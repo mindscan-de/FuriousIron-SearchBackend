@@ -205,6 +205,21 @@ public class QueryParser2Test {
         assertThat( result, equalTo( false ) );
     }
 
+    @Test
+    public void testMatchWordlistToAst_TwoSupressedWordsBothNotContained_returnsTrue() throws Exception {
+        // arrange
+        QueryParser2 parser2 = new QueryParser2();
+        QueryNode ast = parser2.compileSearchTreeFromQuery( "-packagexxx -importxxx" );
+
+        List<String> wordlist = buildWordlist();
+
+        // act
+        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+
+        // assert
+        assertThat( result, equalTo( true ) );
+    }
+
     private List<String> buildWordlist() {
         return Arrays.asList( "package", "org", "common", "import", "java", "nio", "charset", "util", "resourcebundle", "junit", "test", "public", "class",
                         "resourcebundlereadtest", "@test", "void", "bundle", "getbundle", "\"org", "exception", "new", "resourcebundlecontrol", "forname",
