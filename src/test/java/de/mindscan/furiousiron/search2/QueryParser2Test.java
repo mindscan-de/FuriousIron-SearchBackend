@@ -65,7 +65,6 @@ public class QueryParser2Test {
 
         // act
         CoreQueryNode result = parser2.compileCoreSearch( ast );
-        System.out.println( ast );
 
         // assert
         Collection<String> trigrams = result.getTrigrams();
@@ -85,7 +84,6 @@ public class QueryParser2Test {
 
         // act
         CoreQueryNode result = parser2.compileCoreSearch( ast );
-        System.out.println( ast );
 
         // assert
         Collection<String> trigrams = result.getTrigrams();
