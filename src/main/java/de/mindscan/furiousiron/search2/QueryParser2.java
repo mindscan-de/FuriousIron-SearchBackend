@@ -27,6 +27,7 @@ package de.mindscan.furiousiron.search2;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -132,12 +133,19 @@ public class QueryParser2 {
         // filter documents by wordlists and return a list of documents and their state, 
         // how many rules they fulfill, according to the wordlist and the semanticSearchAST
 
-        // we may can do this by using bloom filters and weights at the filter level 
+        // we may can do this by using bloom filters and weights at the filter level
+
+        List<String> retained = filterByDocumentWordlists( coreCandidatesDocumentIDs );
 
         // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
         // we can even let the user decide, which result was better... and use that as well for ordering next time.
 
+        // TODO: save retained results for future queries.
+
         // TODO: predict the order of this documentlist according to the query.
+
+        // Now rank the results 
+        List<String> ranked = retained;
 
         // now how near are the tokens, how many of them are in there
         // take the top 20 documents and do a "simpleSearch" on them, and try to present the user a
@@ -145,5 +153,18 @@ public class QueryParser2 {
 
         // We might train the to predict the score of a file vector according to the search vector using
         // transformers ... But this is way too sophisticated. and requires lots of training
+    }
+
+    private List<String> filterByDocumentWordlists( Set<String> coreCandidatesDocumentIDs ) {
+        List<String> retained = new LinkedList<String>();
+        // TODO: go through each documentid and apply the ast
+        //       to retain documents 
+        for (String documentID : coreCandidatesDocumentIDs) {
+            // TODO:check the 
+            if (true) {
+                retained.add( documentID );
+            }
+        }
+        return retained;
     }
 }
