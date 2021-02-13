@@ -68,7 +68,7 @@ public class QueryParser2 {
 
         // Compile parsedAST into a technical AST
         if (ast instanceof TextNode) {
-            return new TrigramsCoreNode( ast.getContent() );
+            return new TrigramsCoreNode( ast.getContent().toLowerCase() );
         }
 
         if (ast instanceof AndNode) {

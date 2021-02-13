@@ -77,6 +77,26 @@ public class QueryParser2Test {
     }
 
     @Test
+    public void testCompileCoreSearch_TwoSearchQuerySearchTermsMixedCase_expect() throws Exception {
+        // arrange
+        QueryParser2 parser2 = new QueryParser2();
+        // problem is, we actually have mixed case here...
+        QueryNode ast = parser2.compileSearchTreeFromQuery( "+SEARCHquery +PERFORMance" );
+
+        // act
+        CoreQueryNode result = parser2.compileCoreSearch( ast );
+        System.out.println( ast );
+
+        // assert
+        Collection<String> trigrams = result.getTrigrams();
+        assertThat( trigrams, containsInAnyOrder(
+                        // searchquery
+                        "sea", "ear", "arc", "rch", "chq", "hqu", "que", "uer", "ery",
+                        // performance
+                        "per", "erf", "rfo", "for", "orm", "rma", "man", "anc", "nce" ) );
+    }
+
+    @Test
     public void testMatchWordlistToAst_SingleWordContainedInWordlist_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
