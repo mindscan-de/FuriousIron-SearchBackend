@@ -135,7 +135,7 @@ public class QueryParser2 {
 
         // we may can do this by using bloom filters and weights at the filter level
 
-        List<String> retained = filterByDocumentWordlists( coreCandidatesDocumentIDs );
+        List<String> retained = filterByDocumentWordlists( search, coreCandidatesDocumentIDs );
 
         // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
         // we can even let the user decide, which result was better... and use that as well for ordering next time.
@@ -155,12 +155,17 @@ public class QueryParser2 {
         // transformers ... But this is way too sophisticated. and requires lots of training
     }
 
-    private List<String> filterByDocumentWordlists( Set<String> coreCandidatesDocumentIDs ) {
+    private List<String> filterByDocumentWordlists( Search search, Set<String> coreCandidatesDocumentIDs ) {
         List<String> retained = new LinkedList<String>();
-        // TODO: go through each documentid and apply the ast
-        //       to retain documents 
+
         for (String documentID : coreCandidatesDocumentIDs) {
-            // TODO:check the 
+            List<String> documentWordlist = search.getDocumentWordlist( documentID );
+
+            // TODO: check, if the AST matches the documentWordlist.
+
+            // okay this is interesting...
+
+            // TODO: add the matching document 
             if (true) {
                 retained.add( documentID );
             }
