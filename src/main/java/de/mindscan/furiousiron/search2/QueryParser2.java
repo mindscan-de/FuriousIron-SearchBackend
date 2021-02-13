@@ -218,6 +218,22 @@ public class QueryParser2 {
             }
         }
 
+        if (ast instanceof OrNode) {
+            if (ast.hasChildren()) {
+                Collection<QueryNode> children = ast.getChildren();
+                for (QueryNode queryNode : children) {
+                    // early exit in case of a "true" - no need to check further if other word is also found.
+                    if (matchWordlistToAst( queryNode, documentWordlist )) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else {
+                return false;
+            }
+        }
+
         if (ast instanceof IncludingNode) {
             if (ast.hasChildren()) {
                 QueryNode first = ast.getChildren().iterator().next();
