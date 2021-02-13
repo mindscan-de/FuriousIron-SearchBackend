@@ -176,6 +176,8 @@ public class QueryParser2 {
     // TODO: for performance reasons the longest words should be checked first
     //       shorter words are more likely to be occuring the wordlist
     // TODO  wordlists should be organized by wordsize in a TreeSet
+    //       in an andnode, the most unlikely word should be processed first
+    //       int an or node, the most likely word should be processed first
     boolean matchWordlistToAst( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
