@@ -173,9 +173,10 @@ public class QueryParser2 {
 
     // TODO: for performance reasons the longest words should be checked first
     //       shorter words are more likely to be occuring the wordlist
-    // TODO  wordlists should be organized by wordsize in a TreeSet
+    // TODO: wordlists should be organized by wordsize in a TreeSet
     //       in an andnode, the most unlikely word should be processed first
     //       int an or node, the most likely word should be processed first
+    // TODO: This is not the correct Tree, but still good enough for this usecase right now.  
     boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
@@ -252,9 +253,6 @@ public class QueryParser2 {
             }
         }
 
-        System.out.println( "XXX: " + ast.toString() );
-        // okay this is interesting...
-
-        return false;
+        throw new RuntimeException( "This Node type is not supported: " + ast.toString() );
     }
 }
