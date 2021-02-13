@@ -155,21 +155,19 @@ public class QueryParser2 {
         // transformers ... But this is way too sophisticated. and requires lots of training
     }
 
+    // TODO: This is not the correct ast, but still good enough for our purpose.
+    // TODO: this should be an AST which is optimized for matching speed
+    //       Nodes in optimized AST should be sorted : and - from longest to shortest word
+    //       Nodes in optimized AST should be sorted : or  - from shortest to longest
     private List<String> filterByDocumentWordlists( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         List<String> retained = new LinkedList<String>();
 
         for (String documentID : coreCandidatesDocumentIDs) {
-            List<String> documentWordlist = search.getDocumentWordlist( documentID );
-
-            // TODO: check, if the AST matches the documentWordlist.
-            // ast must be optimized for speed also / in and-constructions the longest words should be first
-            boolean result = matchWordlistToAst( ast, documentWordlist );
-
-            // TODO: add the matching document 
-            if (result) {
+            if (matchWordlistToAst( ast, search.getDocumentWordlist( documentID ) )) {
                 retained.add( documentID );
             }
         }
+
         return retained;
     }
 
