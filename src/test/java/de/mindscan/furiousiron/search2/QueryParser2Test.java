@@ -1,11 +1,14 @@
 package de.mindscan.furiousiron.search2;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -71,6 +74,42 @@ public class QueryParser2Test {
                         "sea", "ear", "arc", "rch", "chq", "hqu", "que", "uer", "ery",
                         // performance
                         "per", "erf", "rfo", "for", "orm", "rma", "man", "anc", "nce" ) );
+    }
+
+    @Test
+    public void testMatchWordlistToAst_SingleWordContainedInWordlist_returnsTrue() throws Exception {
+        // arrange
+        QueryParser2 parser2 = new QueryParser2();
+        QueryNode ast = parser2.compileSearchTreeFromQuery( "package" );
+
+        List<String> wordlist = buildWordlist();
+
+        // act
+        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+
+        // assert
+        assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testMatchWordlistToAst_SingleWordNotContainedInWordlist_returnsFalse() throws Exception {
+        // arrange
+        QueryParser2 parser2 = new QueryParser2();
+        QueryNode ast = parser2.compileSearchTreeFromQuery( "packageXXX" );
+
+        List<String> wordlist = buildWordlist();
+
+        // act
+        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+
+        // assert
+        assertThat( result, equalTo( false ) );
+    }
+
+    private List<String> buildWordlist() {
+        return Arrays.asList( "package", "org", "common", "import", "java", "nio", "charset", "util", "resourcebundle", "junit", "test", "public", "class",
+                        "resourcebundlereadtest", "@test", "void", "bundle", "getbundle", "\"org", "exception", "new", "resourcebundlecontrol", "forname",
+                        "\"utf", "string", "value", "getstring", "\"err", "00110\"", "system", "out", "println" );
     }
 
 }
