@@ -97,7 +97,7 @@ public class QueryParser2Test {
     }
 
     @Test
-    public void testMatchWordlistToAst_SingleWordContainedInWordlist_returnsTrue() throws Exception {
+    public void testIsAstMatchingToWordlist_SingleWordContainedInWordlist_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "package" );
@@ -105,14 +105,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( true ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_SingleWordNotContainedInWordlist_returnsFalse() throws Exception {
+    public void testIsAstMatchingToWordlist_SingleWordNotContainedInWordlist_returnsFalse() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "packageXXX" );
@@ -120,14 +120,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( false ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_SingleWordContainedInWordlistPartially_returnsTrue() throws Exception {
+    public void testIsAstMatchingToWordlist_SingleWordContainedInWordlistPartially_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         // part of "package"
@@ -136,14 +136,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( true ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_SingleWordContainedInWordlistPartiallyANDUPPERCASE_returnsTrue() throws Exception {
+    public void testIsAstMatchingToWordlist_SingleWordContainedInWordlistPartiallyANDUPPERCASE_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
 
@@ -154,14 +154,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( true ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_TwoWordsBothContained_returnsTrue() throws Exception {
+    public void testIsAstMatchingToWordlist_TwoWordsBothContained_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+package +import" );
@@ -169,14 +169,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( true ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_TwoWordsBothOneContained_returnsFalse() throws Exception {
+    public void testIsAstMatchingToWordlist_TwoWordsBothOneContained_returnsFalse() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+package +importxxx" );
@@ -184,14 +184,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( false ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_TwoWordsBothNotContained_returnsFalse() throws Exception {
+    public void testIsAstMatchingToWordlist_TwoWordsBothNotContained_returnsFalse() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+packagexx +importxxx" );
@@ -199,14 +199,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( false ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_TwoSupressedWordsBothNotContained_returnsTrue() throws Exception {
+    public void testIsAstMatchingToWordlist_TwoSupressedWordsBothNotContained_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "-packagexxx -importxxx" );
@@ -214,14 +214,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( true ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_TwoWordsContainedAsOr_returnsTrue() throws Exception {
+    public void testIsAstMatchingToWordlist_TwoWordsContainedAsOr_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "package import" );
@@ -229,14 +229,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( true ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_TwoWordsSecondContainedAsOr_returnsTrue() throws Exception {
+    public void testIsAstMatchingToWordlist_TwoWordsSecondContainedAsOr_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "packagexxx import" );
@@ -244,14 +244,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( true ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_TwoWordsFirstContainedAsOr_returnsTrue() throws Exception {
+    public void testIsAstMatchingToWordlist_TwoWordsFirstContainedAsOr_returnsTrue() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "package importxxx" );
@@ -259,14 +259,14 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( true ) );
     }
 
     @Test
-    public void testMatchWordlistToAst_TwoWordsBothNotContainedAsOr_returnsFalse() throws Exception {
+    public void testIsAstMatchingToWordlist_TwoWordsBothNotContainedAsOr_returnsFalse() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "packagexxx importxxx" );
@@ -274,7 +274,7 @@ public class QueryParser2Test {
         List<String> wordlist = buildWordlist();
 
         // act
-        boolean result = parser2.matchWordlistToAst( ast, wordlist );
+        boolean result = parser2.isAstMatchingToWordlist( ast, wordlist );
 
         // assert
         assertThat( result, equalTo( false ) );

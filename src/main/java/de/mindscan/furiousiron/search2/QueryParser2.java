@@ -163,7 +163,7 @@ public class QueryParser2 {
         List<String> retained = new LinkedList<String>();
 
         for (String documentID : coreCandidatesDocumentIDs) {
-            if (matchWordlistToAst( ast, search.getDocumentWordlist( documentID ) )) {
+            if (isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentID ) )) {
                 retained.add( documentID );
             }
         }
@@ -176,7 +176,7 @@ public class QueryParser2 {
     // TODO  wordlists should be organized by wordsize in a TreeSet
     //       in an andnode, the most unlikely word should be processed first
     //       int an or node, the most likely word should be processed first
-    boolean matchWordlistToAst( QueryNode ast, List<String> documentWordlist ) {
+    boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
             String wordToSearch = ast.getContent();
@@ -205,7 +205,7 @@ public class QueryParser2 {
                 Collection<QueryNode> children = ast.getChildren();
                 for (QueryNode queryNode : children) {
                     // early exit in case of a "false" - no need to check further if word is not found.
-                    if (!matchWordlistToAst( queryNode, documentWordlist )) {
+                    if (!isAstMatchingToWordlist( queryNode, documentWordlist )) {
                         return false;
                     }
                 }
@@ -221,7 +221,7 @@ public class QueryParser2 {
                 Collection<QueryNode> children = ast.getChildren();
                 for (QueryNode queryNode : children) {
                     // early exit in case of a "true" - no need to check further if other word is also found.
-                    if (matchWordlistToAst( queryNode, documentWordlist )) {
+                    if (isAstMatchingToWordlist( queryNode, documentWordlist )) {
                         return true;
                     }
                 }
@@ -235,7 +235,7 @@ public class QueryParser2 {
         if (ast instanceof IncludingNode) {
             if (ast.hasChildren()) {
                 QueryNode first = ast.getChildren().iterator().next();
-                return matchWordlistToAst( first, documentWordlist );
+                return isAstMatchingToWordlist( first, documentWordlist );
             }
             else {
                 return true;
@@ -245,7 +245,7 @@ public class QueryParser2 {
         if (ast instanceof ExcludingNode) {
             if (ast.hasChildren()) {
                 QueryNode first = ast.getChildren().iterator().next();
-                return !matchWordlistToAst( first, documentWordlist );
+                return !isAstMatchingToWordlist( first, documentWordlist );
             }
             else {
                 return false;
