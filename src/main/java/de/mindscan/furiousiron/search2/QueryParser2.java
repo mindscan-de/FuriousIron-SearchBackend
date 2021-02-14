@@ -51,7 +51,14 @@ import de.mindscan.furiousiron.search2.corequery.ast.TrigramsCoreNode;
 public class QueryParser2 {
 
     public void search( Search search, String query ) {
+        QueryCache queryCache = new QueryCache();
         QueryNode ast = this.compileSearchTreeFromQuery( query );
+
+        // TODO: if a cache result for this query exist: skip the search part and just do the ranking 
+        //       and data-presentation. Key should be md5(ast.toString)
+        if (queryCache.hasCachedSearchResult( ast )) {
+            List<String> retained = queryCache.loadSearchResult( ast );
+        }
 
         CoreQueryNode coreSearchAST = this.compileCoreSearch( ast );
 
@@ -83,7 +90,8 @@ public class QueryParser2 {
         // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
         // we can even let the user decide, which result was better... and use that as well for ordering next time.
 
-        // TODO: save retained results for future queries.
+        // save retained results for future queries.
+        queryCache.cacheSearchResult( ast, retained );
 
         // TODO: predict the order of this documentlist according to the query.
 
@@ -137,7 +145,7 @@ public class QueryParser2 {
         }
 
         if (ast instanceof ExcludingNode) {
-            // We don't support excludingn on this level right now.
+            // We don't support excluding on this level right now.
             return new EmptyCoreNode();
         }
 
