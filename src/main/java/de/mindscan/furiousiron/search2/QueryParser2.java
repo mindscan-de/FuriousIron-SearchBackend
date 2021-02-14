@@ -50,6 +50,54 @@ import de.mindscan.furiousiron.search2.corequery.ast.TrigramsCoreNode;
  */
 public class QueryParser2 {
 
+    public void search( Search search, String query ) {
+        QueryNode ast = this.compileSearchTreeFromQuery( query );
+
+        CoreQueryNode coreSearchAST = this.compileCoreSearch( ast );
+
+        Collection<String> theTrigrams = coreSearchAST.getTrigrams();
+
+        // coreCandidates = coreSearchAST.searchCoreCandidates();
+        // result is DocumentIDs candidate list
+        Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
+
+        // ----------------------------------------------------------------------
+        // We have some coreCandidates now, but some of the document may still 
+        // miss trigrams which might still not be filtered out, but it was too
+        // expensive to look through large document'id lists, we might need an 
+        // indicator, whether we have used a shortcut
+        // ----------------------------------------------------------------------
+
+        /* semanticSearchAST = */ this.compileLexicalSearch( ast );
+
+        // TODO: semanticSearchAST.filterToResults(coreCandidatesDocumentIDs);
+
+        // TODO: lexical search and look at each "document"
+        // filter documents by wordlists and return a list of documents and their state, 
+        // how many rules they fulfill, according to the wordlist and the semanticSearchAST
+
+        // we may can do this by using bloom filters and weights at the filter level
+
+        List<String> retained = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
+
+        // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
+        // we can even let the user decide, which result was better... and use that as well for ordering next time.
+
+        // TODO: save retained results for future queries.
+
+        // TODO: predict the order of this documentlist according to the query.
+
+        // Now rank the results 
+        List<String> ranked = retained;
+
+        // now how near are the tokens, how many of them are in there
+        // take the top 20 documents and do a "simpleSearch" on them, and try to present the user a
+        // each time the user uses pagination only some of the results are searched in the real way.
+
+        // We might train the to predict the score of a file vector according to the search vector using
+        // transformers ... But this is way too sophisticated. and requires lots of training
+    }
+
     public QueryNode compileSearchTreeFromQuery( String query ) {
         QueryParser queryParser = new QueryParser();
         QueryNode parsedAST = queryParser.parseQuery( query );
@@ -105,54 +153,6 @@ public class QueryParser2 {
 
     public void compileLexicalSearch( QueryNode ast ) {
         // compile parsedAST into a semantic search description
-    }
-
-    public void search( Search search, String query ) {
-        QueryNode ast = this.compileSearchTreeFromQuery( query );
-
-        CoreQueryNode coreSearchAST = this.compileCoreSearch( ast );
-
-        Collection<String> theTrigrams = coreSearchAST.getTrigrams();
-
-        // coreCandidates = coreSearchAST.searchCoreCandidates();
-        // result is DocumentIDs candidate list
-        Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
-
-        // ----------------------------------------------------------------------
-        // We have some coreCandidates now, but some of the document may still 
-        // miss trigrams which might still not be filtered out, but it was too
-        // expensive to look through large document'id lists, we might need an 
-        // indicator, whether we have used a shortcut
-        // ----------------------------------------------------------------------
-
-        /* semanticSearchAST = */ this.compileLexicalSearch( ast );
-
-        // TODO: semanticSearchAST.filterToResults(coreCandidatesDocumentIDs);
-
-        // TODO: lexical search and look at each "document"
-        // filter documents by wordlists and return a list of documents and their state, 
-        // how many rules they fulfill, according to the wordlist and the semanticSearchAST
-
-        // we may can do this by using bloom filters and weights at the filter level
-
-        List<String> retained = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
-
-        // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
-        // we can even let the user decide, which result was better... and use that as well for ordering next time.
-
-        // TODO: save retained results for future queries.
-
-        // TODO: predict the order of this documentlist according to the query.
-
-        // Now rank the results 
-        List<String> ranked = retained;
-
-        // now how near are the tokens, how many of them are in there
-        // take the top 20 documents and do a "simpleSearch" on them, and try to present the user a
-        // each time the user uses pagination only some of the results are searched in the real way.
-
-        // We might train the to predict the score of a file vector according to the search vector using
-        // transformers ... But this is way too sophisticated. and requires lots of training
     }
 
     // TODO: This is not the correct ast, but still good enough for our purpose.
