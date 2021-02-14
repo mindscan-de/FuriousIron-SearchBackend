@@ -25,6 +25,10 @@
  */
 package de.mindscan.furiousiron.search2;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.List;
 
@@ -40,6 +44,8 @@ public class QueryCache {
      * @return
      */
     public boolean hasCachedSearchResult( QueryNode ast ) {
+        String qkey = calculateQueryKey( ast );
+
         return false;
     }
 
@@ -48,7 +54,7 @@ public class QueryCache {
      * @param retained
      */
     public void cacheSearchResult( QueryNode ast, List<String> documentIds ) {
-        // TODO Auto-generated method stub
+        String qkey = calculateQueryKey( ast );
 
     }
 
@@ -57,7 +63,39 @@ public class QueryCache {
      * @return
      */
     public List<String> loadSearchResult( QueryNode ast ) {
+        String qkey = calculateQueryKey( ast );
+
         return Collections.emptyList();
+    }
+
+    private String calculateQueryKey( QueryNode ast ) {
+        return md5( ast.toString() );
+    }
+
+    public static String md5( String queryString ) {
+        try {
+            byte[] relativePathAsBytes = queryString.getBytes( "UTF-8" );
+
+            MessageDigest md5sum = MessageDigest.getInstance( "MD5" );
+            byte[] md5 = md5sum.digest( relativePathAsBytes );
+
+            BigInteger md5bi = new BigInteger( 1, md5 );
+            String md5hex = md5bi.toString( 16 );
+
+            while (md5hex.length() < 32) {
+                md5hex = "0" + md5hex;
+            }
+
+            return md5hex;
+        }
+        catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }
