@@ -54,10 +54,11 @@ public class QueryParser2 {
         QueryCache queryCache = new QueryCache();
         QueryNode ast = this.compileSearchTreeFromQuery( query );
 
-        // TODO: if a cache result for this query exist: skip the search part and just do the ranking 
-        //       and data-presentation. Key should be md5(ast.toString)
+        List<String> queryDocumentIds;
+
+        // if cached result exist:  just do the ranking and data-presentation.
         if (queryCache.hasCachedSearchResult( ast )) {
-            List<String> retained = queryCache.loadSearchResult( ast );
+            queryDocumentIds = queryCache.loadSearchResult( ast );
         }
         else {
             CoreQueryNode coreSearchAST = this.compileCoreSearch( ast );
@@ -85,19 +86,19 @@ public class QueryParser2 {
 
             // we may can do this by using bloom filters and weights at the filter level
 
-            List<String> retained = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
+            queryDocumentIds = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
 
             // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
             // we can even let the user decide, which result was better... and use that as well for ordering next time.
 
             // save retained results for future queries.
-            queryCache.cacheSearchResult( ast, retained );
+            queryCache.cacheSearchResult( ast, queryDocumentIds );
         }
 
         // TODO: predict the order of this documentlist according to the query.
 
         // Now rank the results 
-        // List<String> ranked = retained;
+        List<String> ranked = queryDocumentIds;
 
         // now how near are the tokens, how many of them are in there
         // take the top 20 documents and do a "simpleSearch" on them, and try to present the user a
