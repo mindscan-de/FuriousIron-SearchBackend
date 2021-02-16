@@ -95,7 +95,7 @@ public class SearchRESTfulService {
         long end = System.currentTimeMillis();
         // ---> END
 
-        System.out.println( "q:=" + query + " / time: " + (end - start) );
+        System.out.println( "q2:=" + query + " / time: " + (end - start) );
 
         Gson gson = new Gson();
         return gson.toJson( jsonResult );
