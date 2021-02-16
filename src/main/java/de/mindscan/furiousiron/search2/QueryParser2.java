@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.mindscan.furiousiron.search.Search;
+import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.ast.AndNode;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
@@ -50,7 +51,7 @@ import de.mindscan.furiousiron.search2.corequery.ast.TrigramsCoreNode;
  */
 public class QueryParser2 {
 
-    public void search( Search search, String query ) {
+    public Collection<SearchResultCandidates> search( Search search, String query ) {
         QueryCache queryCache = new QueryCache();
         QueryNode ast = this.compileSearchTreeFromQuery( query );
 
@@ -65,7 +66,6 @@ public class QueryParser2 {
 
             Collection<String> theTrigrams = coreSearchAST.getTrigrams();
 
-            // coreCandidates = coreSearchAST.searchCoreCandidates();
             // result is DocumentIDs candidate list
             Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
 
@@ -106,6 +106,10 @@ public class QueryParser2 {
 
         // We might train the to predict the score of a file vector according to the search vector using
         // transformers ... But this is way too sophisticated. and requires lots of training
+
+        // TODO: convert rankedDocuments into SearchResultCandidates
+
+        return null;
     }
 
     public QueryNode compileSearchTreeFromQuery( String query ) {
