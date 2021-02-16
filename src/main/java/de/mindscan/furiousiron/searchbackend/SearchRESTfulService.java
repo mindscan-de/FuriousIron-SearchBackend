@@ -43,6 +43,7 @@ import de.mindscan.furiousiron.search.outputmodel.QueryResultJsonModel;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.executor.QueryExecutor;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
+import de.mindscan.furiousiron.search2.QueryParser2;
 
 /**
  * 
@@ -57,15 +58,44 @@ public class SearchRESTfulService {
     public String getQueryResult_JSON( @QueryParam( "q" ) String query ) {
         Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
 
-        Search search = new Search( indexFolder );
+        // ---> START
+        long start = System.currentTimeMillis();
 
+        Search search = new Search( indexFolder );
         QueryParser queryParser = new QueryParser();
         QueryNode parsedAST = queryParser.parseQuery( query );
         Collection<SearchResultCandidates> resultCandidates = QueryExecutor.execute( search, parsedAST );
 
         QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 
-        System.out.println( "q:=" + query );
+        long end = System.currentTimeMillis();
+        // --> END
+
+        System.out.println( "q:=" + query + " / time: " + (end - start) );
+
+        Gson gson = new Gson();
+        return gson.toJson( jsonResult );
+    }
+
+    @javax.ws.rs.Path( "/result2" )
+    @GET
+    @Produces( "application/json" )
+    public String getQueryResult2_JSON( @QueryParam( "q" ) String query ) {
+        Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
+
+        // ---> START
+        long start = System.currentTimeMillis();
+
+        Search search = new Search( indexFolder );
+        QueryParser2 queryParser = new QueryParser2();
+        Collection<SearchResultCandidates> resultCandidates = queryParser.search( search, query );
+
+        QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
+
+        long end = System.currentTimeMillis();
+        // ---> END
+
+        System.out.println( "q:=" + query + " / time: " + (end - start) );
 
         Gson gson = new Gson();
         return gson.toJson( jsonResult );
