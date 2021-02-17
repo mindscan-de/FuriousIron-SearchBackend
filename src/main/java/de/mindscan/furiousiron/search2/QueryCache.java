@@ -29,15 +29,26 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
 import java.util.List;
 
+import de.mindscan.furiousiron.index.cache.SearchQueryCache;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 
 /**
  * 
  */
 public class QueryCache {
+
+    // backend
+    private SearchQueryCache searchQueryCache;
+
+    /**
+     * @param searchQueryCache
+     */
+    public QueryCache( SearchQueryCache searchQueryCache ) {
+        this.searchQueryCache = searchQueryCache;
+
+    }
 
     /**
      * @param ast
@@ -46,7 +57,7 @@ public class QueryCache {
     public boolean hasCachedSearchResult( QueryNode ast ) {
         String qkey = calculateQueryKey( ast );
 
-        return false;
+        return searchQueryCache.isQueryResultAvailable( qkey );
     }
 
     /**
@@ -56,6 +67,7 @@ public class QueryCache {
     public void cacheSearchResult( QueryNode ast, List<String> documentIds ) {
         String qkey = calculateQueryKey( ast );
 
+        searchQueryCache.saveQueryResult( qkey, documentIds );
     }
 
     /**
@@ -65,7 +77,7 @@ public class QueryCache {
     public List<String> loadSearchResult( QueryNode ast ) {
         String qkey = calculateQueryKey( ast );
 
-        return Collections.emptyList();
+        return searchQueryCache.loadQueryResult( qkey );
     }
 
     private String calculateQueryKey( QueryNode ast ) {
