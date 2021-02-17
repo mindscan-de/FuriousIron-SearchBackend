@@ -52,7 +52,7 @@ import de.mindscan.furiousiron.search2.corequery.ast.TrigramsCoreNode;
 public class QueryParser2 {
 
     public Collection<SearchResultCandidates> search( Search search, String query ) {
-        QueryCache queryCache = new QueryCache();
+        QueryCache queryCache = new QueryCache( search.getSearchQueryCache() );
         QueryNode ast = this.compileSearchTreeFromQuery( query );
 
         List<String> queryDocumentIds;
