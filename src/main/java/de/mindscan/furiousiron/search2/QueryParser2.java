@@ -26,19 +26,15 @@
 package de.mindscan.furiousiron.search2;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
-import de.mindscan.furiousiron.core.ast.EmptyCoreNode;
-import de.mindscan.furiousiron.core.ast.TrigramsCoreNode;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.ast.AndNode;
-import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.search.query.ast.IncludingNode;
 import de.mindscan.furiousiron.search.query.ast.OrNode;
@@ -62,7 +58,7 @@ public class QueryParser2 {
             queryDocumentIds = queryCache.loadSearchResult( ast );
         }
         else {
-            CoreQueryNode coreSearchAST = this.compileCoreSearch( ast );
+            CoreQueryNode coreSearchAST = CompileCoreSearch.compileCoreSearch( ast );
 
             Collection<String> theTrigrams = coreSearchAST.getTrigrams();
 
@@ -132,52 +128,6 @@ public class QueryParser2 {
         QueryNode parsedAST = queryParser.parseQuery( query );
 
         return parsedAST;
-    }
-
-    public CoreQueryNode compileCoreSearch( QueryNode ast ) {
-        if (ast == null) {
-            return new EmptyCoreNode();
-        }
-
-        if (ast instanceof EmptyNode) {
-            return new EmptyCoreNode();
-        }
-
-        // Compile parsedAST into a technical AST
-        if (ast instanceof TextNode) {
-            return new TrigramsCoreNode( ast.getContent().toLowerCase() );
-        }
-
-        if (ast instanceof AndNode) {
-            Set<String> includedwords = new HashSet<String>();
-
-            // collect each word
-            for (QueryNode queryNode : ast.getChildren()) {
-                CoreQueryNode t = this.compileCoreSearch( queryNode );
-                includedwords.addAll( t.getTrigrams() );
-            }
-            List<String> l = includedwords.stream().collect( Collectors.toList() );
-            return new TrigramsCoreNode( l );
-        }
-
-        if (ast instanceof OrNode) {
-            // We really don't support Or nodes right now.
-            throw new RuntimeException( "Or Optimization is not implemented yet" );
-        }
-
-        if (ast instanceof ExcludingNode) {
-            // We don't support excluding on this level right now.
-            return new EmptyCoreNode();
-        }
-
-        if (ast instanceof IncludingNode) {
-            for (QueryNode queryNode : ast.getChildren()) {
-                return this.compileCoreSearch( queryNode );
-            }
-            return new EmptyCoreNode();
-        }
-
-        return null;
     }
 
     public void compileLexicalSearch( QueryNode ast ) {

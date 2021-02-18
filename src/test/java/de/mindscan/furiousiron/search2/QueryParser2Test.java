@@ -13,36 +13,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
-import de.mindscan.furiousiron.core.ast.EmptyCoreNode;
 import de.mindscan.furiousiron.core.ast.TrigramsCoreNode;
-import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 
 public class QueryParser2Test {
-
-    @Test
-    public void testCompileCoreSearch_inputTreeIsNull_expectEmptyCoreNode() {
-        // arrange
-        QueryParser2 parser2 = new QueryParser2();
-
-        // act
-        CoreQueryNode result = parser2.compileCoreSearch( null );
-
-        // assert
-        assertThat( result, is( instanceOf( EmptyCoreNode.class ) ) );
-    }
-
-    @Test
-    public void testCompileCoreSearch_inputTreeIsEmptyNode_expectEmptyCoreNode() {
-        // arrange
-        QueryParser2 parser2 = new QueryParser2();
-
-        // act
-        CoreQueryNode result = parser2.compileCoreSearch( new EmptyNode() );
-
-        // assert
-        assertThat( result, is( instanceOf( EmptyCoreNode.class ) ) );
-    }
 
     @Test
     public void testCompileCoreSearch_OneSearchQuerySearchTerm_expectTrigramsCoreNode() throws Exception {
@@ -51,7 +25,7 @@ public class QueryParser2Test {
         QueryNode ast = parser2.compileSearchTreeFromQuery( "searchquery" );
 
         // act
-        CoreQueryNode result = parser2.compileCoreSearch( ast );
+        CoreQueryNode result = CompileCoreSearch.compileCoreSearch( ast );
 
         // assert
         assertThat( result, is( instanceOf( TrigramsCoreNode.class ) ) );
@@ -64,7 +38,7 @@ public class QueryParser2Test {
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+searchquery +performance" );
 
         // act
-        CoreQueryNode result = parser2.compileCoreSearch( ast );
+        CoreQueryNode result = CompileCoreSearch.compileCoreSearch( ast );
 
         // assert
         Collection<String> trigrams = result.getTrigrams();
@@ -83,7 +57,7 @@ public class QueryParser2Test {
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+SEARCHquery +PERFORMance" );
 
         // act
-        CoreQueryNode result = parser2.compileCoreSearch( ast );
+        CoreQueryNode result = CompileCoreSearch.compileCoreSearch( ast );
 
         // assert
         Collection<String> trigrams = result.getTrigrams();
