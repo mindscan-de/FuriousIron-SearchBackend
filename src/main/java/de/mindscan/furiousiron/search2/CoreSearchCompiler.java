@@ -42,14 +42,15 @@ import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
 
 /**
- * 
+ * This implements a proof of concept of a core search compiler, which will translate a
+ * semantic search tree into a core search tree.
  */
-public class CompileCoreSearch {
+public class CoreSearchCompiler {
 
     /**
-     * Compile the given semantic query into a core query.
+     * Compile the given semantic query AST into a core query AST.
      *  
-     * @param ast semantic ast
+     * @param ast semantic ast to translate
      * 
      * @return the given optimized core search tree
      */

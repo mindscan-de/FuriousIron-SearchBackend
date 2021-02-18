@@ -25,7 +25,7 @@ public class QueryParser2Test {
         QueryNode ast = parser2.compileSearchTreeFromQuery( "searchquery" );
 
         // act
-        CoreQueryNode result = CompileCoreSearch.compile( ast );
+        CoreQueryNode result = CoreSearchCompiler.compile( ast );
 
         // assert
         assertThat( result, is( instanceOf( TrigramsCoreNode.class ) ) );
@@ -38,7 +38,7 @@ public class QueryParser2Test {
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+searchquery +performance" );
 
         // act
-        CoreQueryNode result = CompileCoreSearch.compile( ast );
+        CoreQueryNode result = CoreSearchCompiler.compile( ast );
 
         // assert
         Collection<String> trigrams = result.getTrigrams();
@@ -57,7 +57,7 @@ public class QueryParser2Test {
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+SEARCHquery +PERFORMance" );
 
         // act
-        CoreQueryNode result = CompileCoreSearch.compile( ast );
+        CoreQueryNode result = CoreSearchCompiler.compile( ast );
 
         // assert
         Collection<String> trigrams = result.getTrigrams();

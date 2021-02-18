@@ -58,7 +58,7 @@ public class QueryParser2 {
             queryDocumentIds = queryCache.loadSearchResult( ast );
         }
         else {
-            CoreQueryNode coreSearchAST = CompileCoreSearch.compile( ast );
+            CoreQueryNode coreSearchAST = CoreSearchCompiler.compile( ast );
 
             Collection<String> theTrigrams = coreSearchAST.getTrigrams();
 
