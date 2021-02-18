@@ -32,6 +32,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.mindscan.furiousiron.core.ast.CoreQueryNode;
+import de.mindscan.furiousiron.core.ast.EmptyCoreNode;
+import de.mindscan.furiousiron.core.ast.TrigramsCoreNode;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.ast.AndNode;
@@ -42,9 +45,6 @@ import de.mindscan.furiousiron.search.query.ast.OrNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
-import de.mindscan.furiousiron.search2.corequery.ast.CoreQueryNode;
-import de.mindscan.furiousiron.search2.corequery.ast.EmptyCoreNode;
-import de.mindscan.furiousiron.search2.corequery.ast.TrigramsCoreNode;
 
 /**
  * 

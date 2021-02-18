@@ -12,11 +12,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import de.mindscan.furiousiron.core.ast.CoreQueryNode;
+import de.mindscan.furiousiron.core.ast.EmptyCoreNode;
+import de.mindscan.furiousiron.core.ast.TrigramsCoreNode;
 import de.mindscan.furiousiron.search.query.ast.EmptyNode;
 import de.mindscan.furiousiron.search.query.ast.QueryNode;
-import de.mindscan.furiousiron.search2.corequery.ast.CoreQueryNode;
-import de.mindscan.furiousiron.search2.corequery.ast.EmptyCoreNode;
-import de.mindscan.furiousiron.search2.corequery.ast.TrigramsCoreNode;
 
 public class QueryParser2Test {
 
