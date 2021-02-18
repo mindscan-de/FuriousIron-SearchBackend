@@ -52,7 +52,7 @@ import de.mindscan.furiousiron.search2.QueryParser2;
 public class SearchRESTfulService {
 
     // Example URL: http://localhost:8080/SearchBackend/rest/search/result?q=123
-    @javax.ws.rs.Path( "/result" )
+    @javax.ws.rs.Path( "/resultold" )
     @GET
     @Produces( "application/json" )
     public String getQueryResult_JSON( @QueryParam( "q" ) String query ) {
@@ -77,28 +77,54 @@ public class SearchRESTfulService {
         return gson.toJson( jsonResult );
     }
 
-    @javax.ws.rs.Path( "/result2" )
+    @javax.ws.rs.Path( "/result" )
     @GET
     @Produces( "application/json" )
     public String getQueryResult2_JSON( @QueryParam( "q" ) String query ) {
         Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
 
-        // ---> START
-        long start = System.currentTimeMillis();
+        // in case the search contains OR tree parts
+        // it will throw an exception then we do the old way. 
+        try {
+            // ---> START
+            long start = System.currentTimeMillis();
 
-        Search search = new Search( indexFolder );
-        QueryParser2 queryParser = new QueryParser2();
-        Collection<SearchResultCandidates> resultCandidates = queryParser.search( search, query );
+            Search search = new Search( indexFolder );
+            QueryParser2 queryParser = new QueryParser2();
+            Collection<SearchResultCandidates> resultCandidates = queryParser.search( search, query );
 
-        QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
+            QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 
-        long end = System.currentTimeMillis();
-        // ---> END
+            long end = System.currentTimeMillis();
+            // ---> END
 
-        System.out.println( "q2:=" + query + " / time: " + (end - start) );
+            System.out.println( "q2:=" + query + " / time: " + (end - start) );
 
-        Gson gson = new Gson();
-        return gson.toJson( jsonResult );
+            Gson gson = new Gson();
+            return gson.toJson( jsonResult );
+
+        }
+        catch (Exception ex) {
+
+            // ---> START
+            long start = System.currentTimeMillis();
+
+            Search search = new Search( indexFolder );
+            QueryParser queryParser = new QueryParser();
+            QueryNode parsedAST = queryParser.parseQuery( query );
+            Collection<SearchResultCandidates> resultCandidates = QueryExecutor.execute( search, parsedAST );
+
+            QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
+
+            long end = System.currentTimeMillis();
+            // --> END
+
+            System.out.println( "q:=" + query + " / time: " + (end - start) );
+
+            Gson gson = new Gson();
+            return gson.toJson( jsonResult );
+        }
+
     }
 
     private QueryResultJsonModel convertResultsToOutputModel( Collection<SearchResultCandidates> resultCandidates ) {
