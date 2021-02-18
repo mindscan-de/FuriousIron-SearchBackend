@@ -19,26 +19,26 @@ import de.mindscan.furiousiron.search.query.ast.QueryNode;
 public class QueryParser2Test {
 
     @Test
-    public void testCompileCoreSearch_OneSearchQuerySearchTerm_expectTrigramsCoreNode() throws Exception {
+    public void testCompile_OneSearchQuerySearchTerm_expectTrigramsCoreNode() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "searchquery" );
 
         // act
-        CoreQueryNode result = CompileCoreSearch.compileCoreSearch( ast );
+        CoreQueryNode result = CompileCoreSearch.compile( ast );
 
         // assert
         assertThat( result, is( instanceOf( TrigramsCoreNode.class ) ) );
     }
 
     @Test
-    public void testCompileCoreSearch_TwoSearchQuerySearchTerms_expect() throws Exception {
+    public void testCompile_TwoSearchQuerySearchTerms_expect() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+searchquery +performance" );
 
         // act
-        CoreQueryNode result = CompileCoreSearch.compileCoreSearch( ast );
+        CoreQueryNode result = CompileCoreSearch.compile( ast );
 
         // assert
         Collection<String> trigrams = result.getTrigrams();
@@ -50,14 +50,14 @@ public class QueryParser2Test {
     }
 
     @Test
-    public void testCompileCoreSearch_TwoSearchQuerySearchTermsMixedCase_expect() throws Exception {
+    public void testCompile_TwoSearchQuerySearchTermsMixedCase_expect() throws Exception {
         // arrange
         QueryParser2 parser2 = new QueryParser2();
         // problem is, we actually have mixed case here...
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+SEARCHquery +PERFORMance" );
 
         // act
-        CoreQueryNode result = CompileCoreSearch.compileCoreSearch( ast );
+        CoreQueryNode result = CompileCoreSearch.compile( ast );
 
         // assert
         Collection<String> trigrams = result.getTrigrams();

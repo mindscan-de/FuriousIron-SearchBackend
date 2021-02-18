@@ -46,49 +46,56 @@ import de.mindscan.furiousiron.search.query.ast.TextNode;
  */
 public class CompileCoreSearch {
 
-    public static CoreQueryNode compileCoreSearch( QueryNode ast ) {
+    /**
+     * Compile the given semantic query into a core query.
+     *  
+     * @param ast semantic ast
+     * 
+     * @return the given optimized core search tree
+     */
+    public static CoreQueryNode compile( QueryNode ast ) {
         if (ast == null) {
             return new EmptyCoreNode();
         }
-    
+
         if (ast instanceof EmptyNode) {
             return new EmptyCoreNode();
         }
-    
+
         // Compile parsedAST into a technical AST
         if (ast instanceof TextNode) {
             return new TrigramsCoreNode( ast.getContent().toLowerCase() );
         }
-    
+
         if (ast instanceof AndNode) {
             Set<String> includedwords = new HashSet<String>();
-    
+
             // collect each word
             for (QueryNode queryNode : ast.getChildren()) {
-                CoreQueryNode t = compileCoreSearch( queryNode );
+                CoreQueryNode t = compile( queryNode );
                 includedwords.addAll( t.getTrigrams() );
             }
             List<String> l = includedwords.stream().collect( Collectors.toList() );
             return new TrigramsCoreNode( l );
         }
-    
+
         if (ast instanceof OrNode) {
             // We really don't support Or nodes right now.
             throw new RuntimeException( "Or Optimization is not implemented yet" );
         }
-    
+
         if (ast instanceof ExcludingNode) {
             // We don't support excluding on this level right now.
             return new EmptyCoreNode();
         }
-    
+
         if (ast instanceof IncludingNode) {
             for (QueryNode queryNode : ast.getChildren()) {
-                return compileCoreSearch( queryNode );
+                return compile( queryNode );
             }
             return new EmptyCoreNode();
         }
-    
+
         return null;
     }
 
