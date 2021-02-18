@@ -65,6 +65,7 @@ public class CoreSearchCompiler {
 
         // Compile parsedAST into a technical AST
         if (ast instanceof TextNode) {
+            // we only have lower case tri-grams indexed
             return new TrigramsCoreNode( ast.getContent().toLowerCase() );
         }
 
