@@ -68,12 +68,21 @@ public class QueryParser2 {
             // ----------------------------------------------------------------------
             // We have some coreCandidates now, but some of the document may still 
             // miss trigrams which might still not be filtered out, but it was too
-            // expensive to look through large document'id lists, we might need an 
-            // indicator, whether we have used a shortcut
+            // expensive to look through large document-id lists
             // ----------------------------------------------------------------------
 
-            boolean tooManyCoreCandidates = false;
-            if (tooManyCoreCandidates) {
+            boolean tooManyCoreCandidatesAndSkippedTrigramsExist = false;
+            if (tooManyCoreCandidatesAndSkippedTrigramsExist) {
+                // use the skipped Trigrams to decide what strategy to use? In some kind of second chance
+
+                // but runtime might at least be (number of candidates * number of skipped trigrams)
+                // with giga bytes of indexed data we skipped processing 97-98% of the data for a reason.
+
+                // Maybe it is still smarter to not do this calculation at all, when the 
+                // slope of decline in the number of candidates is not promising at all
+
+                /*List<TrigramOccurence> skippedTrigrams = */ search.getSkippedTrigramsInOptSearch();
+
                 // only if there are too many results, we still want to filter them down, it depends
                 // a lot on the cost of processing the next trigrams. We could use bloom filters
                 // for large document numbers for one trigram 
