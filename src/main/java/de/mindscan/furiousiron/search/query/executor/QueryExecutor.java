@@ -52,7 +52,15 @@ import de.mindscan.furiousiron.search.query.ast.TextNode;
 public class QueryExecutor {
 
     public static Collection<SearchResultCandidates> execute( Search search, QueryNode parsedAST ) {
-        return processNode( search, parsedAST ).values();
+        // TODO: since this search strategy is the most expensive search right now, we might to consider caching the result especially.
+        // QueryCache queryCache = new QueryCache( search.getSearchQueryCache() );
+
+        Collection<SearchResultCandidates> resultCandidates = processNode( search, parsedAST ).values();
+
+        // TODO: save the result.
+        // queryCache.cacheSearchResult( parsedAST, queryDocumentIds );
+
+        return resultCandidates;
     }
 
     private static Map<String, SearchResultCandidates> processNode( Search search, QueryNode node ) {
