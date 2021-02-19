@@ -207,14 +207,14 @@ public class QueryParser2 {
             for (String documentWord : documentWordlist) {
                 if (documentWord.length() > wordToSearchLength) {
                     // this should yield a higher Score
-                    if (documentWord.startsWith( wordToSearch )) {
-                        return true;
-                    }
-
-                    // this should yield high Score
-                    if (documentWord.endsWith( wordToSearch )) {
-                        return true;
-                    }
+//                    if (documentWord.startsWith( wordToSearch )) {
+//                        return true;
+//                    }
+//
+//                    // this should yield high Score
+//                    if (documentWord.endsWith( wordToSearch )) {
+//                        return true;
+//                    }
 
                     // this should yield some reward
                     if (documentWord.contains( wordToSearch )) {
