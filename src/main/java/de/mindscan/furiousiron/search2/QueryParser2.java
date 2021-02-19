@@ -72,6 +72,37 @@ public class QueryParser2 {
             // indicator, whether we have used a shortcut
             // ----------------------------------------------------------------------
 
+            boolean tooManyCoreCandidates = false;
+            if (tooManyCoreCandidates) {
+                // only if there are too many results, we still want to filter them down, it depends
+                // a lot on the cost of processing the next trigrams. We could use bloom filters
+                // for large document numbers for one trigram 
+
+                // TODO: if trigram documentid lists are too big for direct filtering, then use bloom 
+                //       filters but don't double check the positive findings, whether they are false 
+                //       positives, just use the negatives to kick out the elements in the hope that, 
+                //       that a later Bloom filter for a different trigram would also kick out the 
+                //       documentid.
+
+                // another solution is to look at the trigrams of the documents itself. and compare 
+                // them to the skipped ones.
+
+                // ----------------------------------------------------------------------
+                // TODO: introduce another extra filtering step here?
+                // ----------------------------------------------------------------------
+                // use the trigramcontent of the document and check for the remaining but
+                // (skipped) trigrams might reduce searchtimes for, the full word search
+                // continue with order of occurence
+                // we want to have a high rejection rate very fast, for cheap
+                // ----------------------------------------------------------------------
+
+                // remove individual documentIds from the coreCandidatesDocumentIDs...
+            }
+
+            // ----------------------------------------------------------------------
+            // now wordbased search and give an estimate of the quality of the result
+            // ----------------------------------------------------------------------
+
             /* semanticSearchAST = */ this.compileLexicalSearch( ast );
 
             // TODO: semanticSearchAST.filterToResults(coreCandidatesDocumentIDs);
@@ -93,7 +124,7 @@ public class QueryParser2 {
 
         // TODO: predict the order of this documentlist according to the query.
 
-        // Now rank the results 
+        // Now rank (improve the ranking of) the results 
         List<String> ranked = queryDocumentIds;
 
         // now how near are the tokens, how many of them are in there
@@ -159,17 +190,33 @@ public class QueryParser2 {
     boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
-            String wordToSearch = ast.getContent();
+            // TODO: added wordTo Search toLowerCase, since the documentwordlist currently contains only lowercase words
+            // TODO: the ast for word matching should be compiled with to lowercased words.
+            String wordToSearch = ast.getContent().toLowerCase();
 
             // if it is directly contained
             if (documentWordlist.contains( wordToSearch )) {
+                // this should yield highest reward
                 return true;
             }
 
             int wordToSearchLength = wordToSearch.length();
 
+            // we might want to split the loop, to prefer start over ends over contains
+            // we might want to return relevance instead of boolean
             for (String documentWord : documentWordlist) {
                 if (documentWord.length() > wordToSearchLength) {
+                    // this should yield a higher Score
+                    if (documentWord.startsWith( wordToSearch )) {
+                        return true;
+                    }
+
+                    // this should yield high Score
+                    if (documentWord.endsWith( wordToSearch )) {
+                        return true;
+                    }
+
+                    // this should yield some reward
                     if (documentWord.contains( wordToSearch )) {
                         return true;
                     }
