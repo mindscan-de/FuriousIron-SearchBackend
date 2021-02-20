@@ -44,6 +44,7 @@ import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.executor.QueryExecutor;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 import de.mindscan.furiousiron.search2.QueryParser2;
+import de.mindscan.furiousiron.util.StopWatch;
 
 /**
  * 
@@ -77,6 +78,7 @@ public class SearchRESTfulService {
         return gson.toJson( jsonResult );
     }
 
+    // Example URL: http://localhost:8080/SearchBackend/rest/search/result?q=123    
     @javax.ws.rs.Path( "/result" )
     @GET
     @Produces( "application/json" )
@@ -86,8 +88,7 @@ public class SearchRESTfulService {
         // in case the search contains OR tree parts
         // it will throw an exception then we do the old way. 
         try {
-            // ---> START
-            long start = System.currentTimeMillis();
+            StopWatch optimizedResultStopwatch = StopWatch.createStarted();
 
             Search search = new Search( indexFolder );
             QueryParser2 queryParser = new QueryParser2();
@@ -95,19 +96,16 @@ public class SearchRESTfulService {
 
             QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 
-            long end = System.currentTimeMillis();
-            // ---> END
+            optimizedResultStopwatch.stop();
 
-            System.out.println( "q2:=" + query + " / time: " + (end - start) );
+            System.out.println( "q2:=" + query + " / time: " + (optimizedResultStopwatch.getElapsedTime()) );
 
             Gson gson = new Gson();
             return gson.toJson( jsonResult );
 
         }
         catch (Exception ex) {
-
-            // ---> START
-            long start = System.currentTimeMillis();
+            StopWatch unoptimizedResultStopWatch = StopWatch.createStarted();
 
             Search search = new Search( indexFolder );
             QueryParser queryParser = new QueryParser();
@@ -116,10 +114,9 @@ public class SearchRESTfulService {
 
             QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 
-            long end = System.currentTimeMillis();
-            // --> END
+            unoptimizedResultStopWatch.stop();
 
-            System.out.println( "q:=" + query + " / time: " + (end - start) );
+            System.out.println( "q:=" + query + " / time: " + (unoptimizedResultStopWatch.getElapsedTime()) );
 
             Gson gson = new Gson();
             return gson.toJson( jsonResult );
