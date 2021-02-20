@@ -52,32 +52,6 @@ import de.mindscan.furiousiron.util.StopWatch;
 @javax.ws.rs.Path( "/search" )
 public class SearchRESTfulService {
 
-    // Example URL: http://localhost:8080/SearchBackend/rest/search/result?q=123
-    @javax.ws.rs.Path( "/resultold" )
-    @GET
-    @Produces( "application/json" )
-    public String getQueryResult_JSON( @QueryParam( "q" ) String query ) {
-        Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
-
-        // ---> START
-        long start = System.currentTimeMillis();
-
-        Search search = new Search( indexFolder );
-        QueryParser queryParser = new QueryParser();
-        QueryNode parsedAST = queryParser.parseQuery( query );
-        Collection<SearchResultCandidates> resultCandidates = QueryExecutor.execute( search, parsedAST );
-
-        QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
-
-        long end = System.currentTimeMillis();
-        // --> END
-
-        System.out.println( "q:=" + query + " / time: " + (end - start) );
-
-        Gson gson = new Gson();
-        return gson.toJson( jsonResult );
-    }
-
     // Example URL: http://localhost:8080/SearchBackend/rest/search/result?q=123    
     @javax.ws.rs.Path( "/result" )
     @GET
