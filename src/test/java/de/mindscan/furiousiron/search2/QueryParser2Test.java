@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import de.mindscan.furiousiron.core.CoreSearchCompiler;
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
 import de.mindscan.furiousiron.core.ast.TrigramsCoreNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;

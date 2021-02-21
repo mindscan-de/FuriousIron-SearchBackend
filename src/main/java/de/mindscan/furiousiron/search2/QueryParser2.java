@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.mindscan.furiousiron.core.CoreSearchCompiler;
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
