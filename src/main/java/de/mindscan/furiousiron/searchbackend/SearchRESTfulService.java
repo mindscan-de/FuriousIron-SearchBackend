@@ -36,11 +36,11 @@ import javax.ws.rs.QueryParam;
 import com.google.gson.Gson;
 
 import de.mindscan.furiousiron.document.DocumentMetadata;
+import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultItemJsonModel;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultJsonModel;
-import de.mindscan.furiousiron.search.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.query.executor.QueryExecutor;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 import de.mindscan.furiousiron.search2.QueryParser2;

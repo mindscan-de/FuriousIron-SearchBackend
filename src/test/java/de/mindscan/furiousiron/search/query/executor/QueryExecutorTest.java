@@ -5,9 +5,9 @@ import static org.mockito.Mockito.times;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.Search;
-import de.mindscan.furiousiron.search.query.ast.QueryNode;
-import de.mindscan.furiousiron.search.query.ast.TextNode;
 
 public class QueryExecutorTest {
 

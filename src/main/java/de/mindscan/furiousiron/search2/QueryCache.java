@@ -32,7 +32,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import de.mindscan.furiousiron.index.cache.SearchQueryCache;
-import de.mindscan.furiousiron.search.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.QueryNode;
 
 /**
  * 

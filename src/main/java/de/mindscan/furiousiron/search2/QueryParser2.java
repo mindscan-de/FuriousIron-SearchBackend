@@ -32,14 +32,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
+import de.mindscan.furiousiron.query.ast.AndNode;
+import de.mindscan.furiousiron.query.ast.ExcludingNode;
+import de.mindscan.furiousiron.query.ast.IncludingNode;
+import de.mindscan.furiousiron.query.ast.OrNode;
+import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
-import de.mindscan.furiousiron.search.query.ast.AndNode;
-import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
-import de.mindscan.furiousiron.search.query.ast.IncludingNode;
-import de.mindscan.furiousiron.search.query.ast.OrNode;
-import de.mindscan.furiousiron.search.query.ast.QueryNode;
-import de.mindscan.furiousiron.search.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 
 /**

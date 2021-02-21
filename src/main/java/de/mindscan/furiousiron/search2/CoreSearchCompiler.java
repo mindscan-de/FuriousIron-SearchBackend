@@ -33,13 +33,13 @@ import java.util.stream.Collectors;
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
 import de.mindscan.furiousiron.core.ast.EmptyCoreNode;
 import de.mindscan.furiousiron.core.ast.TrigramsCoreNode;
-import de.mindscan.furiousiron.search.query.ast.AndNode;
-import de.mindscan.furiousiron.search.query.ast.EmptyNode;
-import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
-import de.mindscan.furiousiron.search.query.ast.IncludingNode;
-import de.mindscan.furiousiron.search.query.ast.OrNode;
-import de.mindscan.furiousiron.search.query.ast.QueryNode;
-import de.mindscan.furiousiron.search.query.ast.TextNode;
+import de.mindscan.furiousiron.query.ast.AndNode;
+import de.mindscan.furiousiron.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.ExcludingNode;
+import de.mindscan.furiousiron.query.ast.IncludingNode;
+import de.mindscan.furiousiron.query.ast.OrNode;
+import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.TextNode;
 
 /**
  * This implements a proof of concept of a core search compiler, which will translate a

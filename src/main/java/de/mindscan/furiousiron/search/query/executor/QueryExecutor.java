@@ -33,15 +33,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import de.mindscan.furiousiron.query.ast.AndNode;
+import de.mindscan.furiousiron.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.ExcludingNode;
+import de.mindscan.furiousiron.query.ast.IncludingNode;
+import de.mindscan.furiousiron.query.ast.OrNode;
+import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
-import de.mindscan.furiousiron.search.query.ast.AndNode;
-import de.mindscan.furiousiron.search.query.ast.EmptyNode;
-import de.mindscan.furiousiron.search.query.ast.ExcludingNode;
-import de.mindscan.furiousiron.search.query.ast.IncludingNode;
-import de.mindscan.furiousiron.search.query.ast.OrNode;
-import de.mindscan.furiousiron.search.query.ast.QueryNode;
-import de.mindscan.furiousiron.search.query.ast.TextNode;
 
 /**
  * This class will execute a query AST. Attention this is not optimized. Intersect, Minus(Exclude), Union could be implemented 

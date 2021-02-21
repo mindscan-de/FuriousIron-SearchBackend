@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
 import de.mindscan.furiousiron.core.ast.EmptyCoreNode;
-import de.mindscan.furiousiron.search.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.EmptyNode;
 
 public class CoreSearchCompilerTest {
 

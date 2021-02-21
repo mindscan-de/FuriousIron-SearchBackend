@@ -37,9 +37,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.mindscan.furiousiron.search.query.ast.EmptyNode;
-import de.mindscan.furiousiron.search.query.ast.QueryNode;
-import de.mindscan.furiousiron.search.query.ast.TextNode;
+import de.mindscan.furiousiron.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.tokenizer.QueryToken;
 import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
 

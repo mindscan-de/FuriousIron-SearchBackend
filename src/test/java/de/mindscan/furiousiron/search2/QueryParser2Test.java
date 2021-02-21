@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
 import de.mindscan.furiousiron.core.ast.TrigramsCoreNode;
-import de.mindscan.furiousiron.search.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.QueryNode;
 
 public class QueryParser2Test {
 
