@@ -37,17 +37,42 @@ the metadata and the content - which might move to a completely different projec
 * Content-Delivery
   * Provide meta data on search results __[done]__
   * Provide content data on search results __[done]__
-* Since this project is considered a proof of concept, i won't implement any type of sophisticated persistence nor use a Databases __[done]__
+* Since this project is considered a proof of concept, i won't implement any type of sophisticated persistence nor use a database __[done]__
 
-Simplicity is key. Because you can change a minimal product much faster and adapt that to your needs,
-as your needs begin to grow. Because I prefer having a whole pipeline working, the goal is to not 
-spend too much time on gold plating the code, which you are going to delete at the next iteration, but 
-instead having the whole pipeline running as soon as possible, even if it lacks features. 
+Simplicity is key. Because a minimal product can be changed much faster and be adapted to your 
+needs, as your needs begin to grow. I prefer having a whole pipeline working, the goal is to not 
+spend too much time on gold plating the code, which I'm going to delete at the next iteration, 
+but instead having the whole pipeline running as soon as possible, even if it lacks features. 
 
-I also like to defer unnecessary architectural decisions as long they do not need attention. So please
-do not expect me to provide a full architecture, or a full grown idea. It will either evolve or die.
+I also prefer to defer unnecessary architectural decisions, as long they don't need attention. 
+So please don't expect me to provide a full architecture, or a full grown idea. It will either 
+evolve or die.
 
 That said, please remember this is a private educational project.
+
+## MVP II - Performance Edition
+
+Some people made a remark, that the search takes quite a long time (up to 30 seconds) using 
+the first search strategy. So I had to rethink how to approach the search. Therefore i decided
+to split the search into a core search and an abstract search. The abstract search is translated
+into a core search, which then itself can optimized for very fast candidate dropout right from
+the beginning for very low costs. It is good enough to skip between 30 to 95 of all inverse 
+references to be processed, therefore saving lots of I/O. If the candidates are less than circa 
+three percent of the candidates, it is compared in the next trigram-filtering step, we just
+skip these remaining calculations at all. Not to compute useless things is the biggest speedup.
+
+If we are searching for combination of words in a document e.g. by "and"-ing searchterms we
+can search for the documents containing all tri-grams first, before sending them to the next 
+stage of elimination. We prefer a high dropout for very low costs.  
+
+the word level should be optimized too. The word is more valuable for a high rejection if it
+is more seldom. we can measure the seldomnes, by evaluating the trigram occurence and sort 
+the words by trigram occurence. words are mthe "min" of all contained trigrams, if equal, then 
+the longer word is the most valuable. I call this method relative word occurence prediction.    
+
+Also a cache for the queries should be provided. Because filtering on word level and ranking on 
+word level as well ranking on document level are also very expensive operations. These results
+should be cached as long as the index is not renewed.  
 
 ## Nice to have
 
@@ -55,20 +80,10 @@ That said, please remember this is a private educational project.
   * implement something +test -"@test"
 * Ranking results (might be out of scope yet / might also not be done here but at a different step)
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
-* Using two strategies (a technical and an abstract one), one to find the documentids, especially if, multiple search terms are combined via and, that should increase the reject rate for documents, so fewer word lookups are necessary. currently a simple strategy is done, look for each document look for each word, and then these lists are combined... This is not very efficient. The single word search is extended into a multi word search, which was fast to implement but slow at runtime.
 
 ## What needs to be done next
 
-* The performance is not yet satisfying but good enough for the first prototype, But I came to the conclusion that the word search in the document is done way too early 
-  * I am happy with the trigram index, but its use can be optimized. Instead of searching "aword" and then "anotherword" by 
-    looking for trigrams of "aword" then look for documents in this subset, containing "aword" and then search for 
-    documents with "anotherwords" the trigrams should be processed like this: collect documents containing "aword" 
-    and trigrams for "anotherword" and then look up words in this possible documents and look for both words. This 
-    should reduce the lookup of the words by a big margin, because documents containing "aword" are more then documents 
-    containing "awo", "wor", "ord" and "ano" ... "ord", so there is less caches to crawl for an AND (INCLUDES) search.
-    
-    so the strategy must be changed from looking up word by word for each searchterm and combine the results by boolean logic,
-    the trigram search will filter more documents upfront. (better reject rate - on index trigram level (fast), instead of document wordlist level (slow)) 
+This is indeed the question.
 
 ## Current URL
 
