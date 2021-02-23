@@ -113,7 +113,7 @@ public class QueryParser2 {
             // now wordbased search and give an estimate of the quality of the result
             // ----------------------------------------------------------------------
 
-            /* semanticSearchAST = */ this.compileLexicalSearch( ast );
+            /* semanticSearchAST = */ this.compileWordlistSearch( ast );
 
             // TODO: semanticSearchAST.filterToResults(coreCandidatesDocumentIDs);
 
@@ -171,8 +171,15 @@ public class QueryParser2 {
         return parsedAST;
     }
 
-    public void compileLexicalSearch( QueryNode ast ) {
-        // compile parsedAST into a semantic search description
+    public QueryNode compileWordlistSearch( QueryNode ast ) {
+        QueryNode optimizedWordsearchAST = ast;
+        // compile parsedAST into an efficient wordlist search strategy
+
+        // TODO: create a new copy of the AST and 
+        // rearrange the AND and OR Lists according to the predicted relative word occurence
+        // that means that we can save lots of cycles if we search fot the most likely or most unlikely word first.
+
+        return optimizedWordsearchAST;
     }
 
     // TODO: This is not the correct ast, but still good enough for our purpose.
@@ -239,6 +246,7 @@ public class QueryParser2 {
 
         if (ast instanceof AndNode) {
             if (ast.hasChildren()) {
+                // for - AND nodes the rarest words must be searched first.
                 Collection<QueryNode> children = ast.getChildren();
                 for (QueryNode queryNode : children) {
                     // early exit in case of a "false" - no need to check further if word is not found.
@@ -255,6 +263,7 @@ public class QueryParser2 {
 
         if (ast instanceof OrNode) {
             if (ast.hasChildren()) {
+                // for - OR nodes the most likely words must be searched first.
                 Collection<QueryNode> children = ast.getChildren();
                 for (QueryNode queryNode : children) {
                     // early exit in case of a "true" - no need to check further if other word is also found.
