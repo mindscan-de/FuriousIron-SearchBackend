@@ -27,7 +27,10 @@ package de.mindscan.furiousiron.search2;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.mindscan.furiousiron.indexer.SimpleWordUtils;
 import de.mindscan.furiousiron.query.ast.AndNode;
@@ -54,20 +57,25 @@ public class WordlistSearchCompiler {
         }
 
         if (ast instanceof TextNode) {
-            return new TextNode( ast.getContent() );
+            return new TextNode( ast.getContent().toLowerCase() );
         }
 
         if (ast instanceof AndNode) {
             List<QueryNode> andList = new ArrayList<>();
+            Map<QueryNode, Float> map = new HashMap<>();
 
-            // TODO: go through all andNodes in AST
             if (ast.hasChildren()) {
                 for (QueryNode queryNode : ast.getChildren()) {
                     // create a new Node 
-                    // for new node calculate projectedRelativeOccurence
+                    QueryNode newNode = compile( queryNode, search );
 
+                    // for new node calculate projectedRelativeOccurence
+                    map.put( newNode, calculateProjectedWordOccurrence( queryNode, search ) );
+                    andList.add( newNode );
                 }
+
                 // sort by projectedRelativeOccurence from seldom to high probability
+                andList.sort( Comparator.comparingDouble( node -> map.get( node ).floatValue() ) );
             }
 
             return new AndNode( andList );
@@ -76,15 +84,41 @@ public class WordlistSearchCompiler {
         if (ast instanceof OrNode) {
             List<QueryNode> orList = new ArrayList<>();
 
+            Map<QueryNode, Float> map = new HashMap<>();
+
+            if (ast.hasChildren()) {
+                for (QueryNode queryNode : ast.getChildren()) {
+                    // create a new Node 
+                    QueryNode newNode = compile( queryNode, search );
+
+                    // for new node calculate projectedRelativeOccurence / reverse order
+                    map.put( newNode, -(calculateProjectedWordOccurrence( queryNode, search )) );
+                    orList.add( newNode );
+                }
+
+                // sort by projectedRelativeOccurence from seldom to high probability
+                orList.sort( Comparator.comparingDouble( node -> map.get( node ).floatValue() ) );
+            }
+
             return new OrNode( orList );
         }
 
         if (ast instanceof ExcludingNode) {
-            // return new ExcludingNode(  );
+            if (ast.hasChildren()) {
+                for (QueryNode node : ast.getChildren()) {
+                    return new ExcludingNode( compile( node, search ) );
+                }
+            }
+            return new ExcludingNode( new EmptyNode() );
         }
 
         if (ast instanceof IncludingNode) {
-            // return new IncludingNode( );
+            if (ast.hasChildren()) {
+                for (QueryNode node : ast.getChildren()) {
+                    return new IncludingNode( compile( node, search ) );
+                }
+            }
+            return new IncludingNode( new EmptyNode() );
         }
 
         return null;
@@ -101,7 +135,7 @@ public class WordlistSearchCompiler {
 
         if (ast instanceof TextNode) {
             try {
-                return projectWordOccurrenceByWord( ast.getContent(), search );
+                return projectWordOccurrenceByWord( ast.getContent().toLowerCase(), search );
             }
             catch (IndexOutOfBoundsException e) {
                 return 1000000f;
@@ -167,7 +201,8 @@ public class WordlistSearchCompiler {
 
     private static float projectWordOccurrenceByWord( String word, Search search ) {
         Collection<String> wordTrigrams = SimpleWordUtils.getUniqueTrigramsFromWord( word );
-        return search.getTrigramOccurrencesSortedByOccurrence( wordTrigrams ).get( 0 ).getOccurenceCount();
+        float occurrenceCount = search.getTrigramOccurrencesSortedByOccurrence( wordTrigrams ).get( 0 ).getOccurenceCount();
+        return occurrenceCount / word.length();
     }
 
 }
