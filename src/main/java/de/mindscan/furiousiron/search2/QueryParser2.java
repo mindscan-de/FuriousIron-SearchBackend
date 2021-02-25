@@ -42,6 +42,7 @@ import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
+import de.mindscan.furiousiron.util.StopWatch;
 
 /**
  * 
@@ -113,9 +114,29 @@ public class QueryParser2 {
             // now wordbased search and give an estimate of the quality of the result
             // ----------------------------------------------------------------------
 
-            /* semanticSearchAST = */ this.compileWordlistSearch( ast );
+            QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
 
-            // TODO: semanticSearchAST.filterToResults(coreCandidatesDocumentIDs);
+            // ---
+
+            StopWatch wordlistWatch = StopWatch.createStarted();
+            List<String> queryDocumentIds2 = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+            wordlistWatch.stop();
+
+            System.out.println( "WordlistAST: size: " + queryDocumentIds2.size() + "  in " + wordlistWatch.getElapsedTime() );
+            System.out.println( wordlistSearchAST.toString() );
+
+            // ----
+            // TODO:?
+            // if we compile the wordlist tree, we waste some time... in 80 percent this strategy is slightly a few milliseconds faster
+            // the way to identify the most important word is not yet the best.
+            // ----
+
+//            StopWatch y = StopWatch.createStarted();
+//            queryDocumentIds = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
+//            y.stop();
+//
+//            System.out.println( "AST: size: " + queryDocumentIds.size() + "  in " + y.getElapsedTime() );
+//            System.out.println( ast.toString() );
 
             // TODO: lexical search and look at each "document"
             // filter documents by wordlists and return a list of documents and their state, 
@@ -123,7 +144,7 @@ public class QueryParser2 {
 
             // we may can do this by using bloom filters and weights at the filter level
 
-            queryDocumentIds = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
+            // TODO: queryDocumentIds = filterByBloomFilter( search, wordlistSearchAST, coreCandidatesDocumentIDs );
 
             // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
             // we can even let the user decide, which result was better... and use that as well for ordering next time.
