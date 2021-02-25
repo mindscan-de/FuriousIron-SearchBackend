@@ -61,9 +61,14 @@ public class WordlistSearchCompiler {
             List<QueryNode> andList = new ArrayList<>();
 
             // TODO: go through all andNodes in AST
-            // create foreach a new Node 
-            // foreach new node calculate projectedRelativeOccurence
-            // sort by projectedRelativeOccurence from seldom to high probability
+            if (ast.hasChildren()) {
+                for (QueryNode queryNode : ast.getChildren()) {
+                    // create a new Node 
+                    // for new node calculate projectedRelativeOccurence
+
+                }
+                // sort by projectedRelativeOccurence from seldom to high probability
+            }
 
             return new AndNode( andList );
         }
@@ -96,15 +101,73 @@ public class WordlistSearchCompiler {
 
         if (ast instanceof TextNode) {
             try {
-                Collection<String> wordTrigrams = SimpleWordUtils.getUniqueTrigramsFromWord( ast.getContent() );
-                return search.getTrigramOccurrencesSortedByOccurrence( wordTrigrams ).get( 0 ).getOccurenceCount();
+                return projectWordOccurrenceByWord( ast.getContent(), search );
             }
             catch (IndexOutOfBoundsException e) {
                 return 1000000f;
             }
         }
 
+        if (ast instanceof AndNode) {
+            if (ast.hasChildren()) {
+                float theMinimum = 100000f;
+                for (QueryNode node : ast.getChildren()) {
+                    try {
+                        theMinimum = Math.min( calculateProjectedWordOccurrence( node, search ), theMinimum );
+                    }
+                    catch (Exception ignore) {
+                    }
+                }
+
+                return theMinimum;
+            }
+            else {
+                return 1000000f;
+            }
+        }
+
+        if (ast instanceof OrNode) {
+            if (ast.hasChildren()) {
+                float theMaximum = 0f;
+                for (QueryNode node : ast.getChildren()) {
+                    try {
+                        theMaximum = Math.max( calculateProjectedWordOccurrence( node, search ), theMaximum );
+                    }
+                    catch (Exception ignore) {
+                    }
+                }
+
+                return theMaximum;
+            }
+            else {
+                return 1000000f;
+            }
+        }
+
+        if (ast instanceof IncludingNode) {
+            if (ast.hasChildren()) {
+                for (QueryNode node : ast.getChildren()) {
+                    return calculateProjectedWordOccurrence( node, search );
+                }
+            }
+            return 1000000.0f;
+        }
+
+        if (ast instanceof ExcludingNode) {
+            if (ast.hasChildren()) {
+                for (QueryNode node : ast.getChildren()) {
+                    return calculateProjectedWordOccurrence( node, search );
+                }
+            }
+            return 1000000.0f;
+        }
+
         return 1000000.0f;
+    }
+
+    private static float projectWordOccurrenceByWord( String word, Search search ) {
+        Collection<String> wordTrigrams = SimpleWordUtils.getUniqueTrigramsFromWord( word );
+        return search.getTrigramOccurrencesSortedByOccurrence( wordTrigrams ).get( 0 ).getOccurenceCount();
     }
 
 }
