@@ -114,7 +114,9 @@ public class QueryParser2 {
             // now wordbased search and give an estimate of the quality of the result
             // ----------------------------------------------------------------------
 
+            StopWatch wordlistCompileWatch = StopWatch.createStarted();
             QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
+            wordlistCompileWatch.stop();
 
             // ---
 
@@ -122,6 +124,7 @@ public class QueryParser2 {
             queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
             wordlistWatch.stop();
 
+            System.out.println( "WordlistAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
             System.out.println( "WordlistAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
             System.out.println( wordlistSearchAST.toString() );
 
