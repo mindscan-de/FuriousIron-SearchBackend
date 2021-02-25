@@ -119,7 +119,7 @@ public class QueryParser2 {
             // ---
 
             StopWatch wordlistWatch = StopWatch.createStarted();
-            List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+            queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
             wordlistWatch.stop();
 
             System.out.println( "WordlistAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
