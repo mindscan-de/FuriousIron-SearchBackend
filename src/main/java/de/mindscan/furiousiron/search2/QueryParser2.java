@@ -110,36 +110,24 @@ public class QueryParser2 {
                 // remove individual documentIds from the coreCandidatesDocumentIDs...
             }
 
+            // cache?
+            System.out.println( "BeginCache" );
+            filterDocumentsByNaturalImportance( search, ast, coreCandidatesDocumentIDs );
+            System.out.println( "EndCache" );
+
             // ----------------------------------------------------------------------
             // now wordbased search and give an estimate of the quality of the result
             // ----------------------------------------------------------------------
 
-            StopWatch wordlistCompileWatch = StopWatch.createStarted();
-            QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
-            wordlistCompileWatch.stop();
-
-            // ---
-
-            StopWatch wordlistWatch = StopWatch.createStarted();
-            queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-            wordlistWatch.stop();
-
-            System.out.println( "WordlistAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
-            System.out.println( "WordlistAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-            System.out.println( wordlistSearchAST.toString() );
+            queryDocumentIds = filterDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
+            queryDocumentIds = filterDocumentsByWordlistImportance( search, ast, coreCandidatesDocumentIDs );
+            queryDocumentIds = filterDocumentsByNaturalImportance( search, ast, coreCandidatesDocumentIDs );
 
             // ----
             // TODO:?
             // if we compile the wordlist tree, we waste some time... in 80 percent this strategy is slightly a few milliseconds faster
             // the way to identify the most important word is not yet the best.
             // ----
-
-//            StopWatch y = StopWatch.createStarted();
-//            queryDocumentIds = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
-//            y.stop();
-//
-//            System.out.println( "AST: size: " + queryDocumentIds.size() + "  in " + y.getElapsedTime() );
-//            System.out.println( ast.toString() );
 
             // TODO: lexical search and look at each "document"
             // filter documents by wordlists and return a list of documents and their state, 
@@ -153,7 +141,7 @@ public class QueryParser2 {
             // we can even let the user decide, which result was better... and use that as well for ordering next time.
 
             // save retained results for future queries.
-            queryCache.cacheSearchResult( ast, queryDocumentIds );
+            // queryCache.cacheSearchResult( ast, queryDocumentIds );
         }
 
         // TODO: predict the order of this documentlist according to the query.
@@ -174,6 +162,53 @@ public class QueryParser2 {
                         .collect( Collectors.toList() );
 
         return searchresult;
+    }
+
+    private List<String> filterDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
+        List<String> queryDocumentIds;
+        StopWatch wordlistCompileWatch = StopWatch.createStarted();
+        QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
+        wordlistCompileWatch.stop();
+
+        // ---
+
+        StopWatch wordlistWatch = StopWatch.createStarted();
+        queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+        wordlistWatch.stop();
+
+        System.out.println( "Wordlist3GramAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
+        System.out.println( "Wordlist3GramAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
+        System.out.println( wordlistSearchAST.toString() );
+        return queryDocumentIds;
+    }
+
+    private List<String> filterDocumentsByWordlistImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
+        List<String> queryDocumentIds;
+        StopWatch wordlistCompileWatch = StopWatch.createStarted();
+        QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
+        wordlistCompileWatch.stop();
+
+        // ---
+
+        StopWatch wordlistWatch = StopWatch.createStarted();
+        queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+        wordlistWatch.stop();
+
+        System.out.println( "WordlistLengthAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
+        System.out.println( "WordlistLengthAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
+        System.out.println( wordlistSearchAST.toString() );
+        return queryDocumentIds;
+    }
+
+    private List<String> filterDocumentsByNaturalImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
+        List<String> queryDocumentIds;
+        StopWatch y = StopWatch.createStarted();
+        queryDocumentIds = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
+        y.stop();
+
+        System.out.println( "NaturalAST: size: " + queryDocumentIds.size() + "  in " + y.getElapsedTime() );
+        System.out.println( ast.toString() );
+        return queryDocumentIds;
     }
 
     /**
@@ -228,7 +263,7 @@ public class QueryParser2 {
     //       in an andnode, the most unlikely word should be processed first
     //       int an or node, the most likely word should be processed first
     // TODO: This is not the correct Tree, but still good enough for this usecase right now.  
-    boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
+    static boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
             // TODO: added wordTo Search toLowerCase, since the documentwordlist currently contains only lowercase words
