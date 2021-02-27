@@ -111,45 +111,12 @@ public class QueryParser2 {
                 // remove individual documentIds from the coreCandidatesDocumentIDs...
             }
 
-            // cache?
-            System.out.println( "BeginCache" );
-            queryDocumentIds = filterDocumentsByNaturalImportance( search, ast, coreCandidatesDocumentIDs );
-            System.out.println( "EndCache" );
-
-            // ----------------------------------------------------------------------
-            // now wordbased search and give an estimate of the quality of the result
-            // ----------------------------------------------------------------------
-
-            List<String> __x = null;
             StopWatch stopwatch1 = StopWatch.createStarted();
-            for (int i = 0; i < 10; i++) {
-                __x = filterDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
-            }
+            queryDocumentIds = filterDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
             stopwatch1.stop();
 
-            List<String> __y = null;
-            StopWatch stopwatch2 = StopWatch.createStarted();
-            for (int i = 0; i < 10; i++) {
-                __y = filterDocumentsByWordlengthImportance( search, ast, coreCandidatesDocumentIDs );
-            }
-            stopwatch2.stop();
-
-            StopWatch stopwatch3 = StopWatch.createStarted();
-            for (int i = 0; i < 10; i++) {
-                filterDocumentsByNaturalImportance( search, ast, coreCandidatesDocumentIDs );
-            }
-            stopwatch3.stop();
-
-            System.out.println( "stopwatches 3-gram/length/natural: " + stopwatch1.getElapsedTime() + " / " + stopwatch2.getElapsedTime() + " / "
-                            + stopwatch3.getElapsedTime() );
-
-            System.out.println( "sizes: 3-gram/length/natural " + __x.size() + " / " + __y.size() + " / " + queryDocumentIds.size() );
-
-            // ----
-            // TODO:?
-            // if we compile the wordlist tree, we waste some time... in 80 percent this strategy is slightly a few milliseconds faster
-            // the way to identify the most important word is not yet the best.
-            // ----
+            System.out.println( "stopwatch 3-gram: " + stopwatch1.getElapsedTime() );
+            System.out.println( "size: 3-gram: " + queryDocumentIds.size() );
 
             // TODO: lexical search and look at each "document"
             // filter documents by wordlists and return a list of documents and their state, 
