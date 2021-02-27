@@ -113,10 +113,10 @@ public class WordlistSearchCompiler2 {
         if (ast instanceof IncludingNode) {
             if (ast.hasChildren()) {
                 for (QueryNode node : ast.getChildren()) {
-                    return new IncludingNode( compile( node, search ) );
+                    return compile( node, search );
                 }
             }
-            return new IncludingNode( new EmptyNode() );
+            return new EmptyNode();
         }
 
         return null;
