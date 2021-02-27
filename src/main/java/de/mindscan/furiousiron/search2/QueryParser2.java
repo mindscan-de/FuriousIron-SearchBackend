@@ -168,6 +168,7 @@ public class QueryParser2 {
         return queryDocumentIds;
     }
 
+    @SuppressWarnings( "unused" )
     private List<String> filterDocumentsByWordlengthImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createWordLengthbasedCompiler().compile( ast, search );
@@ -185,6 +186,7 @@ public class QueryParser2 {
         return queryDocumentIds;
     }
 
+    @SuppressWarnings( "unused" )
     private List<String> filterDocumentsByNaturalImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createToLowercaseCompiler().compile( ast, search );
