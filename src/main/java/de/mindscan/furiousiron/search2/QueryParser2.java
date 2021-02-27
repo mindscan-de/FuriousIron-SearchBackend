@@ -112,16 +112,37 @@ public class QueryParser2 {
 
             // cache?
             System.out.println( "BeginCache" );
-            filterDocumentsByNaturalImportance( search, ast, coreCandidatesDocumentIDs );
+            queryDocumentIds = filterDocumentsByNaturalImportance( search, ast, coreCandidatesDocumentIDs );
             System.out.println( "EndCache" );
 
             // ----------------------------------------------------------------------
             // now wordbased search and give an estimate of the quality of the result
             // ----------------------------------------------------------------------
 
-            queryDocumentIds = filterDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
-            queryDocumentIds = filterDocumentsByWordlistImportance( search, ast, coreCandidatesDocumentIDs );
-            queryDocumentIds = filterDocumentsByNaturalImportance( search, ast, coreCandidatesDocumentIDs );
+            List<String> __x = null;
+            StopWatch stopwatch1 = StopWatch.createStarted();
+            for (int i = 0; i < 10; i++) {
+                __x = filterDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
+            }
+            stopwatch1.stop();
+
+            List<String> __y = null;
+            StopWatch stopwatch2 = StopWatch.createStarted();
+            for (int i = 0; i < 10; i++) {
+                __y = filterDocumentsByWordlistImportance( search, ast, coreCandidatesDocumentIDs );
+            }
+            stopwatch2.stop();
+
+            StopWatch stopwatch3 = StopWatch.createStarted();
+            for (int i = 0; i < 10; i++) {
+                filterDocumentsByNaturalImportance( search, ast, coreCandidatesDocumentIDs );
+            }
+            stopwatch3.stop();
+
+            System.out.println( "stopwatches 3-gram/length/natural: " + stopwatch1.getElapsedTime() + " / " + stopwatch2.getElapsedTime() + " / "
+                            + stopwatch3.getElapsedTime() );
+
+            System.out.println( "sizes: 3-gram/length/natrual" + __x.size() + " / " + __y.size() + " / " + queryDocumentIds.size() );
 
             // ----
             // TODO:?
@@ -165,7 +186,7 @@ public class QueryParser2 {
     }
 
     private List<String> filterDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        List<String> queryDocumentIds;
+        List<String> queryDocumentIds = null;
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
         wordlistCompileWatch.stop();
@@ -173,17 +194,19 @@ public class QueryParser2 {
         // ---
 
         StopWatch wordlistWatch = StopWatch.createStarted();
-        queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+        for (int i = 0; i < 100; i++) {
+            queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+        }
         wordlistWatch.stop();
 
-        System.out.println( "Wordlist3GramAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
-        System.out.println( "Wordlist3GramAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-        System.out.println( wordlistSearchAST.toString() );
+//        System.out.println( "Wordlist3GramAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
+//        System.out.println( "Wordlist3GramAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
+//        System.out.println( wordlistSearchAST.toString() );
         return queryDocumentIds;
     }
 
     private List<String> filterDocumentsByWordlistImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        List<String> queryDocumentIds;
+        List<String> queryDocumentIds = null;
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
         wordlistCompileWatch.stop();
@@ -191,23 +214,27 @@ public class QueryParser2 {
         // ---
 
         StopWatch wordlistWatch = StopWatch.createStarted();
-        queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+        for (int i = 0; i < 100; i++) {
+            queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+        }
         wordlistWatch.stop();
 
-        System.out.println( "WordlistLengthAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
-        System.out.println( "WordlistLengthAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-        System.out.println( wordlistSearchAST.toString() );
+//        System.out.println( "WordlistLengthAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
+//        System.out.println( "WordlistLengthAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
+//        System.out.println( wordlistSearchAST.toString() );
         return queryDocumentIds;
     }
 
     private List<String> filterDocumentsByNaturalImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        List<String> queryDocumentIds;
+        List<String> queryDocumentIds = null;
         StopWatch y = StopWatch.createStarted();
-        queryDocumentIds = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
+        for (int i = 0; i < 100; i++) {
+            queryDocumentIds = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
+        }
         y.stop();
 
-        System.out.println( "NaturalAST: size: " + queryDocumentIds.size() + "  in " + y.getElapsedTime() );
-        System.out.println( ast.toString() );
+//        System.out.println( "NaturalAST: size: " + queryDocumentIds.size() + "  in " + y.getElapsedTime() );
+//        System.out.println( ast.toString() );
         return queryDocumentIds;
     }
 
