@@ -54,8 +54,6 @@ We compile only a part of the tree. (to have an fast filter...)
 
 ## Lessons Learned
 
-reduce the number of search-terms instead ordering them only by a criterion. 
-
 ### Baseline
 
 I thought the baseline search, by just taking the documentIDs and then applying the AST 
