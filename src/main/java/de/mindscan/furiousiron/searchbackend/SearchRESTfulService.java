@@ -72,7 +72,7 @@ public class SearchRESTfulService {
 
             optimizedResultStopwatch.stop();
 
-            System.out.println( "q2:=" + query + " / time: " + (optimizedResultStopwatch.getElapsedTime()) );
+            System.out.println( "q2:=" + query + " / time(opt): " + (optimizedResultStopwatch.getElapsedTime()) + " ms" );
 
             Gson gson = new Gson();
             return gson.toJson( jsonResult );
@@ -83,14 +83,14 @@ public class SearchRESTfulService {
 
             Search search = new Search( indexFolder );
             QueryParser queryParser = new QueryParser();
-            QueryNode parsedAST = queryParser.parseQuery( query );
+            QueryNode parsedAST = queryParser.parseQuery( query.toLowerCase() );
             Collection<SearchResultCandidates> resultCandidates = QueryExecutor.execute( search, parsedAST );
 
             QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 
             unoptimizedResultStopWatch.stop();
 
-            System.out.println( "q:=" + query + " / time: " + (unoptimizedResultStopWatch.getElapsedTime()) );
+            System.out.println( "q:=" + query + " / time(not opt): " + (unoptimizedResultStopWatch.getElapsedTime()) + " ms" );
 
             Gson gson = new Gson();
             return gson.toJson( jsonResult );
