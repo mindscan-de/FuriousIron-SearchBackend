@@ -43,6 +43,7 @@ import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 import de.mindscan.furiousiron.util.StopWatch;
+import de.mindscan.furiousiron.wordlists.WordlistCompilerFactory;
 
 /**
  * 
@@ -142,7 +143,7 @@ public class QueryParser2 {
             System.out.println( "stopwatches 3-gram/length/natural: " + stopwatch1.getElapsedTime() + " / " + stopwatch2.getElapsedTime() + " / "
                             + stopwatch3.getElapsedTime() );
 
-            System.out.println( "sizes: 3-gram/length/natrual " + __x.size() + " / " + __y.size() + " / " + queryDocumentIds.size() );
+            System.out.println( "sizes: 3-gram/length/natural " + __x.size() + " / " + __y.size() + " / " + queryDocumentIds.size() );
 
             // ----
             // TODO:?
@@ -188,7 +189,7 @@ public class QueryParser2 {
     private List<String> filterDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         List<String> queryDocumentIds = null;
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
-        QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
+        QueryNode wordlistSearchAST = WordlistCompilerFactory.createTrigramOccurrenceCompiler().compile( ast, search );
         wordlistCompileWatch.stop();
 
         // ---
@@ -208,7 +209,7 @@ public class QueryParser2 {
     private List<String> filterDocumentsByWordlistImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         List<String> queryDocumentIds = null;
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
-        QueryNode wordlistSearchAST = WordlistSearchCompiler2.compile( ast, search );
+        QueryNode wordlistSearchAST = WordlistCompilerFactory.createWordLengthbasedCompiler().compile( ast, search );
         wordlistCompileWatch.stop();
 
         // ---
