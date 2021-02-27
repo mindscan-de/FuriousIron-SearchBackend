@@ -68,7 +68,7 @@ public class WordlistSearchCompiler2 {
                     QueryNode newNode = compile( queryNode, search );
 
                     // for new node calculate projectedRelativeOccurence
-                    map.put( newNode, calculateProjectedWordOccurrence( queryNode, search ) );
+                    map.put( newNode, calculateProjectedWordOccurrence( newNode, search ) );
                     andList.add( newNode );
                 }
 
@@ -113,10 +113,10 @@ public class WordlistSearchCompiler2 {
         if (ast instanceof IncludingNode) {
             if (ast.hasChildren()) {
                 for (QueryNode node : ast.getChildren()) {
-                    return compile( node, search );
+                    return new IncludingNode( compile( node, search ) );
                 }
             }
-            return new EmptyNode();
+            return new IncludingNode( new EmptyNode() );
         }
 
         return null;

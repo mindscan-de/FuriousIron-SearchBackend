@@ -142,7 +142,7 @@ public class QueryParser2 {
             System.out.println( "stopwatches 3-gram/length/natural: " + stopwatch1.getElapsedTime() + " / " + stopwatch2.getElapsedTime() + " / "
                             + stopwatch3.getElapsedTime() );
 
-            System.out.println( "sizes: 3-gram/length/natrual" + __x.size() + " / " + __y.size() + " / " + queryDocumentIds.size() );
+            System.out.println( "sizes: 3-gram/length/natrual " + __x.size() + " / " + __y.size() + " / " + queryDocumentIds.size() );
 
             // ----
             // TODO:?
@@ -201,14 +201,14 @@ public class QueryParser2 {
 
 //        System.out.println( "Wordlist3GramAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
 //        System.out.println( "Wordlist3GramAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-//        System.out.println( wordlistSearchAST.toString() );
+        System.out.println( "Wordlist3GramAST: " + wordlistSearchAST.toString() );
         return queryDocumentIds;
     }
 
     private List<String> filterDocumentsByWordlistImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         List<String> queryDocumentIds = null;
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
-        QueryNode wordlistSearchAST = WordlistSearchCompiler.compile( ast, search );
+        QueryNode wordlistSearchAST = WordlistSearchCompiler2.compile( ast, search );
         wordlistCompileWatch.stop();
 
         // ---
@@ -221,7 +221,7 @@ public class QueryParser2 {
 
 //        System.out.println( "WordlistLengthAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
 //        System.out.println( "WordlistLengthAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-//        System.out.println( wordlistSearchAST.toString() );
+        System.out.println( wordlistSearchAST.toString() );
         return queryDocumentIds;
     }
 

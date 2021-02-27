@@ -70,7 +70,7 @@ public class WordlistSearchCompiler {
                     QueryNode newNode = compile( queryNode, search );
 
                     // for new node calculate projectedRelativeOccurence
-                    map.put( newNode, calculateProjectedWordOccurrence( queryNode, search ) );
+                    map.put( newNode, calculateProjectedWordOccurrence( newNode, search ) );
                     andList.add( newNode );
                 }
 
@@ -115,10 +115,10 @@ public class WordlistSearchCompiler {
         if (ast instanceof IncludingNode) {
             if (ast.hasChildren()) {
                 for (QueryNode node : ast.getChildren()) {
-                    return compile( node, search );
+                    return new IncludingNode( compile( node, search ) );
                 }
             }
-            return new EmptyNode();
+            return new IncludingNode( new EmptyNode() );
         }
 
         return null;
@@ -202,7 +202,8 @@ public class WordlistSearchCompiler {
     private static float projectWordOccurrenceByWord( String word, Search search ) {
         Collection<String> wordTrigrams = SimpleWordUtils.getUniqueTrigramsFromWord( word );
         float occurrenceCount = search.getTrigramOccurrencesSortedByOccurrence( wordTrigrams ).get( 0 ).getOccurenceCount();
-        return occurrenceCount / word.length();
+        // return occurrenceCount; // * 4.0f / (word.length() + 1);
+        return occurrenceCount * 4.0f / (word.length() + 1);
     }
 
 }
