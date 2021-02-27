@@ -130,7 +130,7 @@ public class QueryParser2 {
             List<String> __y = null;
             StopWatch stopwatch2 = StopWatch.createStarted();
             for (int i = 0; i < 10; i++) {
-                __y = filterDocumentsByWordlistImportance( search, ast, coreCandidatesDocumentIDs );
+                __y = filterDocumentsByWordlengthImportance( search, ast, coreCandidatesDocumentIDs );
             }
             stopwatch2.stop();
 
@@ -187,27 +187,21 @@ public class QueryParser2 {
     }
 
     private List<String> filterDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        List<String> queryDocumentIds = null;
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createTrigramOccurrenceCompiler().compile( ast, search );
         wordlistCompileWatch.stop();
 
-        // ---
-
         StopWatch wordlistWatch = StopWatch.createStarted();
-        for (int i = 0; i < 100; i++) {
-            queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-        }
+        List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
         wordlistWatch.stop();
 
-//        System.out.println( "Wordlist3GramAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
-//        System.out.println( "Wordlist3GramAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
+        // System.out.println( "Wordlist3GramAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
+        // System.out.println( "Wordlist3GramAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
         System.out.println( "Wordlist3GramAST: " + wordlistSearchAST.toString() );
         return queryDocumentIds;
     }
 
-    private List<String> filterDocumentsByWordlistImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        List<String> queryDocumentIds = null;
+    private List<String> filterDocumentsByWordlengthImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createWordLengthbasedCompiler().compile( ast, search );
         wordlistCompileWatch.stop();
@@ -215,27 +209,27 @@ public class QueryParser2 {
         // ---
 
         StopWatch wordlistWatch = StopWatch.createStarted();
-        for (int i = 0; i < 100; i++) {
-            queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-        }
+        List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
         wordlistWatch.stop();
 
-//        System.out.println( "WordlistLengthAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
-//        System.out.println( "WordlistLengthAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-        System.out.println( wordlistSearchAST.toString() );
+        // System.out.println( "WordlistLengthAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
+        // System.out.println( "WordlistLengthAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
+        System.out.println( "WordlistLengthAST: " + wordlistSearchAST.toString() );
         return queryDocumentIds;
     }
 
     private List<String> filterDocumentsByNaturalImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        List<String> queryDocumentIds = null;
+        StopWatch wordlistCompileWatch = StopWatch.createStarted();
+        QueryNode wordlistSearchAST = WordlistCompilerFactory.createToLowercaseCompiler().compile( ast, search );
+        wordlistCompileWatch.stop();
+
         StopWatch y = StopWatch.createStarted();
-        for (int i = 0; i < 100; i++) {
-            queryDocumentIds = filterByDocumentWordlists( search, ast, coreCandidatesDocumentIDs );
-        }
+        List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
         y.stop();
 
-//        System.out.println( "NaturalAST: size: " + queryDocumentIds.size() + "  in " + y.getElapsedTime() );
-//        System.out.println( ast.toString() );
+        // System.out.println( "NaturalAST: compile in: " + wordlistCompileWatch.getElapsedTime() );        
+        // System.out.println( "NaturalAST: size: " + queryDocumentIds.size() + "  in " + y.getElapsedTime() );
+        System.out.println( "NaturalAST: " + ast.toString() );
         return queryDocumentIds;
     }
 
@@ -294,9 +288,7 @@ public class QueryParser2 {
     static boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
-            // TODO: added wordTo Search toLowerCase, since the documentwordlist currently contains only lowercase words
-            // TODO: the ast for word matching should be compiled with to lowercased words.
-            String wordToSearch = ast.getContent().toLowerCase();
+            String wordToSearch = ast.getContent();
 
             // if it is directly contained
             if (documentWordlist.contains( wordToSearch )) {
