@@ -248,12 +248,9 @@ public class QueryParser2 {
         return retained;
     }
 
-    // TODO: for performance reasons the longest words should be checked first
-    //       shorter words are more likely to be occuring the wordlist
     // TODO: wordlists should be organized by wordsize in a TreeSet
     //       in an andnode, the most unlikely word should be processed first
     //       int an or node, the most likely word should be processed first
-    // TODO: This is not the correct Tree, but still good enough for this usecase right now.  
     static boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
@@ -294,7 +291,6 @@ public class QueryParser2 {
 
         if (ast instanceof AndNode) {
             if (ast.hasChildren()) {
-                // for - AND nodes the rarest words must be searched first.
                 Collection<QueryNode> children = ast.getChildren();
                 for (QueryNode queryNode : children) {
                     // early exit in case of a "false" - no need to check further if word is not found.
@@ -311,7 +307,6 @@ public class QueryParser2 {
 
         if (ast instanceof OrNode) {
             if (ast.hasChildren()) {
-                // for - OR nodes the most likely words must be searched first.
                 Collection<QueryNode> children = ast.getChildren();
                 for (QueryNode queryNode : children) {
                     // early exit in case of a "true" - no need to check further if other word is also found.
