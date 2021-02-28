@@ -130,19 +130,20 @@ after the first most "interesting" word, we end up with 168 documents, then 155,
 third word will approximately halving the candidates to 72 whereas the true reduction should
 deliver 61 results.  
 
-    staring with 169 candidates
+    Starting at 169 candidates
     
     "hashmap" -> 168
     "hashmap", "abstract" -> 155
     "hashmap", "abstract", "store" -> 72
-    "hashmap", "abstract", "store", field" -> 72
-    "hashmap", "abstract", "store", field", "index" -> 61
+    "hashmap", "abstract", "store", "field" -> 72
+    "hashmap", "abstract", "store", "field", "index" -> 61
 
-All other words missing words compared to above do not provide any additional rejects.
-
+All other words missing words compared to above do not provide any additional rejects -
 "import", "package", "string", "class". It would be really cool to identify those words
-in advance and skip them in the filtering operation. That would save some useless Map
-operations.
+in advance and skip them at the filtering operation. That would save some useless Map
+operations. While "hashmap" cancelled at least one document, it might be also be removed
+for a different reason. In that case "hashmap" is not providing additional value. 
+  
 
     Reduction starts from: 1769 for shm
     Reduction to: 1750 using trigram: hma
@@ -159,3 +160,59 @@ to 143 possible documents to start with so it is 26 documents less to start with
 have to load the wordlists from disk. So shifting back workload to the trigram search will 
 definetly provide some minor gains. As long as we can keep the search for each trigram 
 somehow constant. resulting in a linear 
+
+## A new idea based on an observation of tri-gram elimination
+
+One idea of identifying words with less importance would be to identify the tri-grams, 
+which did not provide (significant) reduction or even none at all and sort them to a 
+later comparison step. If you look at the reduction rates the "ash" and "map" provided, 
+then you see that this word should be penalized and moved further back in the AST search.
+
+So let's have a look into the tri-grams again and which provided value and which don't.
+
+    Reduction starts from: 1769 for shm
+    Reduction to: 1750 using trigram: hma
+    Reduction to: 632 using trigram: abs
+    Reduction to: 497 using trigram: bst
+    Reduction to: 497 using trigram: ash  * hashmap
+    Reduction to: 291 using trigram: sto
+    Reduction to: 291 using trigram: map  ** hashmap
+    Reduction to: 288 using trigram: rac
+    Reduction to: 169 using trigram: iel
+    Reduction to: 169 using trigram: eld  * field
+    Reduction to: 169 using trigram: has  *** hashmap
+    Reduction to: 168 using trigram: fie
+    Reduction to: 167 using trigram: tra
+    Reduction to: 143 using trigram: dex
+    Reduction to: 143 using trigram: act  * abstract
+    Reduction to: 142 using trigram: ind
+    Reduction to: 142 using trigram: rin  * string
+    Reduction to: 142 using trigram: ore  * store
+    Reduction to: 142 using trigram: tor  ** store
+    Reduction to: 142 using trigram: nde  * index
+    Reduction to: 142 using trigram: cla  * class
+    Reduction to: 141 using trigram: mpo  
+    Reduction to: 141 using trigram: ass  ** class
+    Reduction to: 141 using trigram: str  ** string
+    Reduction to: 141 using trigram: por  * import
+    Reduction to: 141 using trigram: kag  * package
+    Reduction to: 141 using trigram: cka  ** package
+    Reduction to: 141 using trigram: ort  ** import
+    Reduction to: 141 using trigram: tri  *** string
+    Reduction to: 141 using trigram: ing  **** string
+    Reduction to: 141 using trigram: ack  *** package
+    Reduction to: 141 using trigram: las  *** class
+    Reduction to: 141 using trigram: pac  **** package
+    Reduction to: 141 using trigram: imp  *** import
+    Reduction to: 141 using trigram: age  ***** package
+
+Package (*****), String(****), Import, Class, HashMap (***) collected the highest penalties. 
+We should be able to approximate the scheme for future penalization of unprocessed trigrams.
+ 
+But also have a look that the first trigram (mpo) of import provided "value". So we might be
+able to optimize the words. We reward the tri-grams, which led to a reduction, we penalize 
+the trigrams not advancing the mission, and we penalize all trigrams not processed. 
+But if a word was not taken into account, we award each unseen word once, but penalize every 
+other trigram of the word.
+
+This is a calculation we can do for cheap.
