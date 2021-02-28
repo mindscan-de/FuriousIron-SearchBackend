@@ -25,9 +25,45 @@
  */
 package de.mindscan.furiousiron.search2;
 
+import de.mindscan.furiousiron.index.trigram.TrigramOccurence;
+
 /**
  * 
  */
 public class TrigramUsage {
+    public enum TrigramUsageState {
+        UNKNOWN, SUCCESS, FAILED
+    }
 
+    private String trigram;
+    private TrigramUsageState state;
+
+    public TrigramUsage( String trigram, TrigramUsageState state ) {
+        this.trigram = trigram;
+        this.state = state;
+    }
+
+    public TrigramUsage( TrigramOccurence trigram, TrigramUsageState state ) {
+        this.trigram = trigram.getTrigram();
+        this.state = state;
+    }
+
+    /**
+     * @return the state
+     */
+    public TrigramUsageState getState() {
+        return state;
+    }
+
+    public String getTrigram() {
+        return trigram;
+    }
+
+    public boolean isSuccess() {
+        return state == TrigramUsageState.SUCCESS;
+    }
+
+    public boolean isFailure() {
+        return state == TrigramUsageState.FAILED;
+    }
 }
