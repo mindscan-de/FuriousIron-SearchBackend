@@ -15,8 +15,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.mindscan.furiousiron.index.trigram.TrigramOccurence;
-
 public class WordlistTrigramPenaltyCompilerTest {
 
     @Test
@@ -24,7 +22,6 @@ public class WordlistTrigramPenaltyCompilerTest {
         // arrange
         WordlistTrigramPenaltyCompiler trigramPenaltyCompiler = new WordlistTrigramPenaltyCompiler();
 
-        Collection<TrigramOccurence> allTrigramOccurrences = Collections.emptyList();
         Collection<String> wordlist = Collections.emptyList();
         Collection<TrigramUsage> usage = Collections.emptyList();
 
