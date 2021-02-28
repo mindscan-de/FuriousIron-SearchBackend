@@ -26,7 +26,6 @@
 package de.mindscan.furiousiron.search2;
 
 import java.util.Collection;
-import java.util.List;
 
 import de.mindscan.furiousiron.index.trigram.TrigramOccurence;
 
@@ -35,9 +34,10 @@ import de.mindscan.furiousiron.index.trigram.TrigramOccurence;
  */
 public class WordlistTrigramPenaltyCompiler {
 
-    public List<String> getOrderedWordlist( Collection<TrigramOccurence> allTrigramOccurrences, Collection<String> wordlist, Collection<TrigramUsage> usage ) {
+    public Collection<String> getOrderedWordlist( Collection<TrigramOccurence> allTrigramOccurrences, Collection<String> wordlist,
+                    Collection<TrigramUsage> usage ) {
 
-        return null;
+        return wordlist;
     }
 
 }
