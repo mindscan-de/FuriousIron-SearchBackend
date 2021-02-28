@@ -91,13 +91,7 @@ public class WordlistTrigramPenaltyCompiler {
 
         // create a map of the wordlist, and init with each word with a defaultscore
         Map<String, WordScore> wordMapScore = new HashMap<>();
-        wordlist.stream().map( word -> {
-            System.out.println( "adding to map: " + word );
-            initWordScoce( wordMapScore, word );
-            return true;
-        } ).collect( Collectors.toList() );
-
-        System.out.println( "WordMapScore Map Size = " + wordMapScore.size() );
+        wordlist.stream().map( word -> initWordScoce( wordMapScore, word ) ).collect( Collectors.toList() );
 
         // create a map of usages
         Map<String, TrigramUsage> usageMap = new HashMap<>();
@@ -121,6 +115,8 @@ public class WordlistTrigramPenaltyCompiler {
                     isFirst = false;
                 }
                 else {
+                    // TODO: check, if any other trigram was used from this word.
+                    // This "isFirst" approach is buggy atm.
                     if (isFirst) {
                         // Don't punish if it is an unrated trigram
                         wordScore.increase( 0 );
@@ -138,19 +134,15 @@ public class WordlistTrigramPenaltyCompiler {
         wordlistToSort.sort( Comparator.comparingInt( word -> extracted( (String) word, wordMapScore ) ).reversed() );
 
         for (String word : wordlistToSort) {
-            try {
-                System.out.println( wordMapScore.get( word ).toString() );
-            }
-            catch (Exception e) {
-                System.out.println( "unknown word: " + word );
-            }
+            System.out.println( wordMapScore.get( word ).toString() );
         }
 
         return wordlistToSort;
     }
 
-    private void initWordScoce( Map<String, WordScore> wordMapScore, String word ) {
+    private boolean initWordScoce( Map<String, WordScore> wordMapScore, String word ) {
         wordMapScore.put( word, new WordScore( word ) );
+        return true;
     }
 
     private int extracted( String word, Map<String, WordScore> wordMapScore ) {

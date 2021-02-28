@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -47,6 +48,94 @@ public class WordlistTrigramPenaltyCompilerTest {
 
         // assert
         assertThat( result, containsInAnyOrder( wordlist.toArray() ) );
+    }
+
+    @Test
+    public void testGetOrderedWordlist_UseFullTrigramTruth_returnsWordlistmostImportant() throws Exception {
+        // arrange
+        WordlistTrigramPenaltyCompiler trigramPenaltyCompiler = new WordlistTrigramPenaltyCompiler();
+
+        Collection<String> wordlist = createWordlist();
+        Collection<TrigramUsage> usage = createFullTrigramUsageList();
+
+        // act
+        Collection<String> result = trigramPenaltyCompiler.getOrderedWordlist( wordlist, usage );
+        List<String> foo = new ArrayList<>( result );
+        List<String> importantSublist = foo.subList( 0, 5 );
+
+        // assert
+        assertThat( importantSublist, containsInAnyOrder( "abstract", "index", "field", "store", "hashmap" ) );
+    }
+
+    @Test
+    public void testGetOrderedWordlist_UseFullTrigramTruth_returnsWordlistMostUselessAtEnd() throws Exception {
+        // arrange
+        WordlistTrigramPenaltyCompiler trigramPenaltyCompiler = new WordlistTrigramPenaltyCompiler();
+
+        Collection<String> wordlist = createWordlist();
+        Collection<TrigramUsage> usage = createFullTrigramUsageList();
+
+        // act
+        Collection<String> result = trigramPenaltyCompiler.getOrderedWordlist( wordlist, usage );
+        List<String> foo = new ArrayList<>( result );
+        List<String> importantSublist = foo.subList( 5, result.size() );
+
+        // assert
+        assertThat( importantSublist, containsInAnyOrder( "import", "class", "string", "package" ) );
+    }
+
+    @Test
+    public void testGetOrderedWordlist_UseIncompleteTruth143_returnsWordlistMostFullAtStart() throws Exception {
+        // arrange
+        WordlistTrigramPenaltyCompiler trigramPenaltyCompiler = new WordlistTrigramPenaltyCompiler();
+
+        Collection<String> wordlist = createWordlist();
+        Collection<TrigramUsage> usage = createIncompleteTrigramUsageList_143();
+
+        // act
+        System.out.println( "143..." );
+        Collection<String> result = trigramPenaltyCompiler.getOrderedWordlist( wordlist, usage );
+        List<String> foo = new ArrayList<>( result );
+        List<String> importantSublist = foo.subList( 0, 3 );
+
+        // assert
+        assertThat( importantSublist, containsInAnyOrder( "abstract", "store", "field" ) );
+    }
+
+    @Test
+    public void testGetOrderedWordlist_UseIncompleteTruth167_returnsWordlistMostFullAtStart() throws Exception {
+        // arrange
+        WordlistTrigramPenaltyCompiler trigramPenaltyCompiler = new WordlistTrigramPenaltyCompiler();
+
+        Collection<String> wordlist = createWordlist();
+        Collection<TrigramUsage> usage = createIncompleteTrigramUsageList_167();
+
+        // act
+        System.out.println( "167..." );
+        Collection<String> result = trigramPenaltyCompiler.getOrderedWordlist( wordlist, usage );
+        List<String> foo = new ArrayList<>( result );
+        List<String> importantSublist = foo.subList( 0, 3 );
+
+        // assert
+        assertThat( importantSublist, containsInAnyOrder( "abstract", "store", "field" ) );
+    }
+
+    @Test
+    public void testGetOrderedWordlist_UseIncompleteTruth169_returnsWordlistMostFullAtStart() throws Exception {
+        // arrange
+        WordlistTrigramPenaltyCompiler trigramPenaltyCompiler = new WordlistTrigramPenaltyCompiler();
+
+        Collection<String> wordlist = createWordlist();
+        Collection<TrigramUsage> usage = createIncompleteTrigramUsageList_169();
+
+        // act
+        System.out.println( "169..." );
+        Collection<String> result = trigramPenaltyCompiler.getOrderedWordlist( wordlist, usage );
+        List<String> foo = new ArrayList<>( result );
+        List<String> importantSublist = foo.subList( 0, 3 );
+
+        // assert
+        assertThat( importantSublist, containsInAnyOrder( "abstract", "store", "field" ) );
     }
 
     private List<String> createWordlist() {
@@ -91,4 +180,59 @@ public class WordlistTrigramPenaltyCompilerTest {
                         new TrigramUsage( "imp", FAILED ), //
                         new TrigramUsage( "age", FAILED ) );
     }
+
+    private List<TrigramUsage> createIncompleteTrigramUsageList_143() {
+        return Arrays.asList( //
+                        new TrigramUsage( "shm", SUCCESS ), //
+                        new TrigramUsage( "hma", SUCCESS ), //
+                        new TrigramUsage( "abs", SUCCESS ), //
+                        new TrigramUsage( "bst", SUCCESS ), // 
+                        new TrigramUsage( "ash", FAILED ), //
+                        new TrigramUsage( "sto", SUCCESS ), //
+                        new TrigramUsage( "map", FAILED ), // 
+                        new TrigramUsage( "rac", SUCCESS ), //
+                        new TrigramUsage( "iel", SUCCESS ), //
+                        new TrigramUsage( "eld", FAILED ), // 
+                        new TrigramUsage( "has", FAILED ), // 
+                        new TrigramUsage( "fie", SUCCESS ), //
+                        new TrigramUsage( "tra", SUCCESS ), // 
+                        new TrigramUsage( "dex", SUCCESS ), //
+                        new TrigramUsage( "act", FAILED ) //
+        );
+    }
+
+    private List<TrigramUsage> createIncompleteTrigramUsageList_167() {
+        return Arrays.asList( //
+                        new TrigramUsage( "shm", SUCCESS ), //
+                        new TrigramUsage( "hma", SUCCESS ), //
+                        new TrigramUsage( "abs", SUCCESS ), //
+                        new TrigramUsage( "bst", SUCCESS ), // 
+                        new TrigramUsage( "ash", FAILED ), //
+                        new TrigramUsage( "sto", SUCCESS ), //
+                        new TrigramUsage( "map", FAILED ), // 
+                        new TrigramUsage( "rac", SUCCESS ), //
+                        new TrigramUsage( "iel", SUCCESS ), //
+                        new TrigramUsage( "eld", FAILED ), // 
+                        new TrigramUsage( "has", FAILED ), // 
+                        new TrigramUsage( "fie", SUCCESS ), //
+                        new TrigramUsage( "tra", SUCCESS ) // 
+        );
+    }
+
+    private List<TrigramUsage> createIncompleteTrigramUsageList_169() {
+        return Arrays.asList( //
+                        new TrigramUsage( "shm", SUCCESS ), //
+                        new TrigramUsage( "hma", SUCCESS ), //
+                        new TrigramUsage( "abs", SUCCESS ), //
+                        new TrigramUsage( "bst", SUCCESS ), // 
+                        new TrigramUsage( "ash", FAILED ), //
+                        new TrigramUsage( "sto", SUCCESS ), //
+                        new TrigramUsage( "map", FAILED ), // 
+                        new TrigramUsage( "rac", SUCCESS ), //
+                        new TrigramUsage( "iel", SUCCESS ), //
+                        new TrigramUsage( "eld", FAILED ), // 
+                        new TrigramUsage( "has", FAILED ) // 
+        );
+    }
+
 }
