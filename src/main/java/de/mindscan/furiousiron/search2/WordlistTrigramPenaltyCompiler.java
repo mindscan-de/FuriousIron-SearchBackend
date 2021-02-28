@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import de.mindscan.furiousiron.index.trigram.TrigramOccurence;
 import de.mindscan.furiousiron.indexer.SimpleWordUtils;
 
 /**
@@ -83,8 +82,7 @@ public class WordlistTrigramPenaltyCompiler {
         }
     }
 
-    public Collection<String> getOrderedWordlist( Collection<TrigramOccurence> allTrigramOccurrences, Collection<String> wordlist,
-                    Collection<TrigramUsage> usage ) {
+    public Collection<String> getOrderedWordlist( Collection<String> wordlist, Collection<TrigramUsage> usage ) {
 
         // no word list -> nothing to do here
         if (wordlist.isEmpty()) {
@@ -108,8 +106,10 @@ public class WordlistTrigramPenaltyCompiler {
         for (String word : wordlist) {
             Collection<String> trigramsForWord = SimpleWordUtils.getUniqueTrigramsFromWord( word );
             WordScore wordScore = wordMapScore.get( word );
+            boolean isFirst = true;
             for (String trigram : trigramsForWord) {
                 if (usageMap.containsKey( trigram )) {
+
                     // it was processed
                     TrigramUsage trigramUsage = usageMap.get( trigram );
                     if (trigramUsage.isSuccess()) {
@@ -118,10 +118,18 @@ public class WordlistTrigramPenaltyCompiler {
                     else {
                         wordScore.decrease( 1 );
                     }
+                    isFirst = false;
                 }
                 else {
-                    // it is unknown 
-                    // penalize
+                    if (isFirst) {
+                        // Don't punish if it is an unrated trigram
+                        wordScore.increase( 0 );
+                    }
+                    else {
+                        wordScore.decrease( 1 );
+                    }
+
+                    isFirst = false;
                 }
             }
         }
