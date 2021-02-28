@@ -96,10 +96,10 @@ public class WordlistTrigramPenaltyCompilerTest {
         System.out.println( "143..." );
         Collection<String> result = trigramPenaltyCompiler.getOrderedWordlist( wordlist, usage );
         List<String> foo = new ArrayList<>( result );
-        List<String> importantSublist = foo.subList( 0, 3 );
+        List<String> importantSublist = foo.subList( 0, 4 );
 
         // assert
-        assertThat( importantSublist, containsInAnyOrder( "abstract", "store", "field" ) );
+        assertThat( importantSublist, containsInAnyOrder( "abstract", "store", "field", "index" ) );
     }
 
     @Test

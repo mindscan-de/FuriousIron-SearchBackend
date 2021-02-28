@@ -56,7 +56,11 @@ public class WordlistTrigramPenaltyCompiler {
          * @param i
          */
         public void increase( int i ) {
-            this.score += 1;
+            this.score += i;
+        }
+
+        public void increase( long i ) {
+            this.score += (int) i;
         }
 
         /**
@@ -64,6 +68,10 @@ public class WordlistTrigramPenaltyCompiler {
          */
         public void decrease( int i ) {
             this.score -= i;
+        }
+
+        public void decrease( long i ) {
+            this.score -= (int) i;
         }
 
         /**
@@ -99,33 +107,43 @@ public class WordlistTrigramPenaltyCompiler {
 
         for (String word : wordlist) {
             Collection<String> trigramsForWord = SimpleWordUtils.getUniqueTrigramsFromWord( word );
-            WordScore wordScore = wordMapScore.get( word );
-            boolean isFirst = true;
-            for (String trigram : trigramsForWord) {
-                if (usageMap.containsKey( trigram )) {
 
-                    // it was processed
-                    TrigramUsage trigramUsage = usageMap.get( trigram );
-                    if (trigramUsage.isSuccess()) {
-                        wordScore.increase( 1 );
+            long unused = trigramsForWord.stream().filter( trigram -> !usageMap.containsKey( trigram ) ).count();
+            long successful = trigramsForWord.stream().filter( trigram -> usageMap.containsKey( trigram ) && usageMap.get( trigram ).isSuccess() ).count();
+            long failure = trigramsForWord.stream().filter( trigram -> usageMap.containsKey( trigram ) && usageMap.get( trigram ).isFailure() ).count();
+
+            WordScore wordScore = wordMapScore.get( word );
+
+            if (successful + failure == 0) {
+                // neither success nor failure - this word was not used
+                wordScore.decrease( unused );
+            }
+            else {
+                wordScore.increase( successful );
+                wordScore.decrease( failure );
+
+                if (unused == 0) {
+                    // all parts were used
+                    if (successful >= failure) {
+                        wordScore.increase( 2 );
                     }
                     else {
                         wordScore.decrease( 1 );
                     }
-                    isFirst = false;
                 }
                 else {
-                    // TODO: check, if any other trigram was used from this word.
-                    // This "isFirst" approach is buggy atm.
-                    if (isFirst) {
-                        // Don't punish if it is an unrated trigram
-                        wordScore.increase( 0 );
+                    // someparts were used some unused
+                    if (failure == 0) {
+                        wordScore.increase( (unused + 1) / 2 );
                     }
                     else {
-                        wordScore.decrease( 1 );
+                        if (successful >= failure) {
+                            wordScore.increase( 2 );
+                        }
+                        else {
+                            wordScore.decrease( (unused + 1) / 2 );
+                        }
                     }
-
-                    isFirst = false;
                 }
             }
         }
