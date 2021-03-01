@@ -62,6 +62,8 @@ import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
  */
 public class QueryParser {
 
+    private List<String> collectedTextTokens = new ArrayList<>();
+
     /**
      * Parses the given query String.
      * @param queryString the query string which needs to be parsed
@@ -72,7 +74,15 @@ public class QueryParser {
             return new EmptyNode();
         }
 
+        collectedTextTokens = new ArrayList<>();
         return parseQueryTokens( QueryTokenizer.tokenize( queryString ) );
+    }
+
+    /**
+     * @return the collectedTextTokens Text Values
+     */
+    public List<String> getCollectedTextTokens() {
+        return collectedTextTokens;
     }
 
     QueryNode parseQueryTokens( List<QueryToken> tokenizedQuery ) {
@@ -95,6 +105,7 @@ public class QueryParser {
         if (currentToken instanceof TextQueryToken) {
             // this? add TEXT
             // this? add OR/INCLUDING/TEXT 
+            this.collectedTextTokens.add( currentToken.getTokenValue().toLowerCase() );
             astCollector.add( new TextNode( currentToken.getTokenValue() ) );
 
             return lastReadTokenIndex;
@@ -104,6 +115,7 @@ public class QueryParser {
             QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
 
             if (peekNextToken instanceof TextQueryToken) {
+                collectedTextTokens.add( peekNextToken.getTokenValue().toLowerCase() );
                 astCollector.add( new AndNode( new ExcludingNode( new TextNode( peekNextToken.getTokenValue() ) ) ) );
                 lastReadTokenIndex++;
                 return lastReadTokenIndex;
@@ -118,6 +130,7 @@ public class QueryParser {
             QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
 
             if (peekNextToken instanceof TextQueryToken) {
+                collectedTextTokens.add( peekNextToken.getTokenValue().toLowerCase() );
                 astCollector.add( new AndNode( new IncludingNode( new TextNode( peekNextToken.getTokenValue() ) ) ) );
                 lastReadTokenIndex++;
                 return lastReadTokenIndex;
