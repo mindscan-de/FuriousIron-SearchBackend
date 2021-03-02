@@ -218,6 +218,9 @@ public class QueryParser2 {
         QueryParser queryParser = new QueryParser();
         QueryNode parsedAST = queryParser.parseQuery( query );
 
+        // TODO: process the collected Text Tokens here, or  make them available.
+        queryParser.getCollectedTextTokens();
+
         return parsedAST;
     }
 
