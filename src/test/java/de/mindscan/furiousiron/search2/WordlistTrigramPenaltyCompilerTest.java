@@ -1,7 +1,7 @@
 package de.mindscan.furiousiron.search2;
 
-import static de.mindscan.furiousiron.util.TrigramUsage.TrigramUsageState.FAILED;
-import static de.mindscan.furiousiron.util.TrigramUsage.TrigramUsageState.SUCCESS;
+import static de.mindscan.furiousiron.index.trigram.TrigramUsage.TrigramUsageState.FAILED;
+import static de.mindscan.furiousiron.index.trigram.TrigramUsage.TrigramUsageState.SUCCESS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import de.mindscan.furiousiron.util.TrigramUsage;
+import de.mindscan.furiousiron.index.trigram.TrigramUsage;
 
 public class WordlistTrigramPenaltyCompilerTest {
 
