@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import de.mindscan.furiousiron.indexer.SimpleWordUtils;
+import de.mindscan.furiousiron.util.TrigramUsage;
 
 /**
  * 
