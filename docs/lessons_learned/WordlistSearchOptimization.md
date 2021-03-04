@@ -124,6 +124,7 @@ As explained in the previous section, we can not reliably detect the most intere
 The dropoutrate sometimes not present on the first comarisons like in this search for: 
 
     +import +package +class +index +store +abstract +field +hashmap +string
+    
 
 picking the most interesting words will reduce to (after optimized trigrams 169 Candidates)
 after the first most "interesting" word, we end up with 168 documents, then 155, and only the
@@ -137,6 +138,10 @@ deliver 61 results.
     "hashmap", "abstract", "store" -> 72
     "hashmap", "abstract", "store", "field" -> 72
     "hashmap", "abstract", "store", "field", "index" -> 61
+
+The better solution according to the elimination pattern is
+    
+    +store + abstract +index +hashmap +field +import +package +class  +string
 
 All other words missing words compared to above do not provide any additional rejects -
 "import", "package", "string", "class". It would be really cool to identify those words
