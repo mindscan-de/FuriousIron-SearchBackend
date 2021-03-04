@@ -52,27 +52,29 @@ That said, please remember this is a private educational project.
 
 ## MVP II - Performance Edition
 
-Some people made a remark, that the search takes quite a long time (up to 30 seconds) using 
-the first search strategy. So I had to rethink how to approach the search. Therefore i decided
-to split the search into a core search and an abstract search. The abstract search is translated
-into a core search, which then itself can optimized for very fast candidate dropout right from
-the beginning for very low costs. It is good enough to skip between 30 to 95 of all inverse 
-references to be processed, therefore saving lots of I/O. If the candidates are less than circa 
-three percent of the candidates, it is compared in the next trigram-filtering step, we just
-skip these remaining calculations at all. Not to compute useless things is the biggest speedup.
+Some people made a remark, that the search takes quite a long time (e.g. over 30 seconds) using 
+the first and naive search strategy. So I had to re-think how to approach the search. Therefore I 
+decided to split the search into a core search and an abstract search. The abstract search is 
+translated into a core search, which then itself can optimized for very fast candidate drop out 
+right from the beginning for very low costs. It is good enough to skip between 30 to 95 of all 
+inverse references to be processed, therefore saving lots of I/O. If the candidates are less 
+than about three percent of the candidates, it is compared in the next trigram-filtering step, 
+we just skip these remaining calculations at all. Not to compute useless things is the biggest 
+speedup.
 
-If we are searching for combination of words in a document e.g. by "and"-ing searchterms we
+If we are searching for combination of words in a document e.g. by "and"-ing search terms we
 can search for the documents containing all tri-grams first, before sending them to the next 
-stage of elimination. We prefer a high dropout for very low costs.  
+stage of elimination. We prefer a high drop out rate for very low costs.  
 
 the word level should be optimized too. The word is more valuable for a high rejection if it
-is more seldom. we can measure the seldomnes, by evaluating the trigram occurence and sort 
-the words by trigram occurence. words are mthe "min" of all contained trigrams, if equal, then 
-the longer word is the most valuable. I call this method relative word occurence prediction.    
+is more seldom. We can measure the seldomness, by evaluating the trigram occurence and sort 
+the words by trigram occurence. words are the "min" of all contained trigrams, if equal, then 
+the longer word is the most valuable. I call this method relative word occurrence prediction.
+(spoiler: this calculation is can be improved)    
 
 Also a cache for the queries should be provided. Because filtering on word level and ranking on 
-word level as well ranking on document level are also very expensive operations. These results
-should be cached as long as the index is not renewed.  
+word level, as well ranking on document level are very expensive operations. These results should 
+be cached as long as the index is not renewed.
 
 ## Nice to have
 
