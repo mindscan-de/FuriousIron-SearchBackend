@@ -44,6 +44,8 @@ import de.mindscan.furiousiron.wordlists.WordlistCompilerFactory;
  */
 public class QueryParser2 {
 
+    private List<String> collectedTextTokens;
+
     public Collection<SearchResultCandidates> search( Search search, String query ) {
         QueryCache queryCache = new QueryCache( search.getSearchQueryCache() );
         QueryNode ast = this.compileSearchTreeFromQuery( query );
@@ -74,9 +76,15 @@ public class QueryParser2 {
             Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
             searchTrigramStopWatch.stop();
 
-            // TODO: use the trigramUsage for predicting good word order - search.getTrigramUsage();
             // TODO: Maybe use these too? search.getSkippedTrigramsInOptSearch()
-            // TODO: maybe collect words from ast and order them...
+
+            // Calculate Word order an use this as an input for the ast compiler step, instead of different strategies.
+            StopWatch optimizeWordOrderStopWatch = StopWatch.createStarted();
+            WordlistTrigramPenaltyCompiler penaltyCompiler = new WordlistTrigramPenaltyCompiler();
+            Collection<String> orderedWordlist = penaltyCompiler.getOrderedWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
+            // TODO: maybe we have to remove strings containing spaces, brackets .... 
+            //       / maybe not, because wordlist compiler can choose not to use this.
+            optimizeWordOrderStopWatch.stop();
 
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
             queryDocumentIds = filterWordsForDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
@@ -97,9 +105,10 @@ public class QueryParser2 {
 
             // Build log message
             StringBuilder sb = new StringBuilder();
-            sb.append( "compile/search3/filterW/rank/cache : " );
+            sb.append( "compile/search3/order/filterW/rank/cache : " );
             sb.append( compileCoreSearchASTStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( searchTrigramStopWatch.getElapsedTime() ).append( "ms / " );
+            sb.append( optimizeWordOrderStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( filterWordsStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( 0L ).append( "ms / " );
             sb.append( cacheSearchResult.getElapsedTime() ).append( "ms" );
@@ -197,7 +206,7 @@ public class QueryParser2 {
         QueryNode parsedAST = queryParser.parseQuery( query );
 
         // TODO: process the collected Text Tokens here, or  make them available.
-        queryParser.getCollectedTextTokens();
+        setCollectedTextTokens( queryParser.getCollectedTextTokens() );
 
         return parsedAST;
     }
@@ -206,5 +215,13 @@ public class QueryParser2 {
         return coreCandidatesDocumentIDs.stream()
                         .filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentId ) ) )
                         .collect( Collectors.toList() );
+    }
+
+    private void setCollectedTextTokens( List<String> collectedTextTokens ) {
+        this.collectedTextTokens = collectedTextTokens;
+    }
+
+    private List<String> getCollectedTextTokens() {
+        return collectedTextTokens;
     }
 }
