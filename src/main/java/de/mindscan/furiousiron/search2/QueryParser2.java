@@ -74,48 +74,15 @@ public class QueryParser2 {
             // expensive to look through large document-id lists
             // ----------------------------------------------------------------------
 
-            boolean tooManyCoreCandidatesAndSkippedTrigramsExist = false;
-            if (tooManyCoreCandidatesAndSkippedTrigramsExist) {
-                // use the skipped Trigrams to decide what strategy to use? In some kind of second chance
+            // TODO: use the trigramUsage for predicting good word order - search.getTrigramUsage();
+            // TODO: Maybe use these too? search.getSkippedTrigramsInOptSearch()
+            // TODO: maybe collect words from ast and order them... 
 
-                // but runtime might at least be (number of candidates * number of skipped trigrams)
-                // with giga bytes of indexed data we skipped processing 97-98% of the data for a reason.
+            StopWatch filterWordsStopWatch = StopWatch.createStarted();
+            queryDocumentIds = filterWordsForDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
+            filterWordsStopWatch.stop();
 
-                // Maybe it is still smarter to not do this calculation at all, when the 
-                // slope of decline in the number of candidates is not promising at all
-
-                /*List<TrigramOccurence> skippedTrigrams = */ search.getSkippedTrigramsInOptSearch();
-
-                // only if there are too many results, we still want to filter them down, it depends
-                // a lot on the cost of processing the next trigrams. We could use bloom filters
-                // for large document numbers for one trigram 
-
-                // TODO: if trigram documentid lists are too big for direct filtering, then use bloom 
-                //       filters but don't double check the positive findings, whether they are false 
-                //       positives, just use the negatives to kick out the elements in the hope that, 
-                //       that a later Bloom filter for a different trigram would also kick out the 
-                //       documentid.
-
-                // another solution is to look at the trigrams of the documents itself. and compare 
-                // them to the skipped ones.
-
-                // ----------------------------------------------------------------------
-                // TODO: introduce another extra filtering step here?
-                // ----------------------------------------------------------------------
-                // use the trigramcontent of the document and check for the remaining but
-                // (skipped) trigrams might reduce searchtimes for, the full word search
-                // continue with order of occurence
-                // we want to have a high rejection rate very fast, for cheap
-                // ----------------------------------------------------------------------
-
-                // remove individual documentIds from the coreCandidatesDocumentIDs...
-            }
-
-            StopWatch stopwatch1 = StopWatch.createStarted();
-            queryDocumentIds = filterDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
-            stopwatch1.stop();
-
-            System.out.println( "stopwatch 3-gram: " + stopwatch1.getElapsedTime() );
+            System.out.println( "stopwatch 3-gram: " + filterWordsStopWatch.getElapsedTime() );
             System.out.println( "size: 3-gram: " + queryDocumentIds.size() );
 
             // TODO: lexical search and look at each "document"
@@ -153,7 +120,8 @@ public class QueryParser2 {
         return searchresult;
     }
 
-    private List<String> filterDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
+    // words are ordered by trigram importance
+    private List<String> filterWordsForDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createTrigramOccurrenceCompiler().compile( ast, search );
         wordlistCompileWatch.stop();
@@ -169,7 +137,8 @@ public class QueryParser2 {
     }
 
     @SuppressWarnings( "unused" )
-    private List<String> filterDocumentsByWordlengthImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
+    // words are ordered by wordlength importance
+    private List<String> filterWordsForDocumentsByWordlengthImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createWordLengthbasedCompiler().compile( ast, search );
         wordlistCompileWatch.stop();
@@ -187,7 +156,8 @@ public class QueryParser2 {
     }
 
     @SuppressWarnings( "unused" )
-    private List<String> filterDocumentsByNaturalImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
+    // words are not ordered by any means, other than the order of word occurrence in the search.
+    private List<String> filterWordsForDocumentsByNaturalImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createToLowercaseCompiler().compile( ast, search );
         wordlistCompileWatch.stop();
