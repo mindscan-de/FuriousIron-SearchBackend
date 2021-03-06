@@ -11,11 +11,11 @@ RESTful API, since it seems to me being the easiest solution to get the whole pi
 Later adjustments are a planned part of this journey.
 
 The main goal of the SearchBackend is, to make use of the inverse indexes and caches, that are
-stored on the disk, in order to implement a RESTful service for a complete search engine. The
-main goal is to determine, what kind of forward and inverse indexes are required to build a 
-complete code search engine.
+stored on disk, in order to implement a RESTful service for a complete search engine. The main 
+goal is to determine, what kind of forward and inverse indexes are required to build a complete 
+code search engine.
 
-Since I don't want to implement a web-server right now, so I picked a technology, which i could
+Since I don't want to implement a web-server right now, I picked a technology, which i could
 find a simple tutorial for.
 
 A big "Thank you!" goes to [o7planning.org](https://o7planning.org/de/11199/die-anleitung-zum-java-restful-web-services-fur-den-anfanger) for providing a useful tutorial.
@@ -23,7 +23,8 @@ A big "Thank you!" goes to [o7planning.org](https://o7planning.org/de/11199/die-
 What I hope for is, either I will develop a code search engine, or make informed decisions on
 how to implement a code search engine using ready stacks, like ElasticSearch. But I also want
 to interface some ML components later and I don't want to get stuck on a certain API and its 
-behavior.
+behavior. And because code eventually contains bugs, i don't want to rely on other parties to
+fix or integrate them, before I can mode on. So doing it on my own, is a quite obvious choice.
 
 ## MVP
 
@@ -66,15 +67,21 @@ If we are searching for combination of words in a document e.g. by "and"-ing sea
 can search for the documents containing all tri-grams first, before sending them to the next 
 stage of elimination. We prefer a high drop out rate for very low costs.  
 
-the word level should be optimized too. The word is more valuable for a high rejection if it
+The word level should be optimized too. The word is more valuable for a high rejection if it
 is more seldom. We can measure the seldomness, by evaluating the trigram occurence and sort 
-the words by trigram occurence. words are the "min" of all contained trigrams, if equal, then 
+the words by trigram occurence. Words are the "min" of all contained trigrams, if equal, then 
 the longer word is the most valuable. I call this method relative word occurrence prediction.
-(spoiler: this calculation is can be improved)    
+(spoiler: this calculation still can be improved)    
 
 Also a cache for the queries should be provided. Because filtering on word level and ranking on 
 word level, as well ranking on document level are very expensive operations. These results should 
 be cached as long as the index is not renewed.
+
+## MVP III - Result Preview Edition
+
+Well, the most pressing issues right now are ranking the result candidates and providing a 
+valuable snippet of the result to the coder, so the coder can decide whether a search result 
+is worth a look or not.
 
 ## Nice to have
 
