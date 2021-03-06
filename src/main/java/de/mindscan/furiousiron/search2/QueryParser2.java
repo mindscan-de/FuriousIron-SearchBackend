@@ -84,6 +84,7 @@ public class QueryParser2 {
             // TODO: tolowercase here for importance calculation? or in the generic compiler? 
             // TODO: maybe we have to remove strings containing spaces, brackets .... but maybe this string gets simply sorted, but is never used...
             Collection<String> orderedWordlist = penaltyCompiler.getOrderedWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
+            WordlistOrderedWordlistCompiler wlc = new WordlistOrderedWordlistCompiler( orderedWordlist );
             optimizeWordOrderStopWatch.stop();
 
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
