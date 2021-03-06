@@ -202,21 +202,6 @@ public class QueryParser2 {
         return parsedAST;
     }
 
-    public QueryNode compileWordlistSearch( QueryNode ast ) {
-        QueryNode optimizedWordsearchAST = ast;
-        // compile parsedAST into an efficient wordlist search strategy
-
-        // TODO: create a new copy of the AST and 
-        // rearrange the AND and OR Lists according to the predicted relative word occurence
-        // that means that we can save lots of cycles if we search fot the most likely or most unlikely word first.
-
-        return optimizedWordsearchAST;
-    }
-
-    // TODO: This is not the correct ast, but still good enough for our purpose.
-    // TODO: this should be an AST which is optimized for matching speed
-    //       Nodes in optimized AST should be sorted : and - from longest to shortest word
-    //       Nodes in optimized AST should be sorted : or  - from shortest to longest
     private List<String> filterByDocumentWordlists( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         return coreCandidatesDocumentIDs.stream()
                         .filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentId ) ) )
