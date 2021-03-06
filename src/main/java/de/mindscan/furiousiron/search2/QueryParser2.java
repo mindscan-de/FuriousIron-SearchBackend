@@ -81,9 +81,9 @@ public class QueryParser2 {
             // Calculate Word order an use this as an input for the ast compiler step, instead of different strategies.
             StopWatch optimizeWordOrderStopWatch = StopWatch.createStarted();
             WordlistTrigramPenaltyCompiler penaltyCompiler = new WordlistTrigramPenaltyCompiler();
+            // TODO: tolowercase here for importance calculation? or in the generic compiler? 
+            // TODO: maybe we have to remove strings containing spaces, brackets .... but maybe this string gets simply sorted, but is never used...
             Collection<String> orderedWordlist = penaltyCompiler.getOrderedWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
-            // TODO: maybe we have to remove strings containing spaces, brackets .... 
-            //       / maybe not, because wordlist compiler can choose not to use this.
             optimizeWordOrderStopWatch.stop();
 
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
@@ -105,7 +105,7 @@ public class QueryParser2 {
 
             // Build log message
             StringBuilder sb = new StringBuilder();
-            sb.append( "compile/search3/order/filterW/rank/cache : " );
+            sb.append( "compile/search3/orderW/filterW/rank/cache : " );
             sb.append( compileCoreSearchASTStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( searchTrigramStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( optimizeWordOrderStopWatch.getElapsedTime() ).append( "ms / " );
@@ -205,7 +205,6 @@ public class QueryParser2 {
         QueryParser queryParser = new QueryParser();
         QueryNode parsedAST = queryParser.parseQuery( query );
 
-        // TODO: process the collected Text Tokens here, or  make them available.
         setCollectedTextTokens( queryParser.getCollectedTextTokens() );
 
         return parsedAST;
