@@ -166,7 +166,7 @@ have to load the wordlists from disk. So shifting back workload to the trigram s
 definetly provide some minor gains. As long as we can keep the search for each trigram 
 somehow constant. resulting in a linear 
 
-## A new idea based on an observation of tri-gram elimination
+## A new Idea based on Observation of Tri-Gram Elimination
 
 One idea of identifying words with less importance would be to identify the tri-grams, 
 which did not provide (significant) reduction or even none at all and sort them to a 

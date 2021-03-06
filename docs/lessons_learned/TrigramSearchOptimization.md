@@ -79,3 +79,7 @@ document'ids from disk. Removing 28 candidates comes at costs to compare these t
 10.000 times that size.
 
 That means we should stop as soon as this ratio becomes bad enough.
+
+We can also say that the slope of decline in the candidates is too slow compared to the raise in
+tri-gram documentIds is too slow, then we should break the effort. But if we still have too many
+search candidates, we should give it a second thought?
