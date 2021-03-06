@@ -72,24 +72,28 @@ public class QueryParser2 {
             // But for performance reasons maybe it was too expensive speaking 
             // performance-wise, to cut them further down.
             // ----------------------------------------------------------------------
+
+            // search3 - Step
             StopWatch searchTrigramStopWatch = StopWatch.createStarted();
             Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
             searchTrigramStopWatch.stop();
 
             // TODO: Maybe use these too? search.getSkippedTrigramsInOptSearch()
 
-            // Calculate Word order an use this as an input for the ast compiler step, instead of different strategies.
+            // orderW - Step
+            // Calculate Word order an use this as an input for the ast compiler step, instead of implementing different Compiler different "strategies"
+            // better to just determine the final word order and use a compiler bringing them in that order.
             StopWatch optimizeWordOrderStopWatch = StopWatch.createStarted();
             WordlistTrigramPenaltyCompiler penaltyCompiler = new WordlistTrigramPenaltyCompiler();
-            // TODO: tolowercase here for importance calculation? or in the generic compiler? 
-            // TODO: maybe we have to remove strings containing spaces, brackets .... but maybe this string gets simply sorted, but is never used...
             Collection<String> orderedWordlist = penaltyCompiler.getOrderedWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
             optimizeWordOrderStopWatch.stop();
 
+            // filterW - Step
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
             queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreCandidatesDocumentIDs, orderedWordlist );
-            // queryDocumentIds = filterWordsForDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
             filterWordsStopWatch.stop();
+
+            // rank - Step
 
             // TODO: lexical search and look at each "document"
             // filter documents by wordlists and return a list of documents and their state, 
@@ -156,6 +160,7 @@ public class QueryParser2 {
         return queryDocumentIds;
     }
 
+    @SuppressWarnings( "unused" )
     // words are ordered by trigram importance
     private List<String> filterWordsForDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
