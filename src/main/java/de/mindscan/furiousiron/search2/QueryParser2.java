@@ -61,43 +61,57 @@ public class QueryParser2 {
             queryDocumentIds = queryCache.loadSearchResult( ast );
         }
         else {
+            // Compile the AST
+            StopWatch compileCoreSearchASTStopWatch = StopWatch.createStarted();
             CoreQueryNode coreSearchAST = CoreSearchCompiler.compile( ast );
+            compileCoreSearchASTStopWatch.stop();
 
+            // get the trigrams from AST
             Collection<String> theTrigrams = coreSearchAST.getTrigrams();
 
             // result is DocumentIDs candidate list
+            // ----------------------------------------------------------------------
+            // We have some coreCandidates now, but some of the document may 
+            // still contain false positive documents but no false negatives. 
+            // But for performance reasons maybe it was too expensive speaking 
+            // performance-wise, to cut them further down.
+            // ----------------------------------------------------------------------
+            StopWatch searchTrigramStopWatch = StopWatch.createStarted();
             Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
-
-            // ----------------------------------------------------------------------
-            // We have some coreCandidates now, but some of the document may still 
-            // miss trigrams which might still not be filtered out, but it was too
-            // expensive to look through large document-id lists
-            // ----------------------------------------------------------------------
+            searchTrigramStopWatch.stop();
 
             // TODO: use the trigramUsage for predicting good word order - search.getTrigramUsage();
             // TODO: Maybe use these too? search.getSkippedTrigramsInOptSearch()
-            // TODO: maybe collect words from ast and order them... 
+            // TODO: maybe collect words from ast and order them...
 
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
             queryDocumentIds = filterWordsForDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
             filterWordsStopWatch.stop();
 
-            System.out.println( "stopwatch 3-gram: " + filterWordsStopWatch.getElapsedTime() );
-            System.out.println( "size: 3-gram: " + queryDocumentIds.size() );
-
             // TODO: lexical search and look at each "document"
             // filter documents by wordlists and return a list of documents and their state, 
             // how many rules they fulfill, according to the wordlist and the semanticSearchAST
 
-            // we may can do this by using bloom filters and weights at the filter level
-
-            // TODO: queryDocumentIds = filterByBloomFilter( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-
+            // Thought:
             // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
             // we can even let the user decide, which result was better... and use that as well for ordering next time.
 
             // save retained results for future queries.
+            StopWatch cacheSearchResult = StopWatch.createStarted();
             // queryCache.cacheSearchResult( ast, queryDocumentIds );
+            cacheSearchResult.stop();
+
+            // Build log message
+            StringBuilder sb = new StringBuilder();
+            sb.append( "compile/search3/filterW/rank/cache : " );
+            sb.append( compileCoreSearchASTStopWatch.getElapsedTime() ).append( "ms / " );
+            sb.append( searchTrigramStopWatch.getElapsedTime() ).append( "ms / " );
+            sb.append( filterWordsStopWatch.getElapsedTime() ).append( "ms / " );
+            sb.append( 0L ).append( "ms / " );
+            sb.append( cacheSearchResult.getElapsedTime() ).append( "ms" );
+
+            System.out.println( sb.toString() );
+            System.out.println( "size: 3-gram: " + queryDocumentIds.size() );
         }
 
         // TODO: predict the order of this documentlist according to the query.
