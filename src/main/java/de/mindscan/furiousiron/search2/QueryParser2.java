@@ -84,11 +84,11 @@ public class QueryParser2 {
             // TODO: tolowercase here for importance calculation? or in the generic compiler? 
             // TODO: maybe we have to remove strings containing spaces, brackets .... but maybe this string gets simply sorted, but is never used...
             Collection<String> orderedWordlist = penaltyCompiler.getOrderedWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
-            WordlistOrderedWordlistCompiler wlc = new WordlistOrderedWordlistCompiler( orderedWordlist );
             optimizeWordOrderStopWatch.stop();
 
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
-            queryDocumentIds = filterWordsForDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
+            queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreCandidatesDocumentIDs, orderedWordlist );
+            // queryDocumentIds = filterWordsForDocumentsByTrigramImportance( search, ast, coreCandidatesDocumentIDs );
             filterWordsStopWatch.stop();
 
             // TODO: lexical search and look at each "document"
@@ -136,6 +136,24 @@ public class QueryParser2 {
                         .collect( Collectors.toList() );
 
         return searchresult;
+    }
+
+    private List<String> filterWordsByGenericWordOrder( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs,
+                    Collection<String> orderedWordlist ) {
+
+        StopWatch wordlistCompileWatch = StopWatch.createStarted();
+        WordlistOrderedWordlistCompiler wlc = new WordlistOrderedWordlistCompiler( orderedWordlist );
+        QueryNode wordlistSearchAST = wlc.compile( ast, search );
+        wordlistCompileWatch.stop();
+
+        StopWatch wordlistWatch = StopWatch.createStarted();
+        List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+        wordlistWatch.stop();
+
+        // System.out.println( "WordlistGenericOrderAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
+        // System.out.println( "WordlistGenericOrderAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
+        System.out.println( "WordlistGenericOrderAST: " + wordlistSearchAST.toString() );
+        return queryDocumentIds;
     }
 
     // words are ordered by trigram importance
