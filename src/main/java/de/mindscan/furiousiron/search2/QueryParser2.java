@@ -26,7 +26,6 @@
 package de.mindscan.furiousiron.search2;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -219,14 +218,8 @@ public class QueryParser2 {
     //       Nodes in optimized AST should be sorted : and - from longest to shortest word
     //       Nodes in optimized AST should be sorted : or  - from shortest to longest
     private List<String> filterByDocumentWordlists( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        List<String> retained = new LinkedList<String>();
-
-        for (String documentID : coreCandidatesDocumentIDs) {
-            if (AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentID ) )) {
-                retained.add( documentID );
-            }
-        }
-
-        return retained;
+        return coreCandidatesDocumentIDs.stream()
+                        .filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentId ) ) )
+                        .collect( Collectors.toList() );
     }
 }
