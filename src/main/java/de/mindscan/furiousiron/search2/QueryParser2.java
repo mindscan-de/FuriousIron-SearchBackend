@@ -38,7 +38,6 @@ import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 import de.mindscan.furiousiron.util.StopWatch;
 import de.mindscan.furiousiron.wordlists.WordlistCompilerFactory;
-import de.mindscan.furiousiron.wordlists.WordlistOrderedWordlistCompiler;
 
 /**
  * 
@@ -147,8 +146,7 @@ public class QueryParser2 {
                     Collection<String> orderedWordlist ) {
 
         StopWatch wordlistCompileWatch = StopWatch.createStarted();
-        WordlistOrderedWordlistCompiler wlc = new WordlistOrderedWordlistCompiler( orderedWordlist );
-        QueryNode wordlistSearchAST = wlc.compile( ast, search );
+        QueryNode wordlistSearchAST = WordlistCompilerFactory.createOrderedWordlistCompiler( orderedWordlist ).compile( ast, search );
         wordlistCompileWatch.stop();
 
         StopWatch wordlistWatch = StopWatch.createStarted();
