@@ -145,72 +145,33 @@ public class QueryParser2 {
 
     private List<String> filterWordsByGenericWordOrder( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs,
                     Collection<String> orderedWordlist ) {
-
-        StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createOrderedWordlistCompiler( orderedWordlist ).compile( ast, search );
-        wordlistCompileWatch.stop();
 
-        StopWatch wordlistWatch = StopWatch.createStarted();
-        List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-        wordlistWatch.stop();
-
-        // System.out.println( "WordlistGenericOrderAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
-        // System.out.println( "WordlistGenericOrderAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-        System.out.println( "WordlistGenericOrderAST: " + wordlistSearchAST.toString() );
-        return queryDocumentIds;
+        return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
     }
 
     @SuppressWarnings( "unused" )
     // words are ordered by trigram importance
     private List<String> filterWordsForDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createTrigramOccurrenceCompiler().compile( ast, search );
-        wordlistCompileWatch.stop();
 
-        StopWatch wordlistWatch = StopWatch.createStarted();
-        List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-        wordlistWatch.stop();
-
-        // System.out.println( "Wordlist3GramAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
-        // System.out.println( "Wordlist3GramAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-        System.out.println( "Wordlist3GramAST: " + wordlistSearchAST.toString() );
-        return queryDocumentIds;
+        return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
     }
 
     @SuppressWarnings( "unused" )
     // words are ordered by wordlength importance
     private List<String> filterWordsForDocumentsByWordlengthImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createWordLengthbasedCompiler().compile( ast, search );
-        wordlistCompileWatch.stop();
 
-        // ---
-
-        StopWatch wordlistWatch = StopWatch.createStarted();
-        List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-        wordlistWatch.stop();
-
-        // System.out.println( "WordlistLengthAST: compile in: " + wordlistCompileWatch.getElapsedTime() );
-        // System.out.println( "WordlistLengthAST: size: " + queryDocumentIds.size() + "  in " + wordlistWatch.getElapsedTime() );
-        System.out.println( "WordlistLengthAST: " + wordlistSearchAST.toString() );
-        return queryDocumentIds;
+        return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
     }
 
     @SuppressWarnings( "unused" )
     // words are not ordered by any means, other than the order of word occurrence in the search.
     private List<String> filterWordsForDocumentsByNaturalImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        StopWatch wordlistCompileWatch = StopWatch.createStarted();
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createToLowercaseCompiler().compile( ast, search );
-        wordlistCompileWatch.stop();
 
-        StopWatch y = StopWatch.createStarted();
-        List<String> queryDocumentIds = filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-        y.stop();
-
-        // System.out.println( "NaturalAST: compile in: " + wordlistCompileWatch.getElapsedTime() );        
-        // System.out.println( "NaturalAST: size: " + queryDocumentIds.size() + "  in " + y.getElapsedTime() );
-        System.out.println( "NaturalAST: " + ast.toString() );
-        return queryDocumentIds;
+        return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
     }
 
     /**
