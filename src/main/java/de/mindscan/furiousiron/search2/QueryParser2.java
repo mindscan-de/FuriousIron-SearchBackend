@@ -38,7 +38,7 @@ import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 import de.mindscan.furiousiron.util.StopWatch;
 import de.mindscan.furiousiron.wordlists.WordlistCompilerFactory;
-import de.mindscan.furiousiron.wordlists.WordlistTrigramPenaltyCompiler;
+import de.mindscan.furiousiron.wordlists.WordOrderTrigramPenaltyStrategy;
 
 /**
  * 
@@ -85,8 +85,8 @@ public class QueryParser2 {
             // Calculate Word order an use this as an input for the ast compiler step, instead of implementing different Compiler different "strategies"
             // better to just determine the final word order and use a compiler bringing them in that order.
             StopWatch optimizeWordOrderStopWatch = StopWatch.createStarted();
-            WordlistTrigramPenaltyCompiler penaltyCompiler = new WordlistTrigramPenaltyCompiler();
-            Collection<String> orderedWordlist = penaltyCompiler.buildOrderedWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
+            WordOrderTrigramPenaltyStrategy penaltyStrategy = new WordOrderTrigramPenaltyStrategy();
+            Collection<String> orderedWordlist = penaltyStrategy.buildWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
             optimizeWordOrderStopWatch.stop();
 
             // filterW - Step
