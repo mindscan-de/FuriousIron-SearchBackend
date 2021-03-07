@@ -38,6 +38,7 @@ import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
 import de.mindscan.furiousiron.util.StopWatch;
 import de.mindscan.furiousiron.wordlists.WordlistCompilerFactory;
+import de.mindscan.furiousiron.wordlists.WordlistOrderedWordlistCompiler;
 
 /**
  * 
