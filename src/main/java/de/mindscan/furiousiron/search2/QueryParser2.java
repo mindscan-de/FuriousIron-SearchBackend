@@ -85,7 +85,7 @@ public class QueryParser2 {
             // better to just determine the final word order and use a compiler bringing them in that order.
             StopWatch optimizeWordOrderStopWatch = StopWatch.createStarted();
             WordlistTrigramPenaltyCompiler penaltyCompiler = new WordlistTrigramPenaltyCompiler();
-            Collection<String> orderedWordlist = penaltyCompiler.getOrderedWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
+            Collection<String> orderedWordlist = penaltyCompiler.buildOrderedWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
             optimizeWordOrderStopWatch.stop();
 
             // filterW - Step

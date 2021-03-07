@@ -91,7 +91,7 @@ public class WordlistTrigramPenaltyCompiler {
         }
     }
 
-    public Collection<String> getOrderedWordlist( Collection<String> wordlist, Collection<TrigramUsage> usage ) {
+    public Collection<String> buildOrderedWordlist( Collection<String> wordlist, Collection<TrigramUsage> usage ) {
 
         // no word list -> nothing to do here
         if (wordlist.isEmpty()) {
