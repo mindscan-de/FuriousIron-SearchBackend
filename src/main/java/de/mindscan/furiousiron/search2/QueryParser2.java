@@ -94,8 +94,14 @@ public class QueryParser2 {
             queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreCandidatesDocumentIDs, orderedWordlist );
             filterWordsStopWatch.stop();
 
-            // rank - Step
+            // rank - Step (1st rank) 
+            // -> only the top results needs to be properly ordered. this is a technical implementation?
+            // TODO: try a completely new approach {sum over each trigram of} (TrigramFrequencyInDocument(TODO: collect this info) / TrigramDocumentCount)
+            // maybe use the trigramindex of the documents ()
+            // use the trigramoccurence count, this should be
 
+            // IDEA?
+            // -----
             // TODO: lexical search and look at each "document"
             // filter documents by wordlists and return a list of documents and their state, 
             // how many rules they fulfill, according to the wordlist and the semanticSearchAST
@@ -174,10 +180,6 @@ public class QueryParser2 {
         return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
     }
 
-    /**
-     * @param documentId
-     * @return
-     */
     private SearchResultCandidates convertToSearchResultCandidate( Search search, String documentId ) {
         // ATTN: don't like it but let's leave it like this until it works.
         // This is currently a proof of concept.
