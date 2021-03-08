@@ -40,8 +40,6 @@ public class TtfIdfCalculator {
      * because the document already passed the word filter, and we know that this wordfilter 
      */
     public float calculateForDocument( Search search, TrigramOccurrence max, Collection<TrigramOccurrence> globalTrigramOccurrences, String documentId ) {
-        // trigram to trigramOccurences
-
         return calculateForOccurrences( max, globalTrigramOccurrences, calculateTtfForDocument( search, documentId ) );
     }
 
