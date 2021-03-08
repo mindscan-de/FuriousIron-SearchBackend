@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 import de.mindscan.furiousiron.core.CoreSearchCompiler;
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.rank.TtfIdfRanking;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.query.parser.QueryParser;
@@ -100,6 +101,10 @@ public class QueryParser2 {
             // maybe use the trigramindex of the documents ()
             // use the trigramoccurence count, this should be
 
+            StopWatch rankDocumentsStopWatch = StopWatch.createStarted();
+            queryDocumentIds = ttfidfRank( search, queryDocumentIds );
+            rankDocumentsStopWatch.stop();
+
             // IDEA?
             // -----
             // TODO: lexical search and look at each "document"
@@ -122,7 +127,7 @@ public class QueryParser2 {
             sb.append( searchTrigramStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( optimizeWordOrderStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( filterWordsStopWatch.getElapsedTime() ).append( "ms / " );
-            sb.append( 0L ).append( "ms / " );
+            sb.append( rankDocumentsStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( cacheSearchResult.getElapsedTime() ).append( "ms" );
 
             System.out.println( sb.toString() );
@@ -178,6 +183,12 @@ public class QueryParser2 {
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createToLowercaseCompiler().compile( ast, search );
 
         return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+    }
+
+    private List<String> ttfidfRank( Search search, List<String> queryDocumentIds ) {
+        TtfIdfRanking ttfIdfRanking = new TtfIdfRanking();
+
+        return ttfIdfRanking.rank( search, search.getLastQueryTrigramOccurences(), queryDocumentIds );
     }
 
     private SearchResultCandidates convertToSearchResultCandidate( Search search, String documentId ) {
