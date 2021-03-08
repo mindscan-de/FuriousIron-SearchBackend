@@ -26,11 +26,10 @@
 package de.mindscan.furiousiron.rank;
 
 import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Map;
 
 import de.mindscan.furiousiron.index.trigram.TrigramOccurrence;
+import de.mindscan.furiousiron.search.Search;
 
 /**
  * 
@@ -40,27 +39,18 @@ public class TtfIdfCalculator {
     /*
      * because the document already passed the word filter, and we know that this wordfilter 
      */
-    public float calculateForDocument( Collection<TrigramOccurrence> globalTrigramOccurrences, String documentId ) {
-        // relative maximum frequency for max trigram occurrences / we don't know the number of documents in index
-        TrigramOccurrence max = globalTrigramOccurrences.stream().max( Comparator.comparingLong( trigram -> trigram.getOccurrenceCount() ) ).get();
-
-        return calculateForDocument( max, globalTrigramOccurrences, documentId );
-    }
-
-    /*
-     * because the document already passed the word filter, and we know that this wordfilter 
-     */
-    public float calculateForDocument( TrigramOccurrence max, Collection<TrigramOccurrence> globalTrigramOccurrences, String documentId ) {
+    public float calculateForDocument( Search search, TrigramOccurrence max, Collection<TrigramOccurrence> globalTrigramOccurrences, String documentId ) {
         // trigram to trigramOccurences
-        Map<String, TrigramOccurrence> documentTrigramOccurrences = new HashMap<>();
 
-        // TODO: Crunch the document, because we didn't do in the first place
-        // TODO: we get the TrigramOccurences per Document - TTF / maybe have a ttf count..
-        return calculateForOccurrences( max, globalTrigramOccurrences, documentTrigramOccurrences );
+        return calculateForOccurrences( max, globalTrigramOccurrences, calculateTtfForDocument( search, documentId ) );
     }
 
-    public float calculateForOccurrences( TrigramOccurrence maximumGlobalTrigramOccurences, Collection<TrigramOccurrence> globalTrigramOccurrences,
-                    Map<String, TrigramOccurrence> documentTrigramOccurrences ) {
+    private Map<String, Integer> calculateTtfForDocument( Search search, String documentId ) {
+        return search.getTrigramTermFrequencyData( documentId );
+    }
+
+    private float calculateForOccurrences( TrigramOccurrence maximumGlobalTrigramOccurences, Collection<TrigramOccurrence> globalTrigramOccurrences,
+                    Map<String, Integer> documentTrigramOccurrences ) {
 
         double maxGTO = maximumGlobalTrigramOccurences.getOccurrenceCount();
 
@@ -72,10 +62,10 @@ public class TtfIdfCalculator {
                 continue;
             }
 
-            TrigramOccurrence ttf = documentTrigramOccurrences.get( globalOccurrence.getTrigram() );
+            int ttf = documentTrigramOccurrences.get( globalOccurrence.getTrigram() );
 
             // high precision
-            double local_tfidf = Math.log( (double) ttf.getOccurrenceCount() * (maxGTO / ((double) (1 + globalOccurrence.getOccurrenceCount()))) );
+            double local_tfidf = Math.log( (double) ttf * (maxGTO / ((double) (1 + globalOccurrence.getOccurrenceCount()))) );
 
             // low precision
             document_ttf_idf += (float) local_tfidf;

@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.mindscan.furiousiron.index.trigram.TrigramOccurrence;
+import de.mindscan.furiousiron.search.Search;
 
 /**
  * This is the first implementation of a ranking mechanism for this project. And uses a derivate of 
@@ -43,13 +44,13 @@ public class TtfIdfRanking {
         ttfIdfCalculator = new TtfIdfCalculator();
     }
 
-    public List<String> rank( List<TrigramOccurrence> searchQueryTrigramOccurences, List<String> queryDocumentIds ) {
+    public List<String> rank( Search search, List<TrigramOccurrence> searchQueryTrigramOccurences, List<String> queryDocumentIds ) {
         TrigramOccurrence max = searchQueryTrigramOccurences.stream().max( Comparator.comparingLong( trigram -> trigram.getOccurrenceCount() ) ).get();
 
         HashMap<String, Float> scoredDocuments = new HashMap<>( queryDocumentIds.size() );
 
         for (String documentId : queryDocumentIds) {
-            float score = ttfIdfCalculator.calculateForDocument( max, searchQueryTrigramOccurences, documentId );
+            float score = ttfIdfCalculator.calculateForDocument( search, max, searchQueryTrigramOccurences, documentId );
             scoredDocuments.put( documentId, score );
         }
 
