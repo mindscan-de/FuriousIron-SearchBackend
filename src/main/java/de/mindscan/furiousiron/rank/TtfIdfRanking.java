@@ -32,7 +32,8 @@ import java.util.List;
 import de.mindscan.furiousiron.index.trigram.TrigramOccurrence;
 
 /**
- * 
+ * This is the first implementation of a ranking mechanism for this project. And uses a derivate of 
+ * the TF-IDF approach (TTF-IDF).
  */
 public class TtfIdfRanking {
 
