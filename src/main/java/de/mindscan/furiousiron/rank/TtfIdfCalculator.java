@@ -44,6 +44,13 @@ public class TtfIdfCalculator {
         // relative maximum frequency for max trigram occurrences / we don't know the number of documents in index
         TrigramOccurrence max = globalTrigramOccurrences.stream().max( Comparator.comparingLong( trigram -> trigram.getOccurrenceCount() ) ).get();
 
+        return calculateForDocument( max, globalTrigramOccurrences, documentId );
+    }
+
+    /*
+     * because the document already passed the word filter, and we know that this wordfilter 
+     */
+    public float calculateForDocument( TrigramOccurrence max, Collection<TrigramOccurrence> globalTrigramOccurrences, String documentId ) {
         // trigram to trigramOccurences
         Map<String, TrigramOccurrence> documentTrigramOccurrences = new HashMap<>();
 
