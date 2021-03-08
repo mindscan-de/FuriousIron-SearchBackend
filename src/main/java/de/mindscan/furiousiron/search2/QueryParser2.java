@@ -117,7 +117,7 @@ public class QueryParser2 {
 
             // save retained results for future queries.
             StopWatch cacheSearchResult = StopWatch.createStarted();
-            // queryCache.cacheSearchResult( ast, queryDocumentIds );
+            queryCache.cacheSearchResult( ast, queryDocumentIds );
             cacheSearchResult.stop();
 
             // Build log message
