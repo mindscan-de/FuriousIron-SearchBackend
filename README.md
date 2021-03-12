@@ -83,11 +83,15 @@ Well, the most pressing issues right now are ranking the result candidates and p
 valuable snippet of the result to the coder, so the coder can decide whether a search result 
 is worth a look or not.
 
+Okay, since we now have some kind of ranking, which I'm currently not too thrilled of, I'll
+start providing some teaser for the source code found. Because ranking results is nice but
+the disappointment in the expected result quality might be bigger. But scanning results in a
+glimpse may help to better satisfy the programmer's needs.
+
 ## Nice to have
 
 * Query Parsing: Exact Searches
   * implement something +test -"@test"
-* Ranking results (might be out of scope yet / might also not be done here but at a different step)
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 
 ## What needs to be done next
