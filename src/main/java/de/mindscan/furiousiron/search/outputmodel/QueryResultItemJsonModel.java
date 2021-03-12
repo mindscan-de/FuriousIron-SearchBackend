@@ -38,6 +38,7 @@ public class QueryResultItemJsonModel {
     private long numberOfLinesInFile;
     private long fileSize;
     private Map<String, String> classifierMap;
+    private String queryResultTeaserText = "Java Backend provided this default value, with at least some pride?";
 
     public QueryResultItemJsonModel( String queryResultSimpleFilename, String queryResultFilePath ) {
         this.queryResultSimpleFilename = queryResultSimpleFilename;
@@ -75,5 +76,13 @@ public class QueryResultItemJsonModel {
 
     public void setClassifierMap( Map<String, String> classifierMap ) {
         this.classifierMap = classifierMap;
+    }
+
+    public String getQueryResultTeaserText() {
+        return queryResultTeaserText;
+    }
+
+    public void setQueryResultTeaserText( String queryResultTeaserText ) {
+        this.queryResultTeaserText = queryResultTeaserText;
     }
 }
