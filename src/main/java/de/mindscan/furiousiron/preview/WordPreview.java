@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.search.Search;
 
 /**
  * 
@@ -40,20 +41,23 @@ public class WordPreview {
     private QueryNode ast;
     private Collection<String> theTrigrams;
 
-    /**
-     * @param ast
-     * @param theTrigrams
-     */
     public WordPreview( QueryNode ast, Collection<String> theTrigrams ) {
         this.ast = ast;
         this.theTrigrams = theTrigrams;
     }
 
-    /**
-     * @param queryDocumentIds
-     * @return
-     */
-    public Map<String, String> getBestPreviews( List<String> queryDocumentIds ) {
+    public Map<String, String> getBestPreviews( Search search, List<String> queryDocumentIds, int startIndex ) {
+
+        // just limit the number of detail results to 25
+        for (String documentIdMD5 : queryDocumentIds.subList( 0, Math.min( queryDocumentIds.size(), 25 ) )) {
+            List<String> allLines = search.getDocumentContentLines( documentIdMD5 );
+
+            // TODO: foreach line calc the trigrams count them while comparing them to "theTrigrams"
+            // keep line if more than X trigrams are satisfied.
+
+            // TODO: also calculate the n best for the file 
+        }
+
         return new HashMap<>();
     }
 
