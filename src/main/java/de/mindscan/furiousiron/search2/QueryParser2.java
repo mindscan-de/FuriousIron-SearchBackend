@@ -119,7 +119,7 @@ public class QueryParser2 {
             StopWatch calculatePreviewStopWatch = StopWatch.createStarted();
             // TODO: use the search and its index to retrieve the documents content.
             WordPreview wordPreview = new WordPreview( ast, theTrigrams );
-            resultPreviews = wordPreview.getBestPreviews( queryDocumentIds );
+            resultPreviews = wordPreview.getBestPreviews( search, queryDocumentIds, 0 );
             // TODO: cache the resultPreviews
             calculatePreviewStopWatch.stop();
 
@@ -223,6 +223,7 @@ public class QueryParser2 {
         SearchResultCandidates result = new SearchResultCandidates( documentId );
         result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
         // TODO: set the preview.
+        // documentPreviews.getOrDefault( documentId, "No Preview created for this document. Please follow link to view contents." );
         return result;
     }
 
