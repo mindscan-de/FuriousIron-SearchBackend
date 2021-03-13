@@ -27,11 +27,13 @@ package de.mindscan.furiousiron.search2;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.mindscan.furiousiron.core.CoreSearchCompiler;
 import de.mindscan.furiousiron.core.ast.CoreQueryNode;
+import de.mindscan.furiousiron.preview.WordPreview;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.rank.TtfIdfRanking;
 import de.mindscan.furiousiron.search.Search;
@@ -51,12 +53,15 @@ public class QueryParser2 {
     public Collection<SearchResultCandidates> search( Search search, String query ) {
         QueryCache queryCache = new QueryCache( search.getSearchQueryCache() );
         QueryNode ast = this.compileSearchTreeFromQuery( query );
+        Map<String, String> resultPreviews = null;
 
         List<String> queryDocumentIds;
 
         // if cached result exist:  just do the ranking and data-presentation.
         if (queryCache.hasCachedSearchResult( ast )) {
             queryDocumentIds = queryCache.loadSearchResult( ast );
+
+            // TODO: load the cached resultPreviews
         }
         else {
             // Compile the AST
@@ -100,7 +105,6 @@ public class QueryParser2 {
             // TODO: try a completely new approach {sum over each trigram of} (TrigramFrequencyInDocument(TODO: collect this info) / TrigramDocumentCount)
             // maybe use the trigramindex of the documents ()
             // use the trigramoccurence count, this should be
-
             StopWatch rankDocumentsStopWatch = StopWatch.createStarted();
             queryDocumentIds = ttfidfRank( search, queryDocumentIds );
             rankDocumentsStopWatch.stop();
@@ -110,6 +114,14 @@ public class QueryParser2 {
             // TODO: lexical search and look at each "document"
             // filter documents by wordlists and return a list of documents and their state, 
             // how many rules they fulfill, according to the wordlist and the semanticSearchAST
+
+            // preview - calculcation 
+            StopWatch calculatePreviewStopWatch = StopWatch.createStarted();
+            // TODO: use the search and its index to retrieve the documents content.
+            WordPreview wordPreview = new WordPreview( ast, theTrigrams );
+            resultPreviews = wordPreview.getBestPreviews( queryDocumentIds );
+            // TODO: cache the resultPreviews
+            calculatePreviewStopWatch.stop();
 
             // Thought:
             // save this Queryresult (we can always improve the order later), when someone spends some again time for searching for it.
@@ -122,12 +134,13 @@ public class QueryParser2 {
 
             // Build log message
             StringBuilder sb = new StringBuilder();
-            sb.append( "compile/search3/orderW/filterW/rank/cache : " );
+            sb.append( "compile/search3/orderW/filterW/rank/preview/cache : " );
             sb.append( compileCoreSearchASTStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( searchTrigramStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( optimizeWordOrderStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( filterWordsStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( rankDocumentsStopWatch.getElapsedTime() ).append( "ms / " );
+            sb.append( calculatePreviewStopWatch.getElapsedTime() ).append( "ms / " );
             sb.append( cacheSearchResult.getElapsedTime() ).append( "ms" );
 
             System.out.println( sb.toString() );
@@ -146,12 +159,17 @@ public class QueryParser2 {
         // We might train the to predict the score of a file vector according to the search vector using
         // transformers ... But this is way too sophisticated. and requires lots of training
 
+        // TODO: Maybe save the whole search result
+
+        if (resultPreviews == null) {
+            return ranked.stream().map( documentId -> convertToSearchResultCandidate( search, documentId ) ).collect( Collectors.toList() );
+        }
+
         // ATTN: don't like it but let's leave it like this until it works.
         // This is currently a proof of concept.
-        List<SearchResultCandidates> searchresult = ranked.stream().map( documentId -> convertToSearchResultCandidate( search, documentId ) )
-                        .collect( Collectors.toList() );
 
-        return searchresult;
+        final Map<String, String> previewContent = resultPreviews;
+        return ranked.stream().map( documentId -> convertToSearchResultCandidate( search, documentId, previewContent ) ).collect( Collectors.toList() );
     }
 
     private List<String> filterWordsByGenericWordOrder( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs,
@@ -196,6 +214,15 @@ public class QueryParser2 {
         // This is currently a proof of concept.
         SearchResultCandidates result = new SearchResultCandidates( documentId );
         result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
+        return result;
+    }
+
+    private SearchResultCandidates convertToSearchResultCandidate( Search search, String documentId, Map<String, String> documentPreviews ) {
+        // ATTN: don't like it but let's leave it like this until it works.
+        // This is currently a proof of concept.
+        SearchResultCandidates result = new SearchResultCandidates( documentId );
+        result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
+        // TODO: set the preview.
         return result;
     }
 
