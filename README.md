@@ -74,8 +74,8 @@ the longer word is the most valuable. I call this method relative word occurrenc
 (spoiler: this calculation still can be improved)    
 
 Also a cache for the queries should be provided. Because filtering on word level and ranking on 
-word level, as well ranking on document level are very expensive operations. These results should 
-be cached as long as the index is not renewed.
+word level, as well ranking on document level are kind of expensive operations. These results 
+should be cached as long as the index is not renewed.
 
 ## MVP III - Result Preview Edition
 
@@ -85,12 +85,13 @@ is worth a look or not.
 
 Okay, since we now have some kind of ranking, which I'm currently not too thrilled of, I'll
 start providing some teaser for the source code found. Because ranking results is nice but
-the disappointment in the expected result quality might be bigger. But scanning results in a
-glimpse may help to better satisfy the programmer's needs.
+the disappointment in the expected result quality might be bigger if you are forced to blindly 
+click on a result. But scanning results in a glimpse may help to better satisfy the programmer's
+needs.
 
 ## Nice to have
 
-* Query Parsing: Exact Searches
+* Query Parsing: Exact Searches and exact matches
   * implement something +test -"@test"
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 
