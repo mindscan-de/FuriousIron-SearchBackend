@@ -34,6 +34,8 @@ import java.util.List;
 public class QueryResultJsonModel {
 
     private int numberOfQeueryResults;
+    private long searchTimeInMillis;
+
     private List<QueryResultItemJsonModel> queryResultItems = new ArrayList<>();
 
     public int getNumberOfQeueryResults() {
@@ -44,8 +46,16 @@ public class QueryResultJsonModel {
         return queryResultItems;
     }
 
+    public long getSearchTimeInMs() {
+        return searchTimeInMillis;
+    }
+
     public void addQueryResultItem( QueryResultItemJsonModel item ) {
         queryResultItems.add( item );
         numberOfQeueryResults = queryResultItems.size();
+    }
+
+    public void setSearchTimeInMs( long searchTimeInMs ) {
+        this.searchTimeInMillis = searchTimeInMs;
     }
 }

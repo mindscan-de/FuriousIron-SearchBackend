@@ -71,6 +71,7 @@ public class SearchRESTfulService {
             QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 
             optimizedResultStopwatch.stop();
+            jsonResult.setSearchTimeInMs( optimizedResultStopwatch.getElapsedTime() );
 
             System.out.println( "q2:=" + query + " / time(opt): " + (optimizedResultStopwatch.getElapsedTime()) + " ms" );
 
@@ -89,6 +90,7 @@ public class SearchRESTfulService {
             QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 
             unoptimizedResultStopWatch.stop();
+            jsonResult.setSearchTimeInMs( unoptimizedResultStopWatch.getElapsedTime() );
 
             System.out.println( "q:=" + query + " / time(not opt): " + (unoptimizedResultStopWatch.getElapsedTime()) + " ms" );
 
