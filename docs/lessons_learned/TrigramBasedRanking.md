@@ -92,4 +92,6 @@ because obviously if we use the trigrams an detail search has to be applied.
 
 But exact searches might be implemented by using the document-trigram index without 
 word segmentation. Which is currently unused. So identifying exact searches might be 
-as simple as the already implemented trigram-search. 
+as simple as the already implemented trigram-search.
+
+?under all circumstances it must be avoided to search in documents, whenever possible?
