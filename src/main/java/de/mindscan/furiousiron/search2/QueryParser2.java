@@ -53,7 +53,7 @@ public class QueryParser2 {
     public Collection<SearchResultCandidates> search( Search search, String query ) {
         QueryCache queryCache = new QueryCache( search.getSearchQueryCache() );
         QueryNode ast = this.compileSearchTreeFromQuery( query );
-        Map<String, String> resultPreviews = null;
+        Map<String, Map<Integer, String>> resultPreviews = null;
 
         List<String> queryDocumentIds;
 
@@ -162,7 +162,7 @@ public class QueryParser2 {
         // ATTN: don't like it but let's leave it like this until it works.
         // This is currently a proof of concept.
 
-        final Map<String, String> previewContent = resultPreviews;
+        final Map<String, Map<Integer, String>> previewContent = resultPreviews;
         return ranked.stream().map( documentId -> convertToSearchResultCandidate( search, documentId, previewContent ) ).collect( Collectors.toList() );
     }
 
@@ -212,12 +212,16 @@ public class QueryParser2 {
         return result;
     }
 
-    private SearchResultCandidates convertToSearchResultCandidate( Search search, String documentId, Map<String, String> documentPreviews ) {
+    private SearchResultCandidates convertToSearchResultCandidate( Search search, String documentId, Map<String, Map<Integer, String>> documentPreviews ) {
         // ATTN: don't like it but let's leave it like this until it works.
         // This is currently a proof of concept.
         SearchResultCandidates result = new SearchResultCandidates( documentId );
         result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
-        result.setPreview( documentPreviews.get( documentId ) );
+        Map<Integer, String> map = documentPreviews.get( documentId );
+
+        if (map != null) {
+            result.setPreview( String.join( "<br>\n\n", map.values() ) );
+        }
 
         return result;
     }

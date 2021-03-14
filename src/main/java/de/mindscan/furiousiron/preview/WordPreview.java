@@ -55,8 +55,8 @@ public class WordPreview {
         this.theTrigrams = theTrigrams;
     }
 
-    public Map<String, String> getBestPreviews( Search search, List<String> queryDocumentIds, int startIndex ) {
-        HashMap<String, String> result = new HashMap<>();
+    public HashMap<String, Map<Integer, String>> getBestPreviews( Search search, List<String> queryDocumentIds, int startIndex ) {
+        HashMap<String, Map<Integer, String>> result = new HashMap<>();
 
         // just limit the number of detail results to 25
         for (String documentIdMD5 : queryDocumentIds.subList( 0, Math.min( queryDocumentIds.size(), 25 ) )) {
@@ -87,14 +87,15 @@ public class WordPreview {
             Collections.sort( scores, Comparator.reverseOrder() );
             Collection<Integer> topKScores = new HashSet<>( scores.subList( 0, Math.min( MAX_K_SCORES, scores.size() ) ) );
 
-            ArrayList<String> contentResult = new ArrayList<>();
+            Map<Integer, String> contentResult = new TreeMap<>();
             for (Entry<Integer, Integer> entry : lineScore.entrySet()) {
                 if (topKScores.contains( entry.getValue() )) {
-                    contentResult.add( lineContents.get( entry.getKey() ) );
+                    int line = entry.getKey();
+                    contentResult.put( line, lineContents.get( line ) );
                 }
             }
 
-            result.put( documentIdMD5, String.join( "<br>\n\n", contentResult ) );
+            result.put( documentIdMD5, contentResult );
         }
 
         return result;
