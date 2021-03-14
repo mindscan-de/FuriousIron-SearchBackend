@@ -25,11 +25,18 @@
  */
 package de.mindscan.furiousiron.preview;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
+import de.mindscan.furiousiron.indexer.SimpleWordUtils;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.Search;
 
@@ -41,24 +48,56 @@ public class WordPreview {
     private QueryNode ast;
     private Collection<String> theTrigrams;
 
+    private final int MAX_K_SCORES = 5;
+
     public WordPreview( QueryNode ast, Collection<String> theTrigrams ) {
         this.ast = ast;
         this.theTrigrams = theTrigrams;
     }
 
     public Map<String, String> getBestPreviews( Search search, List<String> queryDocumentIds, int startIndex ) {
+        HashMap<String, String> result = new HashMap<>();
 
         // just limit the number of detail results to 25
         for (String documentIdMD5 : queryDocumentIds.subList( 0, Math.min( queryDocumentIds.size(), 25 ) )) {
             List<String> allLines = search.getDocumentContentLines( documentIdMD5 );
 
-            // TODO: foreach line calc the trigrams count them while comparing them to "theTrigrams"
-            // keep line if more than X trigrams are satisfied.
+            TreeMap<Integer, String> lineContents = new TreeMap<>();
+            TreeMap<Integer, Integer> lineScore = new TreeMap<>();
 
-            // TODO: also calculate the n best for the file 
+            int currentLine = 0;
+            for (String lineContent : allLines) {
+
+                currentLine++;
+
+                // TODO: foreach line calc the trigrams count them while comparing them to "theTrigrams"
+                Collection<String> lineTrigrams = SimpleWordUtils.getTrigramsFromLine( lineContent.toLowerCase() );
+
+                lineTrigrams.retainAll( theTrigrams );
+                if (lineTrigrams.isEmpty()) {
+                    continue;
+                }
+
+                lineContents.put( currentLine, lineContent );
+                lineScore.put( currentLine, lineTrigrams.size() );
+            }
+
+            // keep line if more than X trigrams are satisfied.
+            ArrayList<Integer> scores = new ArrayList<>( lineScore.values() );
+            Collections.sort( scores, Comparator.reverseOrder() );
+            Collection<Integer> topKScores = new HashSet<>( scores.subList( 0, Math.min( MAX_K_SCORES, scores.size() ) ) );
+
+            ArrayList<String> contentResult = new ArrayList<>();
+            for (Entry<Integer, Integer> entry : lineScore.entrySet()) {
+                if (topKScores.contains( entry.getValue() )) {
+                    contentResult.add( lineContents.get( entry.getKey() ) );
+                }
+            }
+
+            result.put( documentIdMD5, String.join( "<br>\n\n", contentResult ) );
         }
 
-        return new HashMap<>();
+        return result;
     }
 
 }
