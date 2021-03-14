@@ -109,6 +109,7 @@ public class SearchRESTfulService {
             item.setFileSize( metadata.getFileSize() );
             item.setNumberOfLinesInFile( metadata.getNumberOfLines() );
             item.setClassifierMap( metadata.getClassifierMap() );
+            item.setQueryResultTeaserText( candidate.getPreview() );
 
             jsonResult.addQueryResultItem( item );
         }

@@ -38,7 +38,7 @@ public class QueryResultItemJsonModel {
     private long numberOfLinesInFile;
     private long fileSize;
     private Map<String, String> classifierMap;
-    private String queryResultTeaserText = "Java Backend provided this default value, with at least some pride?";
+    private String queryResultTeaserText = "No preview available.";
 
     public QueryResultItemJsonModel( String queryResultSimpleFilename, String queryResultFilePath ) {
         this.queryResultSimpleFilename = queryResultSimpleFilename;
