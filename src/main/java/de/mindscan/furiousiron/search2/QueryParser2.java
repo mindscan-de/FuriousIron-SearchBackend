@@ -85,8 +85,6 @@ public class QueryParser2 {
             Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
             searchTrigramStopWatch.stop();
 
-            // TODO: Maybe use these too? search.getSkippedTrigramsInOptSearch()
-
             // orderW - Step
             // Calculate Word order an use this as an input for the ast compiler step, instead of implementing different Compiler different "strategies"
             // better to just determine the final word order and use a compiler bringing them in that order.
