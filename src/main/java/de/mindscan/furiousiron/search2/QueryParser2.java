@@ -101,10 +101,6 @@ public class QueryParser2 {
             filterWordsStopWatch.stop();
 
             // rank - Step (1st rank) 
-            // -> only the top results needs to be properly ordered. this is a technical implementation?
-            // TODO: try a completely new approach {sum over each trigram of} (TrigramFrequencyInDocument(TODO: collect this info) / TrigramDocumentCount)
-            // maybe use the trigramindex of the documents ()
-            // use the trigramoccurence count, this should be
             StopWatch rankDocumentsStopWatch = StopWatch.createStarted();
             queryDocumentIds = ttfidfRank( search, queryDocumentIds );
             rankDocumentsStopWatch.stop();

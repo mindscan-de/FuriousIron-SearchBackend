@@ -7,6 +7,9 @@ mentions a single term, it is not necessarily the code fragment you are looking
 for. So developing something like a page rank algorithm seems not to be very 
 useful.
 
+Source code is not an opinion piece you may like or dislike. It is something
+containing the technical truth
+
 Approach for initial ranking TTF-IDF
 
 ## TrigramTermFrequency (TTF) in the Document (TTF) 
@@ -75,3 +78,18 @@ Maybe I should also use the search terms directly for ranking, other than indire
 through the trigram term frequency. But i don't know the word term frequency for an 
 ever growing word corpus, because people get creative sometimes with spellings. So
 maybe I will do it.
+
+
+## Just one step in ranking the results?
+
+The idea is that only the top results need to be properly sorted, so identifying the
+top results is an important step in the whole search process. Maybe even if the 
+results are not in perfect order, we might be interested in, whether the top 30% of
+the results contain the correct answer to the programmers query. 
+
+On an exact search, like for a logmessage, the results need to be reordered anyway, 
+because obviously if we use the trigrams an detail search has to be applied.
+
+But exact searches might be implemented by using the document-trigram index without 
+word segmentation. Which is currently unused. So identifying exact searches might be 
+as simple as the already implemented trigram-search. 
