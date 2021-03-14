@@ -110,6 +110,8 @@ public class SearchRESTfulService {
             item.setFileSize( metadata.getFileSize() );
             item.setNumberOfLinesInFile( metadata.getNumberOfLines() );
             item.setClassifierMap( metadata.getClassifierMap() );
+            item.setPreview( candidate.getPreview() );
+
             Map<Integer, String> preview = candidate.getPreview();
             if (preview != null) {
                 item.setQueryResultTeaserText( String.join( "<br>\n\n", preview.values() ) );

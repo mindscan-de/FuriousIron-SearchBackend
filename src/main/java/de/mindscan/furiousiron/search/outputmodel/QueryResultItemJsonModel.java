@@ -39,6 +39,7 @@ public class QueryResultItemJsonModel {
     private long fileSize;
     private Map<String, String> classifierMap;
     private String queryResultTeaserText = "No preview available.";
+    private Map<Integer, String> preview;
 
     public QueryResultItemJsonModel( String queryResultSimpleFilename, String queryResultFilePath ) {
         this.queryResultSimpleFilename = queryResultSimpleFilename;
@@ -84,5 +85,13 @@ public class QueryResultItemJsonModel {
 
     public void setQueryResultTeaserText( String queryResultTeaserText ) {
         this.queryResultTeaserText = queryResultTeaserText;
+    }
+
+    public void setPreview( Map<Integer, String> preview ) {
+        this.preview = preview;
+    }
+
+    public Map<Integer, String> getPreview() {
+        return preview;
     }
 }
