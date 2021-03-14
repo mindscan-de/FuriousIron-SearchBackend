@@ -50,6 +50,7 @@ public class WordPreview {
     private Collection<String> theTrigrams;
 
     private final int MAX_K_SCORES = 5;
+    private final int MAX_DOCUMENTS_TO_ANALYZE = 35;
 
     public WordPreview( QueryNode ast, Collection<String> theTrigrams ) {
         this.ast = ast;
@@ -59,8 +60,7 @@ public class WordPreview {
     public HashMap<String, Map<Integer, String>> getBestPreviews( Search search, List<String> queryDocumentIds, int startIndex ) {
         HashMap<String, Map<Integer, String>> result = new HashMap<>();
 
-        // just limit the number of detail results to 25
-        for (String documentIdMD5 : queryDocumentIds.subList( 0, Math.min( queryDocumentIds.size(), 25 ) )) {
+        for (String documentIdMD5 : queryDocumentIds.subList( 0, Math.min( queryDocumentIds.size(), MAX_DOCUMENTS_TO_ANALYZE ) )) {
             List<String> allLines = search.getDocumentContentLines( documentIdMD5 );
 
             TreeMap<Integer, String> lineContents = new TreeMap<>();
