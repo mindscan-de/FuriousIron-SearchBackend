@@ -82,23 +82,27 @@ public class WordPreview {
                 lineScore.put( currentLine, lineTrigrams.size() );
             }
 
-            // keep line if more than X trigrams are satisfied.
-            ArrayList<Integer> scores = new ArrayList<>( lineScore.values() );
-            Collections.sort( scores, Comparator.reverseOrder() );
-            Collection<Integer> topKScores = new HashSet<>( scores.subList( 0, Math.min( MAX_K_SCORES, scores.size() ) ) );
-
-            Map<Integer, String> contentResult = new TreeMap<>();
-            for (Entry<Integer, Integer> entry : lineScore.entrySet()) {
-                if (topKScores.contains( entry.getValue() )) {
-                    int line = entry.getKey();
-                    contentResult.put( line, lineContents.get( line ) );
-                }
-            }
-
-            result.put( documentIdMD5, contentResult );
+            result.put( documentIdMD5, getTopScoredLinesInDocument( lineContents, lineScore ) );
         }
 
         return result;
+    }
+
+    private Map<Integer, String> getTopScoredLinesInDocument( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScore ) {
+        ArrayList<Integer> scores = new ArrayList<>( lineScore.values() );
+        Collections.sort( scores, Comparator.reverseOrder() );
+        Collection<Integer> topKScores = new HashSet<>( scores.subList( 0, Math.min( MAX_K_SCORES, scores.size() ) ) );
+
+        Map<Integer, String> contentResult = new TreeMap<>();
+
+        for (Entry<Integer, Integer> entry : lineScore.entrySet()) {
+            if (topKScores.contains( entry.getValue() )) {
+                int line = entry.getKey();
+                contentResult.put( line, lineContents.get( line ) );
+            }
+        }
+
+        return contentResult;
     }
 
 }
