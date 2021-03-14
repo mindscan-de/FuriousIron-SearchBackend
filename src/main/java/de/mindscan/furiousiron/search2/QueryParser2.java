@@ -123,7 +123,7 @@ public class QueryParser2 {
 
             // save retained results for future queries.
             StopWatch cacheSearchResult = StopWatch.createStarted();
-            queryCache.cacheSearchResult( ast, queryDocumentIds );
+            // queryCache.cacheSearchResult( ast, queryDocumentIds );
             cacheSearchResult.stop();
 
             // Build log message
@@ -217,11 +217,7 @@ public class QueryParser2 {
         // This is currently a proof of concept.
         SearchResultCandidates result = new SearchResultCandidates( documentId );
         result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
-        Map<Integer, String> map = documentPreviews.get( documentId );
-
-        if (map != null) {
-            result.setPreview( String.join( "<br>\n\n", map.values() ) );
-        }
+        result.setPreview( documentPreviews.get( documentId ) );
 
         return result;
     }

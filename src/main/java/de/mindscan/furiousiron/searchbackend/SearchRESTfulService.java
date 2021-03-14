@@ -28,6 +28,7 @@ package de.mindscan.furiousiron.searchbackend;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
@@ -109,7 +110,10 @@ public class SearchRESTfulService {
             item.setFileSize( metadata.getFileSize() );
             item.setNumberOfLinesInFile( metadata.getNumberOfLines() );
             item.setClassifierMap( metadata.getClassifierMap() );
-            item.setQueryResultTeaserText( candidate.getPreview() );
+            Map<Integer, String> preview = candidate.getPreview();
+            if (preview != null) {
+                item.setQueryResultTeaserText( String.join( "<br>\n\n", preview.values() ) );
+            }
 
             jsonResult.addQueryResultItem( item );
         }
