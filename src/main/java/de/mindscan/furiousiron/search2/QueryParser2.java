@@ -208,6 +208,7 @@ public class QueryParser2 {
         // This is currently a proof of concept.
         SearchResultCandidates result = new SearchResultCandidates( documentId );
         result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
+
         return result;
     }
 
@@ -216,8 +217,8 @@ public class QueryParser2 {
         // This is currently a proof of concept.
         SearchResultCandidates result = new SearchResultCandidates( documentId );
         result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
-        // TODO: set the preview.
-        // documentPreviews.getOrDefault( documentId, "No Preview created for this document. Please follow link to view contents." );
+        result.setPreview( documentPreviews.get( documentId ) );
+
         return result;
     }
 
