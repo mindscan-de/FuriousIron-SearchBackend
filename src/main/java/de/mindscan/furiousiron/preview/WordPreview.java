@@ -45,6 +45,7 @@ import de.mindscan.furiousiron.search.Search;
  */
 public class WordPreview {
 
+    @SuppressWarnings( "unused" )
     private QueryNode ast;
     private Collection<String> theTrigrams;
 
