@@ -80,6 +80,9 @@ public class SearchRESTfulService {
 
         }
         catch (Exception ex) {
+            System.out.println( "Caught exception during optimized search - continue with non optimized search instead... " );
+            ex.printStackTrace();
+
             StopWatch unoptimizedResultStopWatch = StopWatch.createStarted();
 
             Search search = new Search( indexFolder );
