@@ -71,8 +71,15 @@ public class WordPreview {
 
                 currentLine++;
 
+                boolean isExceeding = lineContent.length() > 512;
+
+                String shortenedLineContent = lineContent;
+                if (isExceeding) {
+                    shortenedLineContent = lineContent.substring( 0, 509 ) + "...";
+                }
+
                 // TODO: foreach line calc the trigrams count them while comparing them to "theTrigrams"
-                Collection<String> lineTrigrams = SimpleWordUtils.getTrigramsFromLine( lineContent.toLowerCase() );
+                Collection<String> lineTrigrams = SimpleWordUtils.getTrigramsFromLine( shortenedLineContent.toLowerCase() );
 
                 lineTrigrams.retainAll( theTrigrams );
                 if (lineTrigrams.isEmpty()) {
