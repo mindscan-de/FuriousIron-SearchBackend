@@ -50,8 +50,16 @@ public class TtfIdfRanking {
         HashMap<String, Float> scoredDocuments = new HashMap<>( queryDocumentIds.size() );
 
         for (String documentId : queryDocumentIds) {
-            float score = ttfIdfCalculator.calculateForDocument( search, max, searchQueryTrigramOccurences, documentId );
-            scoredDocuments.put( documentId, score );
+            try {
+                float score = ttfIdfCalculator.calculateForDocument( search, max, searchQueryTrigramOccurences, documentId );
+                scoredDocuments.put( documentId, score );
+            }
+            catch (Exception ex) {
+                scoredDocuments.put( documentId, 0.0f );
+
+                System.out.println( "Problem with ranking documentid - (see last search result(s))" + documentId );
+                ex.printStackTrace();
+            }
         }
 
         queryDocumentIds.sort( Comparator.comparingDouble( documentId -> scoredDocuments.get( documentId ) ).reversed() );
