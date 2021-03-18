@@ -30,6 +30,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
 
 import de.mindscan.furiousiron.index.cache.SearchQueryCache;
 import de.mindscan.furiousiron.query.ast.QueryNode;
@@ -72,12 +73,28 @@ public class QueryCache {
 
     /**
      * @param ast
+     * @param resultPreviews
+     */
+    public void cacheSearchResultPreview( QueryNode ast, Map<String, Map<Integer, String>> resultPreviews ) {
+        String qkey = calculateQueryKey( ast );
+
+        searchQueryCache.savePreviewResult( qkey, resultPreviews );
+    }
+
+    /**
+     * @param ast
      * @return
      */
     public List<String> loadSearchResult( QueryNode ast ) {
         String qkey = calculateQueryKey( ast );
 
         return searchQueryCache.loadQueryResult( qkey );
+    }
+
+    public Map<String, Map<Integer, String>> loadSearchResultPreview( QueryNode ast ) {
+        String qkey = calculateQueryKey( ast );
+
+        return searchQueryCache.loadPreviewResult( qkey );
     }
 
     private String calculateQueryKey( QueryNode ast ) {

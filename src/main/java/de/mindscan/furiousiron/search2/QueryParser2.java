@@ -61,7 +61,7 @@ public class QueryParser2 {
         if (queryCache.hasCachedSearchResult( ast )) {
             queryDocumentIds = queryCache.loadSearchResult( ast );
 
-            // TODO: load the cached resultPreviews
+            resultPreviews = queryCache.loadSearchResultPreview( ast );
         }
         else {
             // Compile the AST
@@ -111,10 +111,8 @@ public class QueryParser2 {
 
             // preview - calculcation 
             StopWatch calculatePreviewStopWatch = StopWatch.createStarted();
-            // TODO: use the search and its index to retrieve the documents content.
             WordPreview wordPreview = new WordPreview( ast, theTrigrams );
             resultPreviews = wordPreview.getBestPreviews( search, queryDocumentIds, 0 );
-            // TODO: cache the resultPreviews
             calculatePreviewStopWatch.stop();
 
             // Thought:
@@ -123,7 +121,8 @@ public class QueryParser2 {
 
             // save retained results for future queries.
             StopWatch cacheSearchResult = StopWatch.createStarted();
-            // queryCache.cacheSearchResult( ast, queryDocumentIds );
+            queryCache.cacheSearchResult( ast, queryDocumentIds );
+            queryCache.cacheSearchResultPreview( ast, resultPreviews );
             cacheSearchResult.stop();
 
             // Build log message
