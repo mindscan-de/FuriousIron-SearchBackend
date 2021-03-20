@@ -93,10 +93,13 @@ needs.
 
 * Query Parsing: Exact Searches and exact matches
   * implement something +test -"@test"
+* Implement a new QueryParser
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 * Support more than a single search, single query, single threaded environment.
   * many of the objects involved share some information which are not meant to be stored there, but currently are convinient
   * introduce a query-environment/query-workspace/query workflow, where the query can work on, to not share data with other queries at the same time
+* implement a configurable pipeline of search, and search environment, to make search multiclient and multithreaded
+
 
 ## What needs to be done next
 

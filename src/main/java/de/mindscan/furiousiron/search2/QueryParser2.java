@@ -44,7 +44,7 @@ import de.mindscan.furiousiron.wordlists.WordlistCompilerFactory;
 import de.mindscan.furiousiron.wordlists.wordorder.TrigramPenaltyStrategy;
 
 /**
- * 
+ * This is a different implementation using a different search strategy.  
  */
 public class QueryParser2 {
 

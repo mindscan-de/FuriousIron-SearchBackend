@@ -69,7 +69,7 @@ Now let's see how many documents there are in the demo index.
     Debug-TrigramOccurence: 'age': 13870
     
 There is no reason to start with a list of 13870 documents and to try to reduce that to a list of 
-169 documents. It takes longer to read in the document'ids of a list of 13870 documents than for
+169 documents. It takes longer to read in the document'ids of a list of 13.870 documents than for
 1769. The Idea is to use the lists which are fast to load, and combine this list, with a slightly
 more expensive list.
 
