@@ -198,7 +198,8 @@ public class QueryParserTest {
         QueryNode result = queryParser.parseQuery( "first second" );
 
         // Assert
-        assertThat( result.toString(), equalTo( "[ 'OR', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
+        assertThat( result.toString(),
+                        equalTo( "[ 'OR', [ [ 'INCLUDING', [ [ 'TEXT', 'first', false ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second', false ] ] ] ] ]" ) );
     }
 
     @Test
@@ -210,7 +211,8 @@ public class QueryParserTest {
         QueryNode result = queryParser.parseQuery( "first +second" );
 
         // Assert
-        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
+        assertThat( result.toString(),
+                        equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first', false ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second', false ] ] ] ] ]" ) );
     }
 
     @Test
@@ -222,7 +224,8 @@ public class QueryParserTest {
         QueryNode result = queryParser.parseQuery( "first -second" );
 
         // Assert
-        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'EXCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
+        assertThat( result.toString(),
+                        equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first', false ] ] ], [ 'EXCLUDING', [ [ 'TEXT', 'second', false ] ] ] ] ]" ) );
     }
 
 // tpxu_method
