@@ -41,99 +41,99 @@ import de.mindscan.furiousiron.query.ast.TextNode;
 public class AstBasedWordlistFilter {
 
     // TODO: wordlists should be organized by wordsize in a TreeSet
-        //       in an andnode, the most unlikely word should be processed first
-        //       int an or node, the most likely word should be processed first
-        static boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
-    
-            if (ast instanceof TextNode) {
-                String wordToSearch = ast.getContent();
-    
-                // if it is directly contained
-                if (documentWordlist.contains( wordToSearch )) {
-                    // this should yield highest reward
-                    return true;
-                }
-    
-                int wordToSearchLength = wordToSearch.length();
-    
-                // we might want to split the loop, to prefer start over ends over contains
-                // we might want to return relevance instead of boolean
-                for (String documentWord : documentWordlist) {
-                    if (documentWord.length() > wordToSearchLength) {
-                        // this should yield a higher Score
-    //                    if (documentWord.startsWith( wordToSearch )) {
-    //                        return true;
-    //                    }
-    //
-    //                    // this should yield high Score
-    //                    if (documentWord.endsWith( wordToSearch )) {
-    //                        return true;
-    //                    }
-    
-                        // this should yield some reward
-                        if (documentWord.contains( wordToSearch )) {
-                            return true;
-                        }
+    //       in an andnode, the most unlikely word should be processed first
+    //       int an or node, the most likely word should be processed first
+    static boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
+
+        if (ast instanceof TextNode) {
+            String wordToSearch = ast.getContent();
+
+            // if it is directly contained
+            if (documentWordlist.contains( wordToSearch )) {
+                // this should yield highest reward
+                return true;
+            }
+
+            int wordToSearchLength = wordToSearch.length();
+
+            // we might want to split the loop, to prefer start over ends over contains
+            // we might want to return relevance instead of boolean
+            for (String documentWord : documentWordlist) {
+                if (documentWord.length() > wordToSearchLength) {
+                    // this should yield a higher Score
+//                    if (documentWord.startsWith( wordToSearch )) {
+//                        return true;
+//                    }
+//
+//                    // this should yield high Score
+//                    if (documentWord.endsWith( wordToSearch )) {
+//                        return true;
+//                    }
+
+                    // this should yield some reward
+                    if (documentWord.contains( wordToSearch )) {
+                        return true;
                     }
                 }
-    
-                // it is neither contained fully nor partially. 
+            }
+
+            // it is neither contained fully nor partially. 
+            return false;
+        }
+
+        if (ast instanceof AndNode) {
+            if (ast.hasChildren()) {
+                Collection<QueryNode> children = ast.getChildren();
+                for (QueryNode queryNode : children) {
+                    // early exit in case of a "false" - no need to check further if word is not found.
+                    if (!isAstMatchingToWordlist( queryNode, documentWordlist )) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            else {
+                return true;
+            }
+        }
+
+        if (ast instanceof OrNode) {
+            if (ast.hasChildren()) {
+                Collection<QueryNode> children = ast.getChildren();
+                for (QueryNode queryNode : children) {
+                    // early exit in case of a "true" - no need to check further if other word is also found.
+                    if (isAstMatchingToWordlist( queryNode, documentWordlist )) {
+                        return true;
+                    }
+                }
                 return false;
             }
-    
-            if (ast instanceof AndNode) {
-                if (ast.hasChildren()) {
-                    Collection<QueryNode> children = ast.getChildren();
-                    for (QueryNode queryNode : children) {
-                        // early exit in case of a "false" - no need to check further if word is not found.
-                        if (!isAstMatchingToWordlist( queryNode, documentWordlist )) {
-                            return false;
-                        }
-                    }
-                    return true;
-                }
-                else {
-                    return true;
-                }
+            else {
+                return false;
             }
-    
-            if (ast instanceof OrNode) {
-                if (ast.hasChildren()) {
-                    Collection<QueryNode> children = ast.getChildren();
-                    for (QueryNode queryNode : children) {
-                        // early exit in case of a "true" - no need to check further if other word is also found.
-                        if (isAstMatchingToWordlist( queryNode, documentWordlist )) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                else {
-                    return false;
-                }
-            }
-    
-            if (ast instanceof IncludingNode) {
-                if (ast.hasChildren()) {
-                    QueryNode first = ast.getChildren().iterator().next();
-                    return isAstMatchingToWordlist( first, documentWordlist );
-                }
-                else {
-                    return true;
-                }
-            }
-    
-            if (ast instanceof ExcludingNode) {
-                if (ast.hasChildren()) {
-                    QueryNode first = ast.getChildren().iterator().next();
-                    return !isAstMatchingToWordlist( first, documentWordlist );
-                }
-                else {
-                    return false;
-                }
-            }
-    
-            throw new RuntimeException( "This Node type is not supported: " + ast.toString() );
         }
+
+        if (ast instanceof IncludingNode) {
+            if (ast.hasChildren()) {
+                QueryNode first = ast.getChildren().iterator().next();
+                return isAstMatchingToWordlist( first, documentWordlist );
+            }
+            else {
+                return true;
+            }
+        }
+
+        if (ast instanceof ExcludingNode) {
+            if (ast.hasChildren()) {
+                QueryNode first = ast.getChildren().iterator().next();
+                return !isAstMatchingToWordlist( first, documentWordlist );
+            }
+            else {
+                return false;
+            }
+        }
+
+        throw new RuntimeException( "This Node type is not supported: " + ast.toString() );
+    }
 
 }
