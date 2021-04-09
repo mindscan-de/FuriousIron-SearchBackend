@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mindscan.furiousiron.query.ast.AndNode;
+import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.OrNode;
@@ -78,6 +79,19 @@ public class AstBasedWordlistFilter {
             }
 
             // it is neither contained fully nor partially. 
+            return false;
+        }
+
+        if (ast instanceof ExactMatchingTextNode) {
+            // TODO: implement a correct strategy to handle exact matching text nodes
+            // TODO: we must distinguish between a phrase containing WS and such, then this is more complicated.
+
+            String wordToSearch = ast.getContent();
+
+            if (documentWordlist.contains( wordToSearch )) {
+                return true;
+            }
+
             return false;
         }
 
