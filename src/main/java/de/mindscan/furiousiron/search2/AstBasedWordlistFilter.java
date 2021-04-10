@@ -37,41 +37,33 @@ import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 
 /**
- * 
+ * A word-level based AST matching.
  */
 public class AstBasedWordlistFilter {
 
-    // TODO: wordlists should be organized by wordsize in a TreeSet
-    //       in an andnode, the most unlikely word should be processed first
-    //       int an or node, the most likely word should be processed first
+    /**
+     * This method tests whether the given AST of QueryNodes matches a wordlist (e.g. a wordlist of an indexed document)
+     * This is a word-based filtering mechanism, which is slightly more expensive in terms of compute costs after the 
+     * trigram filters are exhausted. This kind of search like testing whether a search term is part of a word, will
+     * result in quadratic or higher computing costs (well, if you don't optimize). 
+     *  
+     * @param ast the ast which is applied onto a wordlist
+     * @param documentWordlist a word list of a document
+     * @return <code>true</code> iff the AST matches a given word list.
+     */
     static boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
 
         if (ast instanceof TextNode) {
             String wordToSearch = ast.getContent();
 
-            // if it is directly contained
             if (documentWordlist.contains( wordToSearch )) {
-                // this should yield highest reward
                 return true;
             }
 
             int wordToSearchLength = wordToSearch.length();
 
-            // we might want to split the loop, to prefer start over ends over contains
-            // we might want to return relevance instead of boolean
             for (String documentWord : documentWordlist) {
                 if (documentWord.length() > wordToSearchLength) {
-                    // this should yield a higher Score
-//                    if (documentWord.startsWith( wordToSearch )) {
-//                        return true;
-//                    }
-//
-//                    // this should yield high Score
-//                    if (documentWord.endsWith( wordToSearch )) {
-//                        return true;
-//                    }
-
-                    // this should yield some reward
                     if (documentWord.contains( wordToSearch )) {
                         return true;
                     }
