@@ -78,13 +78,7 @@ public class AstBasedWordlistFilter {
             // TODO: implement a correct strategy to handle exact matching text nodes
             // TODO: we must distinguish between a phrase containing WS and such, then this is more complicated.
 
-            String wordToSearch = ast.getContent();
-
-            if (documentWordlist.contains( wordToSearch )) {
-                return true;
-            }
-
-            return false;
+            return documentWordlist.contains( ast.getContent() );
         }
 
         if (ast instanceof AndNode) {
