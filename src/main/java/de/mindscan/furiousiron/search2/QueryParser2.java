@@ -179,14 +179,6 @@ public class QueryParser2 {
     }
 
     @SuppressWarnings( "unused" )
-    // words are ordered by trigram importance
-    private List<String> filterWordsForDocumentsByTrigramImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        QueryNode wordlistSearchAST = WordlistCompilerFactory.createTrigramOccurrenceCompiler().compile( ast, search );
-
-        return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-    }
-
-    @SuppressWarnings( "unused" )
     // words are ordered by wordlength importance
     private List<String> filterWordsForDocumentsByWordlengthImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createWordLengthbasedCompiler().compile( ast, search );
