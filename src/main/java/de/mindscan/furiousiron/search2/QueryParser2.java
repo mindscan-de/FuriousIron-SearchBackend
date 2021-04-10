@@ -178,22 +178,6 @@ public class QueryParser2 {
         return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
     }
 
-    @SuppressWarnings( "unused" )
-    // words are ordered by wordlength importance
-    private List<String> filterWordsForDocumentsByWordlengthImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        QueryNode wordlistSearchAST = WordlistCompilerFactory.createWordLengthbasedCompiler().compile( ast, search );
-
-        return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-    }
-
-    @SuppressWarnings( "unused" )
-    // words are not ordered by any means, other than the order of word occurrence in the search.
-    private List<String> filterWordsForDocumentsByNaturalImportance( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        QueryNode wordlistSearchAST = WordlistCompilerFactory.createToLowercaseCompiler().compile( ast, search );
-
-        return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
-    }
-
     private List<String> ttfidfRank( Search search, List<String> queryDocumentIds ) {
         TtfIdfRanking ttfIdfRanking = new TtfIdfRanking();
 
