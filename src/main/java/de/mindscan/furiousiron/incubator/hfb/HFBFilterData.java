@@ -39,6 +39,7 @@ public class HFBFilterData {
     // the mask for the bits.
     private long sliceBitMask;
 
+    // TODO: will have to implement this later.
     // private byte[] sliceData;
 
     public HFBFilterData( int slicePosition, int numberOfBits ) {
@@ -54,6 +55,10 @@ public class HFBFilterData {
         // allocate according to sliceSize () - well maybe this is too large,
         // but we really shouldn't care right now. I leave it for future 
         // development and future improvements
+    }
+
+    // TODO: This will set the slice data / e.g if the data is loaded from disk.
+    protected void setSliceData() {
     }
 
     public long getSliceBitMask() {
