@@ -40,10 +40,10 @@ public class HFBFilterDataTest {
         data.setSliceMaskSize( 4 );
 
         // act
-        String result = data.getSliceBitMask().toString();
+        long result = data.getSliceBitMask();
 
         // assert
-        assertThat( result, equalTo( "15" ) );
+        assertThat( result, equalTo( 15L ) );
     }
 
     @Test
@@ -52,10 +52,10 @@ public class HFBFilterDataTest {
         HFBFilterData data = new HFBFilterData( 0, 4 );
 
         // act
-        String result = data.getSliceBitMask().toString();
+        long result = data.getSliceBitMask();
 
         // assert
-        assertThat( result, equalTo( "15" ) );
+        assertThat( result, equalTo( 15L ) );
     }
 
     @Test
@@ -65,10 +65,10 @@ public class HFBFilterDataTest {
         data.setSliceMaskSize( 16 );
 
         // act
-        String result = data.getSliceBitMask().toString();
+        long result = data.getSliceBitMask();
 
         // assert
-        assertThat( result, equalTo( "65535" ) );
+        assertThat( result, equalTo( 65535L ) );
     }
 
     @Test
@@ -77,10 +77,10 @@ public class HFBFilterDataTest {
         HFBFilterData data = new HFBFilterData( 0, 16 );
 
         // act
-        String result = data.getSliceBitMask().toString();
+        long result = data.getSliceBitMask();
 
         // assert
-        assertThat( result, equalTo( "65535" ) );
+        assertThat( result, equalTo( 65535L ) );
     }
 
     @Test
@@ -90,10 +90,10 @@ public class HFBFilterDataTest {
         data.setSliceMaskSize( 10 );
 
         // act
-        String result = data.getSliceBitMask().toString();
+        long result = data.getSliceBitMask();
 
         // assert
-        assertThat( result, equalTo( "1023" ) );
+        assertThat( result, equalTo( 1023L ) );
     }
 
     @Test
@@ -102,10 +102,10 @@ public class HFBFilterDataTest {
         HFBFilterData data = new HFBFilterData( 0, 10 );
 
         // act
-        String result = data.getSliceBitMask().toString();
+        long result = data.getSliceBitMask();
 
         // assert
-        assertThat( result, equalTo( "1023" ) );
+        assertThat( result, equalTo( 1023L ) );
     }
 
     @Test

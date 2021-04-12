@@ -25,8 +25,6 @@
  */
 package de.mindscan.furiousiron.incubator.hfb;
 
-import java.math.BigInteger;
-
 /**
  * 
  */
@@ -36,7 +34,7 @@ public class HFBFilterData {
     private int slicePosition;
 
     private int sliceBitSize;
-    private BigInteger sliceBitMask;
+    private long sliceBitMask;
 
     // private byte[] sliceData;
 
@@ -47,15 +45,15 @@ public class HFBFilterData {
 
     public void setSliceMaskSize( int numberOfBits ) {
         this.sliceBitSize = numberOfBits;
-        BigInteger sliceSize = BigInteger.ONE.shiftLeft( numberOfBits );
-        this.sliceBitMask = sliceSize.subtract( BigInteger.ONE );
+        long sliceSize = 1L << (numberOfBits);
+        this.sliceBitMask = sliceSize - 1L;
 
         // allocate according to sliceSize () - well maybe this is too large,
         // but we really shouldn't care right now. I leave it for future 
         // development and future improvements
     }
 
-    public BigInteger getSliceBitMask() {
+    public long getSliceBitMask() {
         return sliceBitMask;
     }
 
