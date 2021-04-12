@@ -33,7 +33,10 @@ public class HFBFilterData {
     // The position (number of bits to shift right before applying the sliceBitMask.
     private int slicePosition;
 
+    // the number of bits for the HFB-Filter
     private int sliceBitSize;
+
+    // the mask for the bits.
     private long sliceBitMask;
 
     // private byte[] sliceData;
