@@ -39,8 +39,12 @@ public class HFBFilterData {
     // the mask for the bits.
     private long sliceBitMask;
 
-    // TODO: will have to implement this later.
-    // private byte[] sliceData;
+    // contains the filter data
+    // TODO should better be ints or longs to avoid any uneven memory position
+    //      thinking of performance
+    //      maybe there is some optimized library for that bitarray stuff around
+    //      but for the moment this is good enough.
+    private byte[] sliceData;
 
     public HFBFilterData( int slicePosition, int numberOfBits ) {
         setSlicePosition( slicePosition );
@@ -57,8 +61,17 @@ public class HFBFilterData {
         // development and future improvements
     }
 
-    // TODO: This will set the slice data / e.g if the data is loaded from disk.
-    protected void setSliceData() {
+    // TODO: only init after setting the correct SliceMaskSize
+    public void initFilter() {
+        int numberOfBits = Math.max( this.sliceBitSize - 3, 0 );
+        setSliceData( new byte[1 << numberOfBits] );
+    }
+
+    // TODO: write to the byte buffer and mark document occurrences
+    // TODO: check the buffer, whether it contains a value 
+
+    protected void setSliceData( byte[] filterData ) {
+        this.sliceData = filterData;
     }
 
     public long getSliceBitMask() {
