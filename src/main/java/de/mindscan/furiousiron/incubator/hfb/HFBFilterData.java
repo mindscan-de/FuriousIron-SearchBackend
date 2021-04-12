@@ -32,15 +32,27 @@ import java.math.BigInteger;
  */
 public class HFBFilterData {
 
+    // The position (number of bits to shift right before applying the sliceBitMask.
+    private int slicePosition;
+
     private int sliceBitSize;
     private BigInteger sliceBitMask;
 
-    // private int slicePosition;
     // private byte[] sliceData;
+
+    public HFBFilterData( int slicePosition, int numberOfBits ) {
+        setSlicePosition( slicePosition );
+        setSliceMaskSize( numberOfBits );
+    }
 
     public void setSliceMaskSize( int numberOfBits ) {
         this.sliceBitSize = numberOfBits;
-        this.sliceBitMask = BigInteger.ONE.shiftLeft( numberOfBits ).subtract( BigInteger.ONE );
+        BigInteger sliceSize = BigInteger.ONE.shiftLeft( numberOfBits );
+        this.sliceBitMask = sliceSize.subtract( BigInteger.ONE );
+
+        // allocate according to sliceSize () - well maybe this is too large,
+        // but we really shouldn't care right now. I leave it for future 
+        // development and future improvements
     }
 
     public BigInteger getSliceBitMask() {
@@ -49,5 +61,13 @@ public class HFBFilterData {
 
     public int getSliceBitSize() {
         return sliceBitSize;
+    }
+
+    public void setSlicePosition( int slicePosition ) {
+        this.slicePosition = slicePosition;
+    }
+
+    public int getSlicePosition() {
+        return slicePosition;
     }
 }
