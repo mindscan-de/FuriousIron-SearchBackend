@@ -66,44 +66,31 @@ public class HashFreeBloom {
         System.out.println( trigramOccurrence );
 
         long highestBitMasked = Long.highestOneBit( trigramOccurrence.getOccurrenceCount() * 5 );
-        long sliceMask = highestBitMasked - 1;
         int sliceSize = (int) Long.numberOfTrailingZeros( highestBitMasked );
 
-        System.out.println( sliceSize );
-        System.out.println( sliceMask );
+        int slicePosition = 128 - sliceSize;
+        // build the filter.
+        HFBFilterData hfbdata = new HFBFilterData( slicePosition, sliceSize );
+        hfbdata.initFilter();
 
-        // Wir wollen nun alle Ids sammeln und eine Maske erzeugen anhand der DokumentIds.
-
-        // BUILD the Filter
-        BigInteger sliceMaskBi = new BigInteger( Long.toString( sliceMask ) );
-
-        byte[] hfbFilter1 = new byte[(int) highestBitMasked];
+        // use a common mask.
+        BigInteger sliceMaskBi = new BigInteger( Long.toString( hfbdata.getSliceBitMask() ) );
 
         for (String documentId : y) {
             BigInteger bi = new BigInteger( documentId, 16 );
 
             // TODO. we may have multiple filter to fill, so we can go multiple times, 
             //       and we want to go over about half of the bits of the documentid
-            BigInteger bi_s = bi.shiftRight( 128 - sliceSize );
+
+            // this can be done in parallel for all filters
+            BigInteger bi_s = bi.shiftRight( slicePosition );
             BigInteger bi_s_m = bi_s.and( sliceMaskBi );
-            hfbFilter1[bi_s_m.intValueExact()] = 1;
+
+            hfbdata.setIndex( bi_s_m.intValueExact() );
         }
 
-        // ein filter dieser Art hat eine rejection rate von 81 prozent.
+        // ein filter dieser Art hat eine rejection rate von 81 prozent, wenn bspw der Faktor 5 verwendet wird, aber in wirklichkeit irgendwo zwischen 3 und 6
         // eine kombination aus zwei filtern gleicher größe und gleicher hashlänge können vorher kombiniert werden und können die rejection rate erhöhen.
 
-        int[] countts = new int[100];
-        int zerorunstart = 0;
-        for (int j = 0; j < highestBitMasked; j++) {
-            if (hfbFilter1[j] == 1) {
-                countts[j - zerorunstart] += 1;
-                // System.out.println( j - zerorunstart );
-                zerorunstart = j + 1;
-            }
-        }
-
-        for (int j = 0; j < 100; j++) {
-            System.out.println( "runlength: " + j + " count " + countts[j] );
-        }
     }
 }
