@@ -73,8 +73,12 @@ public class HFBFilterData {
     // TODO: write to the byte buffer and mark document occurrences
     // TODO: check the buffer, whether it contains a value 
 
-    protected void setSliceData( byte[] filterData ) {
+    void setSliceData( byte[] filterData ) {
         this.sliceData = filterData;
+    }
+
+    byte[] getSliceData() {
+        return this.sliceData;
     }
 
     public long getSliceBitMask() {
