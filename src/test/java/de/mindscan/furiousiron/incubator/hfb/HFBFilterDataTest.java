@@ -2,6 +2,7 @@ package de.mindscan.furiousiron.incubator.hfb;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -168,6 +169,89 @@ public class HFBFilterDataTest {
         // assert
         int result = data.getSlicePosition();
         assertThat( result, equalTo( 9 ) );
+    }
+
+    @Test
+    public void testSetIndex_SetIdx0_expectIdx0BeTrue() throws Exception {
+        // arrange
+        HFBFilterData data = new HFBFilterData( 0, 5 );
+        data.initFilter();
+
+        // act
+        data.setIndex( 0 );
+
+        // assert
+        boolean result = data.isIndexSet( 0 );
+        assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testSetIndex_SetIdx1_expectIdx0BeFalse() throws Exception {
+        // arrange
+        HFBFilterData data = new HFBFilterData( 0, 5 );
+        data.initFilter();
+
+        // act
+        data.setIndex( 1 );
+
+        // assert
+        boolean result = data.isIndexSet( 0 );
+        assertThat( result, equalTo( false ) );
+    }
+
+    @Test
+    public void testSetIndex_SetIdx1_expectIdx1BeTrue() throws Exception {
+        // arrange
+        HFBFilterData data = new HFBFilterData( 0, 5 );
+        data.initFilter();
+
+        // act
+        data.setIndex( 1 );
+
+        // assert
+        boolean result = data.isIndexSet( 1 );
+        assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testSetIndex_SetIdx31_expectIdx31BeTrue() throws Exception {
+        // arrange
+        HFBFilterData data = new HFBFilterData( 0, 5 );
+        data.initFilter();
+
+        // act
+        data.setIndex( 31 );
+
+        // assert
+        boolean result = data.isIndexSet( 31 );
+        assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testClearIndex_SetIdx31ThenClear_expectIdx31BeFalse() throws Exception {
+        // arrange
+        HFBFilterData data = new HFBFilterData( 0, 5 );
+        data.initFilter();
+        data.setIndex( 31 );
+
+        // act
+        data.clearIndex( 31 );
+
+        // assert
+        boolean result = data.isIndexSet( 31 );
+        assertThat( result, equalTo( false ) );
+    }
+
+    @Test
+    public void testSetIndex_SetIdx32WhenOnlyBitWideWindow_throwsAIOOBException() throws Exception {
+        // arrange
+        HFBFilterData data = new HFBFilterData( 0, 5 );
+        data.initFilter();
+
+        // act
+        assertThrows( ArrayIndexOutOfBoundsException.class, () -> {
+            data.setIndex( 32 );
+        } );
     }
 
 }
