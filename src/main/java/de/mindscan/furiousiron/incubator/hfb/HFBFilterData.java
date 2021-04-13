@@ -26,7 +26,9 @@
 package de.mindscan.furiousiron.incubator.hfb;
 
 /**
- * 
+ * Save the filter data in a bitfield.
+ * Maybe later use Golombcoding / Golombdecoding for the filter representation on disk?
+ * Maybe a quasiarithmetic code?
  */
 public class HFBFilterData {
 
