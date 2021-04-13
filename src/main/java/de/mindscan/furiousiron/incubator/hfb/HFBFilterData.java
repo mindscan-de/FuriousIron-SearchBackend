@@ -45,6 +45,7 @@ public class HFBFilterData {
     //      maybe there is some optimized library for that bitarray stuff around
     //      but for the moment this is good enough.
     private byte[] sliceData;
+    private byte[] toBitPosition = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, (byte) 0x80 };
 
     public HFBFilterData( int slicePosition, int numberOfBits ) {
         setSlicePosition( slicePosition );
@@ -88,5 +89,17 @@ public class HFBFilterData {
 
     public int getSlicePosition() {
         return slicePosition;
+    }
+
+    public void setIndex( int index ) {
+        this.sliceData[index >> 3] |= toBitPosition[index & 7];
+    }
+
+    public void clearIndex( int index ) {
+        this.sliceData[index >> 3] &= ~toBitPosition[index & 7];
+    }
+
+    public boolean isIndexSet( int index ) {
+        return (this.sliceData[index >> 3] & toBitPosition[index & 7]) != 0;
     }
 }
