@@ -26,6 +26,8 @@
 package de.mindscan.furiousiron.incubator.hfb;
 
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * A filterbank is a collection of multiple filters, they don't need to be
@@ -36,13 +38,16 @@ import java.math.BigInteger;
  */
 public class HFBFilterBank {
 
+    private List<HFBFilterData> hfbfilterdata = Collections.emptyList();
+
     public void addDocumentId( BigInteger documentId ) {
         // we use each HFBFilterdata and add it to each filter we currently know.
-        // foreach hfbfilterdata {
-        //   calculate the partial id
-        //   int pid = documentId.shiftright(hfbfilterdata.sliceposition).and(hfbfilterdata.sliceMask).intValueExact();
-        //   hfbfilterdata.setIndex(pid);
-        // }
+        for (HFBFilterData filter : hfbfilterdata) {
+            // this may be useful to transfer to the filter itself, and set the
+            // index by using a BigInteger
+            BigInteger partId = documentId.shiftRight( filter.getSlicePosition() ).and( filter.getSliceBitMaskBI() );
+            filter.setIndex( partId.intValueExact() );
+        }
     }
 
     // TODO: save filterbank
@@ -51,11 +56,25 @@ public class HFBFilterBank {
     //       e.g. load only 3 out of 8 hfbfilters -> save io and compute
 
     public boolean containsDocumentId( BigInteger documentId ) {
-        // now the trick, is how many of these filters we do want to apply?
-        // count the number of applied filters and return true, if we passed 3 max. 4 filters?
-        // with 80% dropout rate we get a maximum false positive error rate 
-        // * of 0,8 percent when 3 hfb filters are asked = 3 times O(1) lookup
-        // * of 0,16 percent when 4 hfb filters are asked = 4 times O(1) lookup
-        return false;
+        int i = 1;
+        for (HFBFilterData filter : hfbfilterdata) {
+            BigInteger partId = documentId.shiftRight( filter.getSlicePosition() ).and( filter.getSliceBitMaskBI() );
+
+            if (!filter.isIndexSet( partId.intValueExact() )) {
+                return false;
+            }
+
+            // now the trick, is how many of these filters we do want to apply?
+            // count the number of applied filters and return true, if we passed 3 max. 4 filters?
+            // with 80% dropout rate we get a maximum false positive error rate 
+            // * of 0,8 percent when 3 hfb filters are asked = 3 times O(1) lookup
+            // * of 0,16 percent when 4 hfb filters are asked = 4 times O(1) lookup
+
+            if (i >= 3) {
+                return true;
+            }
+            i++;
+        }
+        return true;
     }
 }
