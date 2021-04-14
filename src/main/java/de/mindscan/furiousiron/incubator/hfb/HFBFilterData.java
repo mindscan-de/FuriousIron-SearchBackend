@@ -25,6 +25,8 @@
  */
 package de.mindscan.furiousiron.incubator.hfb;
 
+import java.math.BigInteger;
+
 /**
  * Save the filter data in a bitfield.
  * Maybe later use Golombcoding / Golombdecoding for the filter representation on disk?
@@ -49,6 +51,8 @@ public class HFBFilterData {
     private byte[] sliceData;
     private byte[] toBitPosition = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, (byte) 0x80 };
 
+    private BigInteger sliceBitMaskBI;
+
     public HFBFilterData( int slicePosition, int numberOfBits ) {
         setSlicePosition( slicePosition );
         setSliceMaskSize( numberOfBits );
@@ -57,7 +61,9 @@ public class HFBFilterData {
     public void setSliceMaskSize( int numberOfBits ) {
         this.sliceBitSize = numberOfBits;
         long sliceSize = 1L << (numberOfBits);
+
         this.sliceBitMask = sliceSize - 1L;
+        this.sliceBitMaskBI = new BigInteger( Long.toString( this.sliceBitMask ) );
 
         // allocate according to sliceSize () - well maybe this is too large,
         // but we really shouldn't care right now. I leave it for future 
@@ -83,6 +89,10 @@ public class HFBFilterData {
 
     public long getSliceBitMask() {
         return sliceBitMask;
+    }
+
+    public BigInteger getSliceBitMaskBI() {
+        return sliceBitMaskBI;
     }
 
     public int getSliceBitSize() {
