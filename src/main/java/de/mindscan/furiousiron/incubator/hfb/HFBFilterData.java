@@ -65,6 +65,9 @@ public class HFBFilterData {
         this.sliceBitMask = sliceSize - 1L;
         this.sliceBitMaskBI = new BigInteger( Long.toString( this.sliceBitMask ) );
 
+        // currently the number of documents in my index won't exceed my memory needs 
+        // for a couple of filters
+
         // allocate according to sliceSize () - well maybe this is too large,
         // but we really shouldn't care right now. I leave it for future 
         // development and future improvements
