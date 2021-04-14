@@ -38,11 +38,36 @@ import java.util.List;
  */
 public class HFBFilterBank {
 
-    private List<HFBFilterData> hfbfilterdata = Collections.emptyList();
+    private List<HFBFilterData> hfbfilters = Collections.emptyList();
+
+    /**
+     * 
+     */
+    public HFBFilterBank() {
+    }
+
+    /**
+     * 
+     * @param bitsInDocumentId e.g. 128 for md5 hashsums
+     * @param occurenceCount number of documents for a particular value
+     * @param loadFactor set it to 5 (five)
+     */
+    public void initFilters( int bitsInDocumentId, long occurenceCount, int loadFactor ) {
+        long highestBitMasked = Long.highestOneBit( occurenceCount * loadFactor );
+        int sliceSize = (int) Long.numberOfTrailingZeros( highestBitMasked );
+
+        // TODO: init as many as filters as we need
+        for (int slicePosition = bitsInDocumentId - sliceSize; slicePosition >= 0; slicePosition -= sliceSize) {
+            HFBFilterData hfbdata = new HFBFilterData( slicePosition, sliceSize );
+            hfbdata.initFilter();
+
+            // TODO: add this filter to the hfbfilters
+        }
+    }
 
     public void addDocumentId( BigInteger documentId ) {
         // we use each HFBFilterdata and add it to each filter we currently know.
-        for (HFBFilterData filter : hfbfilterdata) {
+        for (HFBFilterData filter : hfbfilters) {
             // this may be useful to transfer to the filter itself, and set the
             // index by using a BigInteger
             BigInteger partId = documentId.shiftRight( filter.getSlicePosition() ).and( filter.getSliceBitMaskBI() );
@@ -57,7 +82,7 @@ public class HFBFilterBank {
 
     public boolean containsDocumentId( BigInteger documentId ) {
         int i = 1;
-        for (HFBFilterData filter : hfbfilterdata) {
+        for (HFBFilterData filter : hfbfilters) {
             BigInteger partId = documentId.shiftRight( filter.getSlicePosition() ).and( filter.getSliceBitMaskBI() );
 
             if (!filter.isIndexSet( partId.intValueExact() )) {
