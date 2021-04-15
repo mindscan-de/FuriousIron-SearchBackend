@@ -57,12 +57,11 @@ public class HFBFilterBank {
         long highestBitMasked = Long.highestOneBit( occurenceCount * loadFactor );
         int sliceSize = (int) Long.numberOfTrailingZeros( highestBitMasked );
 
-        // TODO: init as many as filters as we need
         for (int slicePosition = bitsInDocumentId - sliceSize; slicePosition >= 0; slicePosition -= sliceSize) {
             HFBFilterData hfbdata = new HFBFilterData( slicePosition, sliceSize );
             hfbdata.initFilter();
 
-            // TODO: add this filter to the hfbfilters
+            hfbfilters.add( hfbdata );
         }
     }
 
