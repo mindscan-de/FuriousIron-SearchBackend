@@ -65,6 +65,9 @@ public class HashFreeBloom {
         TrigramOccurrence trigramOccurrence = trigramOccurrencesSortedByOccurrence.get( 0 );
         System.out.println( trigramOccurrence );
 
+        HFBFilterBank bank = new HFBFilterBank();
+        bank.initFilters( 128, trigramOccurrence.getOccurrenceCount(), 5 );
+
         long highestBitMasked = Long.highestOneBit( trigramOccurrence.getOccurrenceCount() * 5 );
         int sliceSize = (int) Long.numberOfTrailingZeros( highestBitMasked );
 
