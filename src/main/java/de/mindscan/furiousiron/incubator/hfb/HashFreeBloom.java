@@ -68,32 +68,12 @@ public class HashFreeBloom {
         HFBFilterBank bank = new HFBFilterBank();
         bank.initFilters( 128, trigramOccurrence.getOccurrenceCount(), 5 );
 
-        long highestBitMasked = Long.highestOneBit( trigramOccurrence.getOccurrenceCount() * 5 );
-        int sliceSize = (int) Long.numberOfTrailingZeros( highestBitMasked );
-
-        int slicePosition = 128 - sliceSize;
-        // build the filter.
-        HFBFilterData hfbdata = new HFBFilterData( slicePosition, sliceSize );
-        hfbdata.initFilter();
-
-        // use a common mask.
-        BigInteger sliceMaskBi = new BigInteger( Long.toString( hfbdata.getSliceBitMask() ) );
-
         for (String documentId : y) {
             BigInteger bi = new BigInteger( documentId, 16 );
-
-            // TODO. we may have multiple filter to fill, so we can go multiple times, 
-            //       and we want to go over about half of the bits of the documentid
-
-            // this can be done in parallel for all filters
-            BigInteger bi_s = bi.shiftRight( slicePosition );
-            BigInteger bi_s_m = bi_s.and( sliceMaskBi );
-
-            hfbdata.setIndex( bi_s_m.intValueExact() );
+            bank.addDocumentId( bi );
         }
 
         // ein filter dieser Art hat eine rejection rate von 81 prozent, wenn bspw der Faktor 5 verwendet wird, aber in wirklichkeit irgendwo zwischen 3 und 6
         // eine kombination aus zwei filtern gleicher größe und gleicher hashlänge können vorher kombiniert werden und können die rejection rate erhöhen.
-
     }
 }
