@@ -26,7 +26,7 @@
 package de.mindscan.furiousiron.incubator.hfb;
 
 import java.math.BigInteger;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class HFBFilterBank {
 
-    private List<HFBFilterData> hfbfilters = Collections.emptyList();
+    private List<HFBFilterData> hfbfilters = new ArrayList<>();
 
     /**
      * 
