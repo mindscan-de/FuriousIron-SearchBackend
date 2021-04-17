@@ -34,8 +34,11 @@ import java.util.List;
  * equally sized or so, but for the moment this is good enough.
  * 
  * The cool thing about such a filterbank is, that it could already combine often
- * used search terms instead of only trigrams and build a hash of these and cache 
- * this particular filterbank. 
+ * used search terms, instead of only trigrams. We can build a hash of these and 
+ * cache this particular filterbank. 
+ * 
+ * HFBFilter data can be combined using a binary AND-Operation if they have the 
+ * same sliceSize and the same slicePosition.
  */
 public class HFBFilterBank {
 

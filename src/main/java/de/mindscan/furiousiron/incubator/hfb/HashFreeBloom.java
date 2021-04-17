@@ -59,6 +59,11 @@ public class HashFreeBloom {
 
     public void createHFBFilter() {
         String[] x = new String[] { "imp" };
+
+        for (int i = 0; i < x[0].length(); i++) {
+            System.out.println( Integer.toString( x[0].charAt( i ), 16 ) );
+        }
+
         List<TrigramOccurrence> trigramOccurrencesSortedByOccurrence = index.getTrigramOccurrencesSortedByOccurrence( Arrays.asList( x ) );
         Set<String> y = index.collectDocumentIdsForTrigramsOpt( Arrays.asList( x ) );
 
