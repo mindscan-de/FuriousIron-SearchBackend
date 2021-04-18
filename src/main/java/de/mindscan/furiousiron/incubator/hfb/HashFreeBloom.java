@@ -68,7 +68,12 @@ import de.mindscan.furiousiron.search.Search;
  * 
  * These internal bitflag arrays can be stored using golomb coding, so then 
  * even very sparse bit flag arrays can be stored memory efficient. (In case 
- * you need a high dropout rate) 
+ * you need a high dropout rate)
+ * 
+ * Maybe a quasi-arithmetic coder is also applicable. (for the golombcode output?)
+ * Howard & Vitter 1993 
+ * * Design and Analysis of Fast Text Compression Based on Quasi-Arithmetic Coding
+ * * https://kuscholarworks.ku.edu/bitstream/handle/1808/7210/HoV93.qtfull.pdf;sequence=1
  */
 public class HashFreeBloom {
 
