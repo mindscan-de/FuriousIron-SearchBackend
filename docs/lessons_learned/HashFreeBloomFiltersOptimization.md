@@ -29,5 +29,32 @@ To create a more sparse representation we can introduce a sparsety factor to imp
 
 Let's assume we have chosen our sparsety factor that the we calculate this value to 65536. That 
 means that we have an effective way to calculate a modulo operation by a bitwise and-operation.
-If we have 13137 unique document IDs, then only an upper bound of 13137 values can be calculated
-by any hash operation.
+
+If we have 13137 unique document IDs, then only an upper bound of 13137 different values can be 
+calculated by any hash function.
+
+For bloom filters to be effective we usually need more than one hash function. So the question is,
+which particular hash function(s) to use? If the hash value is derived from a cryptographically
+secure hash function, we can assume the hash values are independent and uniformly distributed.
+So is for every selected subset of this hash value. The first slice of n bit, are independent 
+from the second slice of n bit and so on. Therefore having multiple hash functions is easy. 
+
+We can just pick a different slice of n bit for every hash function, we want to apply. So the 
+hash function in X, where X is a document ID, simply reduces to:
+
+    h_{ slice_position, slice_size}(X) = (X>>slice_position )&((2^slice_size)-1)
+    
+So the hash function is a simple bit shift in combination with the and operation. Both of these
+operations are directly supported by the CPU and are extremely fast, in comparison to every other
+hash function.
+
+    (SHR / SHRX) have a low latency and low cycle count
+
+Multiple hash functions can be calculated in parallel if they are aligned at 32 bits, then the
+vector instructions / SSSE3 / AVX instructions can be used to calculate 4 or 8 hashes in 
+parallel.
+
+So we don't eliminate the hash functions all-together, but we use a very cheap one, which is
+indistinguishable from a simple memory access. Also if we align our document IDs optimally, 
+then we just read a value from memory, perform an and operation and then we access the filter 
+data to check, whether there is a hit or nohit.
