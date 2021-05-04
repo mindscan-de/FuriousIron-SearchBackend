@@ -40,7 +40,7 @@ import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.tokenizer.MinusQueryToken;
 import de.mindscan.furiousiron.search.query.tokenizer.PlusQueryToken;
 import de.mindscan.furiousiron.search.query.tokenizer.QueryToken;
-import de.mindscan.furiousiron.search.query.tokenizer.QueryTokenizer;
+import de.mindscan.furiousiron.search.query.tokenizer.QueryTokenizerFactory;
 import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
 
 /**
@@ -75,7 +75,7 @@ public class QueryParser {
         }
 
         collectedTextTokens = new ArrayList<>();
-        return parseQueryTokens( QueryTokenizer.tokenize( queryString ) );
+        return parseQueryTokens( QueryTokenizerFactory.getTokenizer().tokenize( queryString ) );
     }
 
     /**

@@ -17,7 +17,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "" );
 
         // assert
         assertThat( result, empty() );
@@ -28,7 +28,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "+" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "+" );
 
         // assert
         assertThat( result, not( empty() ) );
@@ -39,7 +39,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "+" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "+" );
 
         // assert
         assertThat( result, contains( instanceOf( PlusQueryToken.class ) ) );
@@ -50,7 +50,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "-" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "-" );
 
         // assert
         assertThat( result, not( empty() ) );
@@ -61,7 +61,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "-" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "-" );
 
         // assert
         assertThat( result, contains( instanceOf( MinusQueryToken.class ) ) );
@@ -72,7 +72,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "one" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "one" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ) ) );
@@ -83,7 +83,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "one two" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "one two" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
@@ -94,7 +94,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "one +two" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "one +two" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( PlusQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
@@ -105,7 +105,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "one +two -three" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "one +two -three" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( PlusQueryToken.class ), instanceOf( TextQueryToken.class ),
@@ -117,7 +117,7 @@ public class QueryTokenizerTest {
         // arrange
 
         // act
-        List<QueryToken> result = QueryTokenizer.tokenize( "test -\"test\"" );
+        List<QueryToken> result = new QueryTokenizer().tokenize( "test -\"test\"" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( MinusQueryToken.class ), instanceOf( TextQueryToken.class ) ) );

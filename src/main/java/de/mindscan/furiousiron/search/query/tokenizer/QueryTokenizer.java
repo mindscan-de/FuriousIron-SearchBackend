@@ -33,11 +33,11 @@ import java.util.List;
  */
 public class QueryTokenizer {
 
-    public static List<QueryToken> tokenize( String queryString ) {
-        return new QueryTokenizer().parse( queryString );
+    public List<QueryToken> tokenize( String queryString ) {
+        return QueryTokenizerFactory.getTokenizer().parse( queryString );
     }
 
-    private QueryTokenizer() {
+    QueryTokenizer() {
         // do not create instances of tooling class
     }
 
