@@ -31,17 +31,19 @@ import java.util.List;
 /**
  * 
  */
-public class QueryTokenizer {
+public class QueryTokenizer implements Tokenizer {
 
+    @Override
     public List<QueryToken> tokenize( String queryString ) {
-        return QueryTokenizerFactory.getTokenizer().parse( queryString );
+        return parse( queryString );
     }
 
     QueryTokenizer() {
         // do not create instances of tooling class
     }
 
-    private List<QueryToken> parse( String queryString ) {
+    @Override
+    public List<QueryToken> parse( String queryString ) {
         ArrayList<QueryToken> result = new ArrayList<>();
 
         char[] charsAsArray = queryString.toCharArray();

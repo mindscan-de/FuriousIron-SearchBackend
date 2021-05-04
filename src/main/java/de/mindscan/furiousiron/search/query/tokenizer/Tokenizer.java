@@ -25,18 +25,15 @@
  */
 package de.mindscan.furiousiron.search.query.tokenizer;
 
+import java.util.List;
+
 /**
  * 
  */
-public class QueryTokenizerFactory {
+public interface Tokenizer {
 
-    // have the old QueryTokenizer... // extract a common interface
-    public static Tokenizer getTokenizer() {
-        return new QueryTokenizer();
-    }
+    List<QueryToken> parse( String queryString );
 
-    // have the new QueryTokenizer... // extract a common interface
-    //public static QueryTokenizer2 getTokenizer2() {
-    //     return new QueryTokenizer2();
-    // }
+    List<QueryToken> tokenize( String queryString );
+
 }
