@@ -25,18 +25,27 @@
  */
 package de.mindscan.furiousiron.search.query.tokenizer;
 
+import java.util.List;
+
 /**
- * 
+ * This is a newer implementation of the Tokenizer, which should also tokenize
+ * exact matches and phrases.
  */
-public class QueryTokenizerFactory {
+public class QueryTokenizer2 implements Tokenizer {
 
-    // have the old QueryTokenizer implementation
-    public static Tokenizer getTokenizer() {
-        return new QueryTokenizer();
+    /**
+     * 
+     */
+    public QueryTokenizer2() {
     }
 
-    // have a new QueryTokenizer implementation
-    public static Tokenizer getTokenizer2() {
-        return new QueryTokenizer2();
+    /** 
+     * {@inheritDoc}
+     */
+    @Override
+    public List<QueryToken> parse( String queryString ) {
+
+        return null;
     }
+
 }
