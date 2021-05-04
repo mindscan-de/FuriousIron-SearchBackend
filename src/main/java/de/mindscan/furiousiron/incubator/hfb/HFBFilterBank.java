@@ -97,6 +97,7 @@ public class HFBFilterBank {
             // with 80% dropout rate we get a maximum false positive error rate 
             // * of 0,8 percent when 3 hfb filters are asked = 3 times O(1) lookup
             // * of 0,16 percent when 4 hfb filters are asked = 4 times O(1) lookup
+            // if we use a smaller sparsity we have to increase the number of filters
 
             if (i >= 3) {
                 return true;
