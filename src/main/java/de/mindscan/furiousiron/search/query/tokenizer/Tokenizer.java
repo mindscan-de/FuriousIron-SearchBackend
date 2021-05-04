@@ -32,8 +32,10 @@ import java.util.List;
  */
 public interface Tokenizer {
 
-    List<QueryToken> parse( String queryString );
+    default List<QueryToken> tokenize( String queryString ) {
+        return parse( queryString );
+    }
 
-    List<QueryToken> tokenize( String queryString );
+    List<QueryToken> parse( String queryString );
 
 }
