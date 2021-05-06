@@ -25,6 +25,7 @@
  */
 package de.mindscan.furiousiron.search.query.tokenizer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +46,83 @@ public class QueryTokenizer2 implements Tokenizer {
     @Override
     public List<QueryToken> parse( String queryString ) {
 
-        return null;
+        ArrayList<QueryToken> result = new ArrayList<>();
+
+        char[] charsAsArray = queryString.toCharArray();
+
+        QueryToken currentToken = null;
+        for (int index = 0; index < charsAsArray.length; index++) {
+            char currentChar = charsAsArray[index];
+
+            if (isDoubleQuote( currentChar )) {
+                // TODO: start quote
+                // TODO: end quote -> okay the text token is complete / complete Previous token
+
+                // set inquote mode / unset inquote mode
+                continue;
+            }
+
+            // TODO if inquote mode add the char
+
+            // othewise do the old stuff...
+
+            if (isWhiteSpace( currentChar )) {
+                processResult( result, currentToken );
+                currentToken = null;
+            }
+            else if (isPlus( currentChar )) {
+                // complete previous Token
+                processResult( result, currentToken );
+                currentToken = null;
+                // add a PlusToken
+                processResult( result, new PlusQueryToken() );
+            }
+            else if (isMinus( currentChar )) {
+                // complete previous Token
+                processResult( result, currentToken );
+                currentToken = null;
+                // add a MinusToken
+                processResult( result, new MinusQueryToken() );
+            }
+            else if (Character.isLetterOrDigit( currentChar ) || Character.isIdeographic( currentChar )) {
+                if (currentToken == null) {
+                    currentToken = new TextQueryToken();
+                }
+
+                // add currentChar to the currentToken
+                currentToken.addChar( currentChar );
+            }
+
+        }
+
+        processResult( result, currentToken );
+        currentToken = null;
+
+        return result;
+    }
+
+    private boolean isDoubleQuote( char currentChar ) {
+        return currentChar == '"';
+    }
+
+    private boolean isMinus( char currentChar ) {
+        return currentChar == '-';
+    }
+
+    private boolean isPlus( char currentChar ) {
+        return currentChar == '+';
+    }
+
+    private boolean isWhiteSpace( char currentChar ) {
+        return Character.isWhitespace( currentChar );
+    }
+
+    private void processResult( List<QueryToken> result, QueryToken currentToken ) {
+        if (currentToken == null) {
+            return;
+        }
+
+        result.add( currentToken );
     }
 
 }
