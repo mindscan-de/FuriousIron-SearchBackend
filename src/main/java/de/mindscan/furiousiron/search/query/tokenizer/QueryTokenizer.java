@@ -107,7 +107,7 @@ public class QueryTokenizer implements Tokenizer {
         return Character.isWhitespace( currentChar );
     }
 
-    private void processResult( ArrayList<QueryToken> result, QueryToken currentToken ) {
+    private void processResult( List<QueryToken> result, QueryToken currentToken ) {
         if (currentToken == null) {
             return;
         }
