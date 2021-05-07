@@ -1,6 +1,7 @@
 package de.mindscan.furiousiron.search.query.tokenizer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
@@ -101,7 +102,7 @@ public class QueryTokenizer2Test {
     }
 
     @Test
-    public void testTokenize_containsThreeWordsAndPlusAndMinus_ListContainsTwoTextTokenAndOnePlusToken() throws Exception {
+    public void testTokenize_containsThreeWordsAndPlusAndMinus_ListContainsThreeTextTokensAndOnePlusTokenOneMinusToken() throws Exception {
         // arrange
 
         // act
@@ -113,7 +114,7 @@ public class QueryTokenizer2Test {
     }
 
     @Test
-    public void testTokenize_containsTest_ListContainsTwoTextTokenAndOnePlusToken() throws Exception {
+    public void testTokenize_containsTest_ListContainsOneTextTokenAndOneMinusAndOneExactTextToken() throws Exception {
         // arrange
 
         // act
@@ -121,6 +122,39 @@ public class QueryTokenizer2Test {
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( MinusQueryToken.class ), instanceOf( ExactTextQueryToken.class ) ) );
+    }
+
+    @Test
+    public void testTokenize_containsExactString_ListContainsOneExactTextToken() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = new QueryTokenizer2().tokenize( "\"test\"" );
+
+        // assert
+        assertThat( result, contains( instanceOf( ExactTextQueryToken.class ) ) );
+    }
+
+    @Test
+    public void testTokenize_containsOneExactStringWithSpace_ListContainsOneToken() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = new QueryTokenizer2().tokenize( "\"test1 test2\"" );
+
+        // assert
+        assertThat( result, contains( instanceOf( ExactTextQueryToken.class ) ) );
+    }
+
+    @Test
+    public void testTokenize_containsOneExactStringWithSpace_ListContainsOneTokenWithtest1AndTest2() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = new QueryTokenizer2().tokenize( "\"test1 test2\"" );
+
+        // assert
+        assertThat( result.get( 0 ).getTokenValue(), equalTo( "test1 test2" ) );
     }
 
 }
