@@ -34,6 +34,9 @@ import java.util.List;
  */
 public class QueryTokenizer2 implements Tokenizer {
 
+    private final static int DEFAULT_MODE = 0;
+    private final static int INQUOTE_MODE = 1;
+
     /**
      * 
      */
@@ -50,22 +53,33 @@ public class QueryTokenizer2 implements Tokenizer {
 
         char[] charsAsArray = queryString.toCharArray();
 
+        int mode = DEFAULT_MODE;
+
         QueryToken currentToken = null;
         for (int index = 0; index < charsAsArray.length; index++) {
             char currentChar = charsAsArray[index];
 
             if (isDoubleQuote( currentChar )) {
-                // TODO: start quote
-                // TODO: end quote -> okay the text token is complete / complete Previous token
-
-                // set inquote mode / unset inquote mode
+                if (mode == DEFAULT_MODE) {
+                    currentToken = new ExactTextQueryToken();
+                    mode = INQUOTE_MODE;
+                }
+                else if (mode == INQUOTE_MODE) {
+                    processResult( result, currentToken );
+                    currentToken = null;
+                    mode = DEFAULT_MODE;
+                }
                 continue;
             }
 
-            // TODO if inquote mode add the char
+            if (mode == INQUOTE_MODE) {
+                if (currentToken != null) {
+                    currentToken.addChar( currentChar );
+                }
+                continue;
+            }
 
-            // othewise do the old stuff...
-
+            // otherwise do the old stuff...
             if (isWhiteSpace( currentChar )) {
                 processResult( result, currentToken );
                 currentToken = null;
