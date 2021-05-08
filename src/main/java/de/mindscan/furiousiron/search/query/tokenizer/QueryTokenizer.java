@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * 
  */
-public interface Tokenizer {
+public interface QueryTokenizer {
 
     default List<QueryToken> tokenize( String queryString ) {
         return parse( queryString );

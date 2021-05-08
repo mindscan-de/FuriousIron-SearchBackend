@@ -31,12 +31,12 @@ package de.mindscan.furiousiron.search.query.tokenizer;
 public class QueryTokenizerFactory {
 
     // have the old QueryTokenizer implementation
-    public static Tokenizer getTokenizer() {
+    public static QueryTokenizer getTokenizer() {
         return new QueryTokenizerImpl();
     }
 
     // have a new QueryTokenizer implementation
-    public static Tokenizer getTokenizer2() {
+    public static QueryTokenizer getTokenizer2() {
         return new QueryTokenizerImpl2();
     }
 }
