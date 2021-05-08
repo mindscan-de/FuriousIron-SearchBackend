@@ -87,12 +87,7 @@ public class QueryCache {
     public void cacheSearchQuery( QueryNode ast ) {
         String qkey = calculateQueryKey( ast );
 
-        // TODO: save the search query to learn something about the queries, so that these can be
-        //       pre-cached after creating a new index.
-
-        // TODO: we need a pretty printer for the query? or just use toString
-        // printedQuery = prettyprinter.printQuery(ast)
-        // searchQueryCache.saveQuery( qkey, printedQuery)
+        searchQueryCache.saveQuery( qkey, QueryPrinter.toPrettyQuery( ast ) );
     }
 
     /**
