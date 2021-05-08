@@ -104,20 +104,10 @@ public class QueryParser {
         int lastReadTokenIndex = currentTokenIndex;
         QueryToken currentToken = tokenizedQuery.get( lastReadTokenIndex );
 
-        if (currentToken instanceof ExactTextQueryToken) {
-            // TODO: ExactTextQueryToken 
-            // TODO: check whether this is a word, or whether it is a phrase, both are differently handled in the 
-            //       search execution stage.
-            this.collectedTextTokens.add( currentToken.getTokenValue().toLowerCase() );
-            astCollector.add( new ExactMatchingTextNode( currentToken.getTokenValue() ) );
-
-            return lastReadTokenIndex;
-        }
-        else if (currentToken instanceof TextQueryToken) {
+        if (currentToken instanceof TextQueryToken) {
             // this? add TEXT
-            // this? add OR/INCLUDING/TEXT 
-            this.collectedTextTokens.add( currentToken.getTokenValue().toLowerCase() );
-            astCollector.add( new TextNode( currentToken.getTokenValue() ) );
+            // this? add OR/INCLUDING/TEXT
+            astCollector.add( consumeTextToken( currentToken ) );
 
             return lastReadTokenIndex;
         }
@@ -125,10 +115,8 @@ public class QueryParser {
             // add AND/EXCLUDING/TEXT
             QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
 
-            // TODO: ExactTextQueryToken
             if (peekNextToken instanceof TextQueryToken) {
-                collectedTextTokens.add( peekNextToken.getTokenValue().toLowerCase() );
-                astCollector.add( new AndNode( new ExcludingNode( new TextNode( peekNextToken.getTokenValue() ) ) ) );
+                astCollector.add( new AndNode( new ExcludingNode( consumeTextToken( peekNextToken ) ) ) );
                 lastReadTokenIndex++;
                 return lastReadTokenIndex;
             }
@@ -141,10 +129,8 @@ public class QueryParser {
             // add AND/INCLUDING/TEXT
             QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
 
-            // TODO: ExactTextQueryToken 
             if (peekNextToken instanceof TextQueryToken) {
-                collectedTextTokens.add( peekNextToken.getTokenValue().toLowerCase() );
-                astCollector.add( new AndNode( new IncludingNode( new TextNode( peekNextToken.getTokenValue() ) ) ) );
+                astCollector.add( new AndNode( new IncludingNode( consumeTextToken( peekNextToken ) ) ) );
                 lastReadTokenIndex++;
                 return lastReadTokenIndex;
             }
@@ -158,6 +144,30 @@ public class QueryParser {
         }
 
         return lastReadTokenIndex;
+    }
+
+    private QueryNode consumeTextToken( QueryToken queryToken ) {
+        // do the special token first
+        if (queryToken instanceof ExactTextQueryToken) {
+
+            // collectTextNode
+            // TODO: ExactTextQueryToken 
+            // TODO: check whether this is a word, or whether it is a phrase, both are differently handled in the 
+            //       search execution stage.
+
+            this.collectedTextTokens.add( queryToken.getTokenValue().toLowerCase() );
+            return new ExactMatchingTextNode( queryToken.getTokenValue() );
+        }
+        // do the simple text query tokens second
+        else if (queryToken instanceof TextQueryToken) {
+
+            this.collectedTextTokens.add( queryToken.getTokenValue().toLowerCase() );
+            return new TextNode( queryToken.getTokenValue() );
+        }
+        // this should not be a problem at all 
+        else {
+            throw new RuntimeException( "unknown token type" );
+        }
     }
 
     private QueryNode composeFullAST( List<QueryNode> astCollector ) {
