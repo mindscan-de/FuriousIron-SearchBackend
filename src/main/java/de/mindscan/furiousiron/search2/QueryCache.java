@@ -90,7 +90,9 @@ public class QueryCache {
         // TODO: save the search query to learn something about the queries, so that these can be
         //       pre-cached after creating a new index.
 
-        // searchQueryCache.saveQuery( qkey, ast)
+        // TODO: we need a pretty printer for the query? or just use toString
+        // printedQuery = prettyprinter.printQuery(ast)
+        // searchQueryCache.saveQuery( qkey, printedQuery)
     }
 
     /**
