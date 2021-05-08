@@ -107,7 +107,7 @@ public class QueryParser {
         if (currentToken instanceof TextQueryToken) {
             // this? add TEXT
             // this? add OR/INCLUDING/TEXT
-            astCollector.add( consumeTextToken( currentToken ) );
+            astCollector.add( consumeTextToken( (TextQueryToken) currentToken ) );
 
             return lastReadTokenIndex;
         }
@@ -116,7 +116,7 @@ public class QueryParser {
             QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
 
             if (peekNextToken instanceof TextQueryToken) {
-                astCollector.add( new AndNode( new ExcludingNode( consumeTextToken( peekNextToken ) ) ) );
+                astCollector.add( new AndNode( new ExcludingNode( consumeTextToken( (TextQueryToken) peekNextToken ) ) ) );
                 lastReadTokenIndex++;
                 return lastReadTokenIndex;
             }
@@ -130,7 +130,7 @@ public class QueryParser {
             QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
 
             if (peekNextToken instanceof TextQueryToken) {
-                astCollector.add( new AndNode( new IncludingNode( consumeTextToken( peekNextToken ) ) ) );
+                astCollector.add( new AndNode( new IncludingNode( consumeTextToken( (TextQueryToken) peekNextToken ) ) ) );
                 lastReadTokenIndex++;
                 return lastReadTokenIndex;
             }
@@ -146,8 +146,8 @@ public class QueryParser {
         return lastReadTokenIndex;
     }
 
-    private QueryNode consumeTextToken( QueryToken queryToken ) {
-        // do the special token first
+    private QueryNode consumeTextToken( TextQueryToken queryToken ) {
+        // do the special case first
         if (queryToken instanceof ExactTextQueryToken) {
 
             // collectTextNode
@@ -158,16 +158,10 @@ public class QueryParser {
             this.collectedTextTokens.add( queryToken.getTokenValue().toLowerCase() );
             return new ExactMatchingTextNode( queryToken.getTokenValue() );
         }
-        // do the simple text query tokens second
-        else if (queryToken instanceof TextQueryToken) {
 
-            this.collectedTextTokens.add( queryToken.getTokenValue().toLowerCase() );
-            return new TextNode( queryToken.getTokenValue() );
-        }
-        // this should not be a problem at all 
-        else {
-            throw new RuntimeException( "unknown token type" );
-        }
+        // do the simple text query tokens second
+        this.collectedTextTokens.add( queryToken.getTokenValue().toLowerCase() );
+        return new TextNode( queryToken.getTokenValue() );
     }
 
     private QueryNode composeFullAST( List<QueryNode> astCollector ) {
