@@ -2,7 +2,7 @@
  * 
  * MIT License
  *
- * Copyright (c) 2019 Maxim Gansert, Mindscan
+ * Copyright (c) 2019, 2021 Maxim Gansert, Mindscan
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.OrNode;
@@ -106,7 +107,7 @@ public class QueryParser {
         if (currentToken instanceof ExactTextQueryToken) {
             // TODO: ExactTextQueryToken 
             this.collectedTextTokens.add( currentToken.getTokenValue().toLowerCase() );
-            astCollector.add( new TextNode( currentToken.getTokenValue() ) );
+            astCollector.add( new ExactMatchingTextNode( currentToken.getTokenValue() ) );
 
             return lastReadTokenIndex;
         }
