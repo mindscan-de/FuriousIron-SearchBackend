@@ -83,6 +83,18 @@ public class QueryCache {
 
     /**
      * @param ast
+     */
+    public void cacheSearchQuery( QueryNode ast ) {
+        String qkey = calculateQueryKey( ast );
+
+        // TODO: save the search query to learn something about the queries, so that these can be
+        //       pre-cached after creating a new index.
+
+        // searchQueryCache.saveQuery( qkey, ast)
+    }
+
+    /**
+     * @param ast
      * @return
      */
     public List<String> loadSearchResult( QueryNode ast ) {
