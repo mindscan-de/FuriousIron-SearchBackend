@@ -106,6 +106,8 @@ public class QueryParser {
 
         if (currentToken instanceof ExactTextQueryToken) {
             // TODO: ExactTextQueryToken 
+            // TODO: check whether this is a word, or whether it is a phrase, both are differently handled in the 
+            //       search execution stage.
             this.collectedTextTokens.add( currentToken.getTokenValue().toLowerCase() );
             astCollector.add( new ExactMatchingTextNode( currentToken.getTokenValue() ) );
 
