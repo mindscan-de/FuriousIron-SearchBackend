@@ -37,6 +37,7 @@ import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
+import de.mindscan.furiousiron.search.query.tokenizer.ExactTextQueryToken;
 import de.mindscan.furiousiron.search.query.tokenizer.MinusQueryToken;
 import de.mindscan.furiousiron.search.query.tokenizer.PlusQueryToken;
 import de.mindscan.furiousiron.search.query.tokenizer.QueryToken;
@@ -79,7 +80,7 @@ public class QueryParser {
     }
 
     /**
-     * @return the collectedTextTokens Text Values
+     * @return the collectedTextTokens Text Values, (may contain phrases)
      */
     public List<String> getCollectedTextTokens() {
         return collectedTextTokens;
@@ -102,7 +103,14 @@ public class QueryParser {
         int lastReadTokenIndex = currentTokenIndex;
         QueryToken currentToken = tokenizedQuery.get( lastReadTokenIndex );
 
-        if (currentToken instanceof TextQueryToken) {
+        if (currentToken instanceof ExactTextQueryToken) {
+            // TODO: ExactTextQueryToken 
+            this.collectedTextTokens.add( currentToken.getTokenValue().toLowerCase() );
+            astCollector.add( new TextNode( currentToken.getTokenValue() ) );
+
+            return lastReadTokenIndex;
+        }
+        else if (currentToken instanceof TextQueryToken) {
             // this? add TEXT
             // this? add OR/INCLUDING/TEXT 
             this.collectedTextTokens.add( currentToken.getTokenValue().toLowerCase() );
@@ -114,6 +122,7 @@ public class QueryParser {
             // add AND/EXCLUDING/TEXT
             QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
 
+            // TODO: ExactTextQueryToken
             if (peekNextToken instanceof TextQueryToken) {
                 collectedTextTokens.add( peekNextToken.getTokenValue().toLowerCase() );
                 astCollector.add( new AndNode( new ExcludingNode( new TextNode( peekNextToken.getTokenValue() ) ) ) );
@@ -129,6 +138,7 @@ public class QueryParser {
             // add AND/INCLUDING/TEXT
             QueryToken peekNextToken = tokenizedQuery.get( lastReadTokenIndex + 1 );
 
+            // TODO: ExactTextQueryToken 
             if (peekNextToken instanceof TextQueryToken) {
                 collectedTextTokens.add( peekNextToken.getTokenValue().toLowerCase() );
                 astCollector.add( new AndNode( new IncludingNode( new TextNode( peekNextToken.getTokenValue() ) ) ) );
