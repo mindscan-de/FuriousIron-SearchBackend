@@ -11,14 +11,14 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class QueryTokenizer2Test {
+public class QueryTokenizerImpl2Test {
 
     @Test
     public void testTokenize_emptyString_returnsEmptyTokenList() throws Exception {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "" );
 
         // assert
         assertThat( result, empty() );
@@ -29,7 +29,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "+" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "+" );
 
         // assert
         assertThat( result, not( empty() ) );
@@ -40,7 +40,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "+" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "+" );
 
         // assert
         assertThat( result, contains( instanceOf( PlusQueryToken.class ) ) );
@@ -51,7 +51,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "-" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "-" );
 
         // assert
         assertThat( result, not( empty() ) );
@@ -62,7 +62,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "-" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "-" );
 
         // assert
         assertThat( result, contains( instanceOf( MinusQueryToken.class ) ) );
@@ -73,7 +73,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "one" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "one" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ) ) );
@@ -84,7 +84,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "one two" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "one two" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
@@ -95,7 +95,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "one +two" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "one +two" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( PlusQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
@@ -106,7 +106,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "one +two -three" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "one +two -three" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( PlusQueryToken.class ), instanceOf( TextQueryToken.class ),
@@ -118,7 +118,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "test -\"test\"" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "test -\"test\"" );
 
         // assert
         assertThat( result, contains( instanceOf( TextQueryToken.class ), instanceOf( MinusQueryToken.class ), instanceOf( ExactTextQueryToken.class ) ) );
@@ -129,7 +129,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "\"test\"" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "\"test\"" );
 
         // assert
         assertThat( result, contains( instanceOf( ExactTextQueryToken.class ) ) );
@@ -140,7 +140,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "\"test1 test2\"" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "\"test1 test2\"" );
 
         // assert
         assertThat( result, contains( instanceOf( ExactTextQueryToken.class ) ) );
@@ -151,7 +151,7 @@ public class QueryTokenizer2Test {
         // arrange
 
         // act
-        List<QueryToken> result = new QueryTokenizer2().tokenize( "\"test1 test2\"" );
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "\"test1 test2\"" );
 
         // assert
         assertThat( result.get( 0 ).getTokenValue(), equalTo( "test1 test2" ) );
