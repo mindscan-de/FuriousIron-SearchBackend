@@ -31,9 +31,9 @@ import java.util.List;
 /**
  * 
  */
-public class QueryTokenizer implements Tokenizer {
+public class QueryTokenizerImpl implements Tokenizer {
 
-    QueryTokenizer() {
+    QueryTokenizerImpl() {
         // do not create instances of tooling class
     }
 

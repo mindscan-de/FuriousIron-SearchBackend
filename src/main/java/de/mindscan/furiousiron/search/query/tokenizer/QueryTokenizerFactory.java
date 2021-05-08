@@ -32,7 +32,7 @@ public class QueryTokenizerFactory {
 
     // have the old QueryTokenizer implementation
     public static Tokenizer getTokenizer() {
-        return new QueryTokenizer();
+        return new QueryTokenizerImpl();
     }
 
     // have a new QueryTokenizer implementation
