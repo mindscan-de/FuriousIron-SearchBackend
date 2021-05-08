@@ -32,7 +32,7 @@ import java.util.List;
  * This is a newer implementation of the Tokenizer, which should also tokenize
  * exact matches and phrases.
  */
-public class QueryTokenizer2 implements Tokenizer {
+public class QueryTokenizerImpl2 implements Tokenizer {
 
     private final static int DEFAULT_MODE = 0;
     private final static int INQUOTE_MODE = 1;
@@ -40,7 +40,7 @@ public class QueryTokenizer2 implements Tokenizer {
     /**
      * 
      */
-    public QueryTokenizer2() {
+    public QueryTokenizerImpl2() {
     }
 
     /** 

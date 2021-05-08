@@ -37,6 +37,6 @@ public class QueryTokenizerFactory {
 
     // have a new QueryTokenizer implementation
     public static Tokenizer getTokenizer2() {
-        return new QueryTokenizer2();
+        return new QueryTokenizerImpl2();
     }
 }
