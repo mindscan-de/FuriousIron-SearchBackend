@@ -35,6 +35,7 @@ import java.util.Set;
 
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.OrNode;
@@ -66,6 +67,10 @@ public class QueryExecutor {
     private static Map<String, SearchResultCandidates> processNode( Search search, QueryNode node ) {
         if (node instanceof EmptyNode) {
             return Collections.emptyMap();
+        }
+
+        if (node instanceof ExactMatchingTextNode) {
+            return processExactTextNode( search, (ExactMatchingTextNode) node );
         }
 
         if (node instanceof TextNode) {
@@ -153,6 +158,10 @@ public class QueryExecutor {
     }
 
     private static Map<String, SearchResultCandidates> processTextNode( Search search, TextNode parsedAST ) {
+        return search.searchToMap( parsedAST.getContent() );
+    }
+
+    private static Map<String, SearchResultCandidates> processExactTextNode( Search search, ExactMatchingTextNode parsedAST ) {
         return search.searchToMap( parsedAST.getContent() );
     }
 
