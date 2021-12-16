@@ -108,7 +108,7 @@ public class SearchRESTfulService {
         for (SearchResultCandidates candidate : resultCandidates) {
             DocumentMetadata metadata = candidate.getMetadata();
 
-            QueryResultItemJsonModel item = new QueryResultItemJsonModel( metadata.getSimpleFilename(), metadata.getRelativePath() );
+            QueryResultItemJsonModel item = new QueryResultItemJsonModel( metadata.getDocumentSimpleName(), metadata.getRelativePath() );
             item.setFileSize( metadata.getFileSize() );
             item.setNumberOfLinesInFile( metadata.getNumberOfLines() );
             item.setClassifierMap( metadata.getClassifierMap() );
