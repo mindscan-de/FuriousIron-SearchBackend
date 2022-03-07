@@ -85,6 +85,9 @@ public class WordPreview {
                     continue;
                 }
 
+                // TODO maybe already integrate the top 5 calculations here to ignore most of the data, 
+                // before even further processing it, we can save more compute the more we omit. 
+
                 lineContents.put( currentLine, shortenedLineContent );
                 lineScore.put( currentLine, filteredLineTrigrams.size() );
             }
