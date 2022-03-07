@@ -80,13 +80,13 @@ public class WordPreview {
 
                 // TODO: we should consider to use the trigram occurence over the simple count because, often occuring trigrams will lead to bad line picks in source code.
 
-                Collection<String> lineTrigrams = SimpleWordUtils.getTrigramsFromLineFiltered( shortenedLineContent.toLowerCase(), theTrigrams );
-                if (lineTrigrams.isEmpty()) {
+                Collection<String> filteredLineTrigrams = SimpleWordUtils.getTrigramsFromLineFiltered( shortenedLineContent.toLowerCase(), theTrigrams );
+                if (filteredLineTrigrams.isEmpty()) {
                     continue;
                 }
 
                 lineContents.put( currentLine, shortenedLineContent );
-                lineScore.put( currentLine, lineTrigrams.size() );
+                lineScore.put( currentLine, filteredLineTrigrams.size() );
             }
 
             result.put( documentIdMD5, getTopScoredLinesInDocument( lineContents, lineScore ) );
