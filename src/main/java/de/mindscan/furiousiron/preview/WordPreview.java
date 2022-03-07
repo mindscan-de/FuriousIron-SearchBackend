@@ -78,11 +78,9 @@ public class WordPreview {
                     shortenedLineContent = lineContent.substring( 0, 509 ) + "...";
                 }
 
-                // TODO: foreach line calc the trigrams count them while comparing them to "theTrigrams"
-                // TODO: we should consider to use the trigram occurence over the simple count because, often occuring trigrams will lead to bad line picks in sourcecode.  
-                Collection<String> lineTrigrams = SimpleWordUtils.getTrigramsFromLine( shortenedLineContent.toLowerCase() );
+                // TODO: we should consider to use the trigram occurence over the simple count because, often occuring trigrams will lead to bad line picks in source code.
 
-                lineTrigrams.retainAll( theTrigrams );
+                Collection<String> lineTrigrams = SimpleWordUtils.getTrigramsFromLineFiltered( shortenedLineContent.toLowerCase(), theTrigrams );
                 if (lineTrigrams.isEmpty()) {
                     continue;
                 }
