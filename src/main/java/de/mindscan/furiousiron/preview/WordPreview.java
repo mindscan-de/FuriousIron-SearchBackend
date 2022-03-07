@@ -96,15 +96,21 @@ public class WordPreview {
     }
 
     private Map<Integer, String> getTopScoredLinesInDocument( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScore ) {
+
+        // TODO: timing, actually we want to calculate this value, while collecting the line score
+        // instead of sorting a list of hundreds candidates with the score.
         ArrayList<Integer> scores = new ArrayList<>( lineScore.values() );
         Collections.sort( scores, Comparator.reverseOrder() );
         Collection<Integer> topKScores = new HashSet<>( scores.subList( 0, Math.min( MAX_K_SCORES, scores.size() ) ) );
+
+        // TODO: is this faster?
+        // Collection<Integer> topKScores = lineScore.values().stream().sorted( Comparator.reverseOrder() ).limit( MAX_K_SCORES ).collect( Collectors.toSet() );
 
         Map<Integer, String> contentResult = new TreeMap<>();
 
         for (Entry<Integer, Integer> entry : lineScore.entrySet()) {
             if (topKScores.contains( entry.getValue() )) {
-                int line = entry.getKey();
+                Integer line = entry.getKey();
                 contentResult.put( line, lineContents.get( line ) );
             }
         }
