@@ -60,10 +60,10 @@ public class TtfIdfCalculator {
                 continue;
             }
 
-            int ttf = documentTrigramOccurrences.get( globalOccurrence.getTrigram() );
+            double ttf = documentTrigramOccurrences.get( globalOccurrence.getTrigram() ).doubleValue();
 
             // high precision
-            double local_tfidf = Math.log( (double) ttf * (maxGTO / ((double) (1 + globalOccurrence.getOccurrenceCount()))) );
+            double local_tfidf = Math.log( ttf * (maxGTO / ((double) (1 + globalOccurrence.getOccurrenceCount()))) );
 
             // low precision
             document_ttf_idf += (float) local_tfidf;
