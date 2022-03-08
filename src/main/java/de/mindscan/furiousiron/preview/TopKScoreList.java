@@ -52,11 +52,11 @@ public class TopKScoreList {
             return false;
         }
 
-        if (backingArrayList.get( maxElementsInList - 1 ) < score) {
-            if (backingSet.contains( score )) {
-                return true;
-            }
+        if (backingSet.contains( score )) {
+            return true;
+        }
 
+        if (backingArrayList.get( maxElementsInList - 1 ) < score) {
             // find position to insert...
             for (int i = 0; i < backingArrayList.size(); i++) {
                 if (backingArrayList.get( i ) < score) {
@@ -68,6 +68,7 @@ public class TopKScoreList {
             }
         }
 
+        // will not be reached...
         return true;
     }
 
