@@ -61,6 +61,7 @@ public class WordPreview {
         HashMap<String, Map<Integer, String>> result = new HashMap<>();
 
         for (String documentIdMD5 : queryDocumentIds.subList( 0, Math.min( queryDocumentIds.size(), MAX_DOCUMENTS_TO_ANALYZE ) )) {
+            TopKScoreList topKScoreList = new TopKScoreList( MAX_K_SCORES );
             List<String> allLines = search.getDocumentContentLines( documentIdMD5 );
 
             TreeMap<Integer, String> lineContents = new TreeMap<>();
@@ -78,20 +79,18 @@ public class WordPreview {
                     shortenedLineContent = lineContent.substring( 0, 509 ) + "...";
                 }
 
-                // TODO: we should consider to use the trigram occurence over the simple count because, often occuring trigrams will lead to bad line picks in source code.
-
                 Collection<String> filteredLineTrigrams = SimpleWordUtils.getTrigramsFromLineFiltered( shortenedLineContent.toLowerCase(), theTrigrams );
                 if (filteredLineTrigrams.isEmpty()) {
                     continue;
                 }
 
-                // TODO maybe already integrate the top 5 calculations here to ignore most of the data, 
-                // before even further processing it, we can save more compute the more we omit early. 
-                // TODO keep a top MAX_K_SCORES limit
-                // TODO how much do we save?
+                // TODO: we should consider to use the trigram occurence over the simple count because, often occuring trigrams will lead to bad line picks in source code.
+                int score = filteredLineTrigrams.size();
 
-                lineContents.put( currentLine, shortenedLineContent );
-                lineScore.put( currentLine, filteredLineTrigrams.size() );
+                if (topKScoreList.isCandidateTopK( score )) {
+                    lineContents.put( currentLine, shortenedLineContent );
+                    lineScore.put( currentLine, score );
+                }
             }
 
             result.put( documentIdMD5, getTopScoredLinesInDocument( lineContents, lineScore ) );
