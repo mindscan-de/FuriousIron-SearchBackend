@@ -86,7 +86,9 @@ public class WordPreview {
                 }
 
                 // TODO maybe already integrate the top 5 calculations here to ignore most of the data, 
-                // before even further processing it, we can save more compute the more we omit. 
+                // before even further processing it, we can save more compute the more we omit early. 
+                // TODO keep a top MAX_K_SCORES limit
+                // TODO how much do we save?
 
                 lineContents.put( currentLine, shortenedLineContent );
                 lineScore.put( currentLine, filteredLineTrigrams.size() );
