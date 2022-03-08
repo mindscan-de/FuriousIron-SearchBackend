@@ -25,15 +25,12 @@
  */
 package de.mindscan.furiousiron.preview;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import de.mindscan.furiousiron.indexer.SimpleWordUtils;
@@ -93,22 +90,14 @@ public class WordPreview {
                 }
             }
 
-            result.put( documentIdMD5, getTopScoredLinesInDocument( lineContents, lineScore ) );
+            result.put( documentIdMD5, getTopScoredLinesInDocument( lineContents, lineScore, topKScoreList.getSet() ) );
         }
 
         return result;
     }
 
-    private Map<Integer, String> getTopScoredLinesInDocument( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScore ) {
-
-        // TODO: timing, actually we want to calculate this value, while collecting the line score
-        // instead of sorting a list of hundreds candidates with the score.
-        ArrayList<Integer> scores = new ArrayList<>( lineScore.values() );
-        Collections.sort( scores, Comparator.reverseOrder() );
-        Collection<Integer> topKScores = new HashSet<>( scores.subList( 0, Math.min( MAX_K_SCORES, scores.size() ) ) );
-
-        // TODO: is this faster?
-        // Collection<Integer> topKScores = lineScore.values().stream().sorted( Comparator.reverseOrder() ).limit( MAX_K_SCORES ).collect( Collectors.toSet() );
+    private Map<Integer, String> getTopScoredLinesInDocument( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScore,
+                    Set<Integer> topKScores ) {
 
         Map<Integer, String> contentResult = new TreeMap<>();
 

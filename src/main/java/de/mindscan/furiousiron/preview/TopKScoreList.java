@@ -53,17 +53,15 @@ public class TopKScoreList {
         if (backingArrayList.get( maxElementsInList - 1 ) < score) {
             for (int i = 0; i < backingArrayList.size(); i++) {
                 if (backingArrayList.get( i ) == score) {
-                    // if already in list do not add again / only add once.
-                    break;
+                    return true;
                 }
 
                 if (backingArrayList.get( i ) < score) {
                     backingArrayList.add( i, score );
                     removeLast();
-                    break;
+                    return true;
                 }
             }
-
         }
 
         return true;
