@@ -34,11 +34,13 @@ import java.util.Set;
  */
 public class TopKScoreList {
 
-    private int maxElementsInList;
-    private ArrayList<Integer> backingArrayList = new ArrayList<>();
+    private final int maxElementsInList;
+    private final ArrayList<Integer> backingArrayList;
+    private final Set<Integer> backingSet;
 
     public TopKScoreList( int maxElementsInList ) {
         this.maxElementsInList = maxElementsInList;
+        this.backingSet = new HashSet<>();
         this.backingArrayList = new ArrayList<>();
         for (int i = 0; i < maxElementsInList; i++) {
             backingArrayList.add( Integer.MIN_VALUE );
@@ -51,13 +53,15 @@ public class TopKScoreList {
         }
 
         if (backingArrayList.get( maxElementsInList - 1 ) < score) {
-            for (int i = 0; i < backingArrayList.size(); i++) {
-                if (backingArrayList.get( i ) == score) {
-                    return true;
-                }
+            if (backingSet.contains( score )) {
+                return true;
+            }
 
+            // find position to insert...
+            for (int i = 0; i < backingArrayList.size(); i++) {
                 if (backingArrayList.get( i ) < score) {
                     backingArrayList.add( i, score );
+                    backingSet.add( score );
                     removeLast();
                     return true;
                 }
@@ -68,11 +72,12 @@ public class TopKScoreList {
     }
 
     public void removeLast() {
-        backingArrayList.remove( maxElementsInList );
+        Integer removed = backingArrayList.remove( maxElementsInList );
+        backingSet.remove( removed );
     }
 
     public Set<Integer> getSet() {
-        return new HashSet<>( backingArrayList );
+        return backingSet;
     }
 
 }
