@@ -30,6 +30,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * This is a dynamic top k score calculator.
+ * 
+ * It checks whether a given score is a candidate for a top k element. If it is, it is kept as an candidate 
+ * and in case a new candidate is found, it will update its current top k score and drop the lowest score 
+ * from the current backing set. 
+ * 
+ * That will move the goalpost higher and higher, so less and less times the insertion is happening. Anyhow
+ * this should have a good enough performance and it avoids later calculation of the top k score. We want to
+ * avoid storing and processing data, which we would discard anyways.  
  * 
  */
 public class TopKScoreList {
@@ -68,7 +77,6 @@ public class TopKScoreList {
             }
         }
 
-        // will not be reached...
         return true;
     }
 
