@@ -57,7 +57,8 @@ public class TtfIdfRanking {
             catch (Exception ex) {
                 scoredDocuments.put( documentId, 0.0f );
 
-                System.out.println( "Problem with ranking documentid - (see last search result(s))" + documentId );
+                System.out.println( "Problem with ranking documentid - (see bottom search result(s)) - Document Id: " + documentId );
+
                 ex.printStackTrace();
             }
         }
