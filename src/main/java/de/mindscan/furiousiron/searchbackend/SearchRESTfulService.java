@@ -25,6 +25,9 @@
  */
 package de.mindscan.furiousiron.searchbackend;
 
+import static de.mindscan.furiousiron.config.SearchBackendConfiguration.INDEX_BASE_PATH;
+import static de.mindscan.furiousiron.config.SearchBackendConfiguration.INDEX_INDEXED_PATH;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -57,7 +60,7 @@ public class SearchRESTfulService {
     @GET
     @Produces( "application/json" )
     public String getQueryResult2_JSON( @QueryParam( "q" ) String query ) {
-        Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
+        Path indexFolder = Paths.get( INDEX_BASE_PATH, INDEX_INDEXED_PATH );
 
         // in case the search contains OR tree parts
         // it will throw an exception then we do the old way. 

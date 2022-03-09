@@ -25,6 +25,9 @@
  */
 package de.mindscan.furiousiron.searchbackend;
 
+import static de.mindscan.furiousiron.config.SearchBackendConfiguration.INDEX_BASE_PATH;
+import static de.mindscan.furiousiron.config.SearchBackendConfiguration.INDEX_INDEXED_PATH;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -49,7 +52,7 @@ public class CachedContentRESTfulService {
     @GET
     @Produces( "text/plain" )
     public String getCachedContent( @QueryParam( "p" ) String path ) {
-        Path indexFolder = Paths.get( "D:\\Analysis\\CrawlerProjects", "Indexed" );
+        Path indexFolder = Paths.get( INDEX_BASE_PATH, INDEX_INDEXED_PATH );
 
         Search search = new Search( indexFolder );
 
