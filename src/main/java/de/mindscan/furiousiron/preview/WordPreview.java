@@ -2,7 +2,7 @@
  * 
  * MIT License
  *
- * Copyright (c) 2021 Maxim Gansert, Mindscan
+ * Copyright (c) 2021, 2022 Maxim Gansert, Mindscan
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -82,11 +82,13 @@ public class WordPreview {
                 }
 
                 // TODO: we should consider to use the trigram occurence over the simple count because, often occuring trigrams will lead to bad line picks in source code.
-                int score = filteredLineTrigrams.size();
+                int currentLineScore = filteredLineTrigrams.size();
 
-                if (topKScoreList.isCandidateTopK( score )) {
+                // only process lines, which have a good enough score, and then move the goalpost with every good score
+                // this reduces compute and memory usage in later stages.
+                if (topKScoreList.isCandidateTopK( currentLineScore )) {
                     lineContents.put( currentLine, shortenedLineContent );
-                    lineScore.put( currentLine, score );
+                    lineScore.put( currentLine, currentLineScore );
                 }
             }
 
