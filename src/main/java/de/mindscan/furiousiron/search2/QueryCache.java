@@ -25,8 +25,8 @@
  */
 package de.mindscan.furiousiron.search2;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -112,7 +112,7 @@ public class QueryCache {
 
     public static String md5( String queryString ) {
         try {
-            byte[] relativePathAsBytes = queryString.getBytes( "UTF-8" );
+            byte[] relativePathAsBytes = queryString.getBytes( StandardCharsets.UTF_8 );
 
             MessageDigest md5sum = MessageDigest.getInstance( "MD5" );
             byte[] md5 = md5sum.digest( relativePathAsBytes );
@@ -125,9 +125,6 @@ public class QueryCache {
             }
 
             return md5hex;
-        }
-        catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         }
         catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
