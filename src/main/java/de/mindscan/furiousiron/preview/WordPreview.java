@@ -38,7 +38,7 @@ import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.search.Search;
 
 /**
- * 
+ * Calculate and filter the best preview lines of a document. 
  */
 public class WordPreview {
 
@@ -81,8 +81,7 @@ public class WordPreview {
                     continue;
                 }
 
-                // TODO: we should consider to use the trigram occurence over the simple count because, often occuring trigrams will lead to bad line picks in source code.
-                int currentLineScore = filteredLineTrigrams.size();
+                int currentLineScore = calculateLineScore( filteredLineTrigrams );
 
                 // only process lines, which have a good enough score, and then move the goalpost with every good score
                 // this reduces compute and memory usage in later stages.
@@ -96,6 +95,11 @@ public class WordPreview {
         }
 
         return result;
+    }
+
+    private int calculateLineScore( Collection<String> filteredLineTrigrams ) {
+        // TODO: we should consider to use the trigram occurence over the simple count because, often occuring trigrams will lead to bad line picks in source code.        
+        return filteredLineTrigrams.size();
     }
 
     private Map<Integer, String> getTopScoredLinesInDocument( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScore,
