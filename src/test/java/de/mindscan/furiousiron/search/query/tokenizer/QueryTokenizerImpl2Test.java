@@ -170,6 +170,19 @@ public class QueryTokenizerImpl2Test {
     }
 
     @Test
+    public void testTokenize_containsMetaSearchTerm_ListContainsTextDoubleColonText() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "filetype:java" );
+
+        // assert
+        // assert
+        assertThat( result,
+                        contains( instanceOf( TextQueryToken.class ), instanceOf( DoublecolonOperatorQueryToken.class ), instanceOf( TextQueryToken.class ) ) );
+    }
+
+    @Test
     public void testTokenize_containsPlusAndOpenClose_ListContainsPlusOpenClose() throws Exception {
         // arrange
 
