@@ -62,7 +62,7 @@ import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
  * later to describe properties of the source code I am searching for, I might need a different 
  * EBNF grammar anyway. 
  */
-public class QueryParser {
+public class QueryParser implements SearchQueryParser {
 
     private List<String> collectedTextTokens = new ArrayList<>();
 
