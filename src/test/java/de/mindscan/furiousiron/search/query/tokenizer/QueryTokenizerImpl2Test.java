@@ -157,4 +157,29 @@ public class QueryTokenizerImpl2Test {
         assertThat( result.get( 0 ).getTokenValue(), equalTo( "test1 test2" ) );
     }
 
+    @Test
+    public void testTokenize_containsPlusAndOpenClose_ListContainsOpenClose() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "()" );
+
+        // assert
+        // assert
+        assertThat( result, contains( instanceOf( ParenthesisOpenQueryToken.class ), instanceOf( ParenthesisCloseQueryToken.class ) ) );
+    }
+
+    @Test
+    public void testTokenize_containsPlusAndOpenClose_ListContainsPlusOpenClose() throws Exception {
+        // arrange
+
+        // act
+        List<QueryToken> result = new QueryTokenizerImpl2().tokenize( "+()" );
+
+        // assert
+        // assert
+        assertThat( result, contains( instanceOf( PlusQueryToken.class ), instanceOf( ParenthesisOpenQueryToken.class ),
+                        instanceOf( ParenthesisCloseQueryToken.class ) ) );
+    }
+
 }
