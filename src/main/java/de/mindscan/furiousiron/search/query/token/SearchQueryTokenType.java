@@ -45,6 +45,9 @@ public enum SearchQueryTokenType {
     //
     WHITESPACE,
 
+    // 
+    NONE,
+
     //
     ENDOFINPUT;
 
