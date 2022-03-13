@@ -38,9 +38,6 @@ import de.mindscan.furiousiron.search.query.tokenizer.lexer.StringBackedLexerImp
  */
 public class SearchQueryTokenizerImpl {
 
-    private final static int DEFAULT_MODE = 0;
-    private final static int INQUOTE_MODE = 1;
-
     public SearchQueryTokenizerImpl() {
     }
 
