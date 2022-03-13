@@ -67,6 +67,9 @@ public class SearchQueryTokenizerImpl {
         if (SearchQueryTokenizerTerminals.isParenthesis( charAtTokenStart )) {
             return SearchQueryTokenType.PARENTHESIS;
         }
+        else if (SearchQueryTokenizerTerminals.isStartOfOperator( charAtTokenStart )) {
+            return consumeOperator( lexer );
+        }
         else if (SearchQueryTokenizerTerminals.isStartOfQuote( charAtTokenStart )) {
             return consumeQuotedText( lexer );
         }
@@ -90,4 +93,15 @@ public class SearchQueryTokenizerImpl {
 
         return SearchQueryTokenType.EXACTSEARCHTERM;
     }
+
+    private SearchQueryTokenType consumeOperator( StringBackedLexerImpl lexer ) {
+        String operatorCandidate = lexer.getTokenString();
+
+        if (SearchQueryTokenizerTerminals.isOneCharOperator( operatorCandidate )) {
+            return SearchQueryTokenType.OPERATOR;
+        }
+
+        return null;
+    }
+
 }
