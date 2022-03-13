@@ -38,6 +38,8 @@ import de.mindscan.furiousiron.search.query.tokenizer.lexer.StringBackedLexerImp
  */
 public class SearchQueryTokenizerImpl {
 
+    private boolean ignoreWhitespaces = true;
+
     public SearchQueryTokenizerImpl() {
     }
 
@@ -47,6 +49,7 @@ public class SearchQueryTokenizerImpl {
         StringBackedLexerImpl lexer = new StringBackedLexerImpl( queryString );
 
         while (lexer.isTokenStartBeforeInputEnd()) {
+            lexer.prepareNextToken();
 
             SearchQueryTokenType tokenType = consumeSearchQueryToken( lexer );
 
@@ -61,20 +64,42 @@ public class SearchQueryTokenizerImpl {
     private SearchQueryTokenType consumeSearchQueryToken( StringBackedLexerImpl lexer ) {
         char charAtTokenStart = lexer.charAtTokenStart();
 
-        if (SearchQueryTokenizerTerminals.isParenthesis( charAtTokenStart )) {
+        if (SearchQueryTokenizerTerminals.isWhiteSpace( charAtTokenStart )) {
+            return consumeWhiteSpace( lexer );
+        }
+        else if (SearchQueryTokenizerTerminals.isParenthesis( charAtTokenStart )) {
             return SearchQueryTokenType.PARENTHESIS;
         }
         else if (SearchQueryTokenizerTerminals.isStartOfOperator( charAtTokenStart )) {
             return consumeOperator( lexer );
         }
         else if (SearchQueryTokenizerTerminals.isStartOfQuote( charAtTokenStart )) {
-            return consumeQuotedText( lexer );
+            return consumeQuotedSearchTerm( lexer );
+        }
+        else {
+            // return consumeSearchTerm
         }
 
         return SearchQueryTokenType.SEARCHTERM;
     }
 
-    private SearchQueryTokenType consumeQuotedText( StringBackedLexerImpl lexer ) {
+    private SearchQueryTokenType consumeWhiteSpace( StringBackedLexerImpl lexer ) {
+        lexer.incrementTokenEndWhile( SearchQueryTokenizerTerminals::isWhiteSpace );
+
+        return ignoreWhitespaces ? SearchQueryTokenType.NONE : SearchQueryTokenType.WHITESPACE;
+    }
+
+    private SearchQueryTokenType consumeOperator( StringBackedLexerImpl lexer ) {
+        String operatorCandidate = lexer.getTokenString();
+
+        if (SearchQueryTokenizerTerminals.isOneCharOperator( operatorCandidate )) {
+            return SearchQueryTokenType.OPERATOR;
+        }
+
+        return SearchQueryTokenType.NONE;
+    }
+
+    private SearchQueryTokenType consumeQuotedSearchTerm( StringBackedLexerImpl lexer ) {
         char firstChar = lexer.charAtTokenStart();
 
         if (SearchQueryTokenizerTerminals.isStartOfQuote( firstChar )) {
@@ -85,20 +110,9 @@ public class SearchQueryTokenizerImpl {
             return SearchQueryTokenType.EXACTSEARCHTERM;
         }
 
-        // we increment here because we found the first char again.
         lexer.incrementTokenEnd();
 
         return SearchQueryTokenType.EXACTSEARCHTERM;
-    }
-
-    private SearchQueryTokenType consumeOperator( StringBackedLexerImpl lexer ) {
-        String operatorCandidate = lexer.getTokenString();
-
-        if (SearchQueryTokenizerTerminals.isOneCharOperator( operatorCandidate )) {
-            return SearchQueryTokenType.OPERATOR;
-        }
-
-        return null;
     }
 
 }
