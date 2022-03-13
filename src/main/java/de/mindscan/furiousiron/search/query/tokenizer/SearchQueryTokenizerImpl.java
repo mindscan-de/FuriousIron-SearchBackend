@@ -53,12 +53,32 @@ public class SearchQueryTokenizerImpl {
 
             SearchQueryTokenType tokenType = consumeSearchQueryToken( lexer );
 
-            // TODO: create token for TokenType.
+            if (isValidTokenType( tokenType )) {
+                result.add( createToken( tokenType, lexer ) );
+            }
+            else {
+                // TODO: present the string which wasn't processed.
+            }
 
             lexer.advanceToNextToken();
         }
 
         return result;
+    }
+
+    private boolean isValidTokenType( SearchQueryTokenType tokenType ) {
+        return tokenType != null;
+    }
+
+    private SearchQueryToken createToken( SearchQueryTokenType tokenType, StringBackedLexerImpl lexer ) {
+        String valueString = lexer.getTokenString();
+
+        if (tokenType == SearchQueryTokenType.EXACTSEARCHTERM) {
+            return null;
+        }
+
+        // create the token....
+        return null;
     }
 
     private SearchQueryTokenType consumeSearchQueryToken( StringBackedLexerImpl lexer ) {
