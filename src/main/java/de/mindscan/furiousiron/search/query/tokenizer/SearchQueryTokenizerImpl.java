@@ -67,7 +67,15 @@ public class SearchQueryTokenizerImpl {
     }
 
     private boolean isValidTokenType( SearchQueryTokenType tokenType ) {
-        return tokenType != null;
+        if (tokenType == null) {
+            return false;
+        }
+
+        if (tokenType == SearchQueryTokenType.NONE) {
+            return false;
+        }
+
+        return true;
     }
 
     private SearchQueryToken createToken( SearchQueryTokenType tokenType, StringBackedLexerImpl lexer ) {
@@ -100,7 +108,7 @@ public class SearchQueryTokenizerImpl {
             // return consumeSearchTerm
         }
 
-        return SearchQueryTokenType.SEARCHTERM;
+        return null;
     }
 
     private SearchQueryTokenType consumeWhiteSpace( StringBackedLexerImpl lexer ) {
