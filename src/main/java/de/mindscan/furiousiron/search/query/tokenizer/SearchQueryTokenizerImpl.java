@@ -86,7 +86,15 @@ public class SearchQueryTokenizerImpl {
         String valueString = lexer.getTokenString();
 
         if (tokenType == SearchQueryTokenType.EXACTSEARCHTERM) {
-            return null;
+            char startsWith = valueString.charAt( 0 );
+            char endsWith = valueString.charAt( valueString.length() - 1 );
+
+            if (startsWith == endsWith) {
+                // Strip beginning and end.
+                valueString = valueString.substring( 1, valueString.length() - 1 );
+            }
+
+            return SearchQueryTokenFactory.createToken( tokenType, valueString );
         }
 
         // create the token....
