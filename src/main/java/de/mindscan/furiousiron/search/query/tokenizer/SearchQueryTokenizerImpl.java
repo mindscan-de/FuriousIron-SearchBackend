@@ -117,10 +117,11 @@ public class SearchQueryTokenizerImpl {
             return consumeQuotedSearchTerm( lexer );
         }
         else {
-            // return consumeSearchTerm
+            // numbers or aphanumeric stuff and 
+            return consumeSearchTerm( lexer );
         }
 
-        return null;
+        // return null;
     }
 
     private SearchQueryTokenType consumeWhiteSpace( StringBackedLexerImpl lexer ) {
@@ -153,6 +154,13 @@ public class SearchQueryTokenizerImpl {
         lexer.incrementTokenEnd();
 
         return SearchQueryTokenType.EXACTSEARCHTERM;
+    }
+
+    private SearchQueryTokenType consumeSearchTerm( StringBackedLexerImpl lexer ) {
+        // also DoubleColon is a spacer, at least for a string.... whitespace or firstmenge of Operator or a parenthesis
+        lexer.incrementTokenEndWhileNot( SearchQueryTokenizerTerminals::isWhiteSpace );
+
+        return SearchQueryTokenType.SEARCHTERM;
     }
 
 }
