@@ -34,4 +34,7 @@ public class SearchQueryTokens {
     public final static SearchQueryToken OPERATOR_MINUS = new SearchQueryTokenImpl( SearchQueryTokenType.OPERATOR, "-" );
     public final static SearchQueryToken OPERATOR_DOUBLECOLON = new SearchQueryTokenImpl( SearchQueryTokenType.OPERATOR, ":" );
 
+    public final static SearchQueryToken PARENTHESIS_OPEN = new SearchQueryTokenImpl( SearchQueryTokenType.PARENTHESIS, "(" );
+    public final static SearchQueryToken PARENTHESIS_CLOSE = new SearchQueryTokenImpl( SearchQueryTokenType.PARENTHESIS, ")" );
+
 }
