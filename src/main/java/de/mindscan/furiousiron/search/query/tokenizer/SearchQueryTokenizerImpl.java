@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
+import de.mindscan.furiousiron.search.query.token.SearchQueryTokenFactory;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenType;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenizerTerminals;
 import de.mindscan.furiousiron.search.query.tokenizer.lexer.StringBackedLexerImpl;
@@ -57,7 +58,10 @@ public class SearchQueryTokenizerImpl {
                 result.add( createToken( tokenType, lexer ) );
             }
             else {
-                // TODO: present the string which wasn't processed.
+                if (tokenType == null) {
+                    // TODO: present the string which wasn't processed.
+
+                }
             }
 
             lexer.advanceToNextToken();
@@ -86,7 +90,7 @@ public class SearchQueryTokenizerImpl {
         }
 
         // create the token....
-        return null;
+        return SearchQueryTokenFactory.createToken( tokenType, valueString );
     }
 
     private SearchQueryTokenType consumeSearchQueryToken( StringBackedLexerImpl lexer ) {
