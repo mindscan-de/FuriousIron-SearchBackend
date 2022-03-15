@@ -36,4 +36,16 @@ public class SearchQueryTokenizerImplTest {
         assertThat( result, hasSize( 2 ) );
     }
 
+    @Test
+    public void testParse_MinusTestQueryString_TwoTokensInTokenList() throws Exception {
+        // arrange
+        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+
+        // act
+        List<SearchQueryToken> result = tokenizer.parse( "-test" );
+
+        // assert
+        assertThat( result, hasSize( 2 ) );
+    }
+
 }
