@@ -76,8 +76,24 @@ public class SearchQueryTokenizerImplTest {
         assertThat( result, contains( SearchQueryTokens.OPERATOR_MINUS, textToken( "test" ) ) );
     }
 
+    @Test
+    public void testParse_PlusTestExactQueryString_containsPLusTokenAndExactTextTokenInList() throws Exception {
+        // arrange
+        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+
+        // act
+        List<SearchQueryToken> result = tokenizer.parse( "+\"test\"" );
+
+        // assert
+        assertThat( result, contains( SearchQueryTokens.OPERATOR_PLUS, exactTextToken( "test" ) ) );
+    }
+
     private SearchQueryTokenImpl textToken( String value ) {
         return new SearchQueryTokenImpl( SearchQueryTokenType.SEARCHTERM, value );
+    }
+
+    private SearchQueryTokenImpl exactTextToken( String value ) {
+        return new SearchQueryTokenImpl( SearchQueryTokenType.EXACTSEARCHTERM, value );
     }
 
 }
