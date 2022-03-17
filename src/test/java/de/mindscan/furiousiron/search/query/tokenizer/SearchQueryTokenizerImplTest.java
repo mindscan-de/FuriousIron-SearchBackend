@@ -88,6 +88,18 @@ public class SearchQueryTokenizerImplTest {
         assertThat( result, contains( SearchQueryTokens.OPERATOR_PLUS, exactTextToken( "test" ) ) );
     }
 
+    @Test
+    public void testParse_OpenCloseParenthesis_containsTwoTokens() throws Exception {
+        // arrange
+        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+
+        // act
+        List<SearchQueryToken> result = tokenizer.parse( "()" );
+
+        // assert
+        assertThat( result, hasSize( 2 ) );
+    }
+
     private SearchQueryTokenImpl textToken( String value ) {
         return new SearchQueryTokenImpl( SearchQueryTokenType.SEARCHTERM, value );
     }
