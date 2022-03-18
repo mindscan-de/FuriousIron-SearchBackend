@@ -100,6 +100,18 @@ public class SearchQueryTokenizerImplTest {
         assertThat( result, hasSize( 2 ) );
     }
 
+    @Test
+    public void testParse_PlusTestinusExactQueryString_containsPLusTokenTestAndMinusTokenExactText() throws Exception {
+        // arrange
+        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+
+        // act
+        List<SearchQueryToken> result = tokenizer.parse( "+test -\"test\"" );
+
+        // assert
+        assertThat( result, contains( SearchQueryTokens.OPERATOR_PLUS, textToken( "test" ), SearchQueryTokens.OPERATOR_MINUS, exactTextToken( "test" ) ) );
+    }
+
     private SearchQueryTokenImpl textToken( String value ) {
         return new SearchQueryTokenImpl( SearchQueryTokenType.SEARCHTERM, value );
     }
