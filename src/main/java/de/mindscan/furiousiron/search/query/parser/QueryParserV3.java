@@ -27,6 +27,8 @@ package de.mindscan.furiousiron.search.query.parser;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
+import de.mindscan.furiousiron.search.query.token.SearchQueryTokenType;
 
 /**
  * 
@@ -41,4 +43,27 @@ public class QueryParserV3 implements SearchQueryParser {
         return new EmptyNode();
     }
 
+    // -------------------
+    // parser support code
+    // -------------------    
+
+    private boolean tryToken( SearchQueryToken acceptableToken ) {
+        return false;
+    }
+
+    private boolean tryAndAcceptToken( SearchQueryToken acceptableToken ) {
+        return false;
+    }
+
+    private boolean tryAndConsumeAsString( String acceptableString ) {
+        return false;
+    }
+
+    private boolean tryType( SearchQueryTokenType acceptableType ) {
+        return false;
+    }
+
+    private boolean tryAndAcceptType( String acceptableType ) {
+        return false;
+    }
 }
