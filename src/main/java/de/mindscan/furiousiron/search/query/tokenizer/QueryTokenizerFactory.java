@@ -30,8 +30,7 @@ package de.mindscan.furiousiron.search.query.tokenizer;
  */
 public class QueryTokenizerFactory {
 
-    // have a new QueryTokenizer implementation
-    public static QueryTokenizer getTokenizer2() {
+    public static QueryTokenizer getTokenizer() {
         return new QueryTokenizerImpl2();
     }
 }

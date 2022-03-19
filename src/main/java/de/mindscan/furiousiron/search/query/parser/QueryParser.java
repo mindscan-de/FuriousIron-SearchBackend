@@ -77,7 +77,7 @@ public class QueryParser implements SearchQueryParser {
         }
 
         collectedTextTokens = new ArrayList<>();
-        return parseQueryTokens( QueryTokenizerFactory.getTokenizer2().tokenize( queryString ) );
+        return parseQueryTokens( QueryTokenizerFactory.getTokenizer().tokenize( queryString ) );
     }
 
     /**
