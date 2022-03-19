@@ -48,6 +48,9 @@ public class SearchQueryTokenizerTerminals {
     // Quotes
     public final static char[] TERMINAL_QUOTES = new char[] { '\'', '"' };
 
+    // TODO: calculate the 
+    public final static char[] TERMINAL_TERM_FOLLOW_MENGE = new char[] { '+', '-', ':', ' ', '\t', '\r', '\n', '(', ')' };
+
     // ----------------
     // Helper functions
     // ----------------
@@ -94,6 +97,10 @@ public class SearchQueryTokenizerTerminals {
 
     public static boolean isOneCharOperator( String oneChar ) {
         return TERMINAL_OPERATORS_WITH_1_CHAR.contains( oneChar );
+    }
+
+    public static boolean isFollowMengeToTerm( char currentChar ) {
+        return isCharIn( currentChar, TERMINAL_TERM_FOLLOW_MENGE );
     }
 
 }
