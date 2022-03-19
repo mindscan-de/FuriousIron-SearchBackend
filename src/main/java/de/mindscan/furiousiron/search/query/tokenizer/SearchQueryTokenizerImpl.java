@@ -59,8 +59,8 @@ public class SearchQueryTokenizerImpl {
             }
             else {
                 if (tokenType == null) {
-                    // TODO: present the string which wasn't processed.
-
+                    String tokenString = lexer.getTokenString();
+                    System.out.println( "Couldn't process this tokenstring: '" + String.valueOf( tokenString ) + "'" );
                 }
             }
 
@@ -157,8 +157,7 @@ public class SearchQueryTokenizerImpl {
     }
 
     private SearchQueryTokenType consumeSearchTerm( StringBackedLexerImpl lexer ) {
-        // also DoubleColon is a spacer, at least for a string.... whitespace or firstmenge of Operator or a parenthesis
-        lexer.incrementTokenEndWhileNot( SearchQueryTokenizerTerminals::isWhiteSpace );
+        lexer.incrementTokenEndWhileNot( SearchQueryTokenizerTerminals::isFollowMengeToTerm );
 
         return SearchQueryTokenType.SEARCHTERM;
     }
