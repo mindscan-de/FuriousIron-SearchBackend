@@ -37,13 +37,14 @@ import de.mindscan.furiousiron.search.query.tokenizer.lexer.StringBackedLexerImp
 /**
  * 
  */
-public class SearchQueryTokenizerImpl {
+public class SearchQueryTokenizerImpl implements SearchQueryTokenizer {
 
     private boolean ignoreWhitespaces = true;
 
     public SearchQueryTokenizerImpl() {
     }
 
+    @Override
     public List<SearchQueryToken> parse( String queryString ) {
         ArrayList<SearchQueryToken> result = new ArrayList<>();
 

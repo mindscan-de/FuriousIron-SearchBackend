@@ -19,7 +19,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_emptyQueryString_emptyTokenList() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "" );
@@ -31,7 +31,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_PlusTestQueryString_TwoTokensInTokenList() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "+test" );
@@ -43,7 +43,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_PlusTestQueryString_containsPlusTokenAndTextTokenInList() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "+test" );
@@ -55,7 +55,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_MinusTestQueryString_TwoTokensInTokenList() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "-test" );
@@ -67,7 +67,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_MinusTestQueryString_containsMinusTokenAndTextTokenInList() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "-test" );
@@ -79,7 +79,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_PlusTestExactQueryString_containsPLusTokenAndExactTextTokenInList() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "+\"test\"" );
@@ -91,7 +91,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_OpenCloseParenthesis_containsTwoTokens() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "()" );
@@ -103,7 +103,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_PlusTestinusExactQueryString_containsPLusTokenTestAndMinusTokenExactText() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "+test -\"test\"" );
@@ -115,7 +115,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_Plus1234Minus123456QueryString_containsPLusToken1234AndMinus123456Token() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "+1234 -123456" );
@@ -127,7 +127,7 @@ public class SearchQueryTokenizerImplTest {
     @Test
     public void testParse_PlusTestNotPythonFile_containsPlusTokenTestAndMinusFiletypeTyphon() throws Exception {
         // arrange
-        SearchQueryTokenizerImpl tokenizer = new SearchQueryTokenizerImpl();
+        SearchQueryTokenizer tokenizer = new SearchQueryTokenizerImpl();
 
         // act
         List<SearchQueryToken> result = tokenizer.parse( "+test -filetype:python" );
