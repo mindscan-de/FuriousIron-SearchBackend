@@ -7,7 +7,7 @@ import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenImpl;
