@@ -25,8 +25,9 @@
  */
 package de.mindscan.furiousiron.search.query.token;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * 
@@ -43,7 +44,7 @@ public class SearchQueryTokenProvider {
     private final static int MARKED_NONE = Integer.MIN_VALUE;
 
     public SearchQueryTokenProvider( List<SearchQueryToken> tokens ) {
-        this.tokenList = new LinkedList<>( tokens );
+        this.tokenList = new ArrayList<>( tokens );
         this.currentPosition = 0;
         this.defaultToken = SearchQueryTokens.END_OF_INPUT;
         this.value = null;
@@ -57,4 +58,51 @@ public class SearchQueryTokenProvider {
         this.defaultToken = defaultToken;
     }
 
+    public SearchQueryToken last() {
+        return this.value;
+    }
+
+    public SearchQueryToken next() {
+        try {
+            this.value = this.tokenList.get( this.currentPosition );
+            this.currentPosition++;
+        }
+        catch (IndexOutOfBoundsException ioobe) {
+            throw new NoSuchElementException( "No more elements in this TokenProvider" );
+        }
+
+        return this.value;
+    }
+
+    public SearchQueryToken lookahead() {
+        return lookahead( 0 );
+    }
+
+    public SearchQueryToken lookahead( int skipCount ) {
+        try {
+            this.value = this.tokenList.get( this.currentPosition + skipCount );
+        }
+        catch (IndexOutOfBoundsException e) {
+            return this.defaultToken;
+        }
+
+        return this.value;
+    }
+
+    public void pushMarker() {
+        this.markedPosition = this.currentPosition;
+    }
+
+    public void discardMarker() {
+        this.markedPosition = MARKED_NONE;
+    }
+
+    public void popMarker() {
+        if (this.markedPosition != MARKED_NONE) {
+            this.currentPosition = this.markedPosition;
+        }
+        else {
+            throw new IllegalStateException( "PopMarker has an invalid state." );
+        }
+    }
 }
