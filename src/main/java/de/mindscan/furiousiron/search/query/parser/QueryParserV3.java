@@ -45,11 +45,13 @@ public class QueryParserV3 implements SearchQueryParser {
             return new EmptyNode();
         }
 
-        // tokenize the search query and prepare tokens for parsing.
-        SearchQueryTokenizer tokenizer = SearchQueryTokenizerFactory.getTokenizer();
-        this.tokens = new SearchQueryTokenProvider( tokenizer.parse( queryString ) );
+        setTokenizer( SearchQueryTokenizerFactory.getTokenizer(), queryString );
 
         return new EmptyNode();
+    }
+
+    private void setTokenizer( SearchQueryTokenizer tokenizer, String queryString ) {
+        this.tokens = new SearchQueryTokenProvider( tokenizer.parse( queryString ) );
     }
 
     // -------------------
