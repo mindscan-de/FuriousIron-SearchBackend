@@ -76,6 +76,19 @@ public class QueryParserV3Test {
     }
 
     @Test
+    public void testParseQuery_StringContainsWordTestWithSpaces_returnsTextNodeContainsHasWordTest() {
+        // Arrange
+        QueryParserV3 parserV3 = new QueryParserV3();
+
+        // Act
+        QueryNode result = parserV3.parseQuery( " test " );
+
+        // Assert
+        String content = result.getContent();
+        assertThat( content, equalTo( "test" ) );
+    }
+
+    @Test
     public void testParseQuery_testExactQuery_() throws Exception {
         // arrange
         QueryParserV3 parserV3 = new QueryParserV3();
