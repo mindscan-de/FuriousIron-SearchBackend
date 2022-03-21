@@ -1,6 +1,7 @@
 package de.mindscan.furiousiron.search.query.parser;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
@@ -46,6 +47,19 @@ public class QueryParserV3Test {
 
         // assert
         assertThat( result, is( instanceOf( TextNode.class ) ) );
+    }
+
+    @Test
+    public void testParseQuery_StringContainsWordTest_returnsTextNodeHasWordTest() {
+        // Arrange
+        QueryParserV3 parserV3 = new QueryParserV3();
+
+        // Act
+        QueryNode result = parserV3.parseQuery( "test" );
+
+        // Assert
+        String content = result.getContent();
+        assertThat( content, equalTo( "test" ) );
     }
 
     @Test
