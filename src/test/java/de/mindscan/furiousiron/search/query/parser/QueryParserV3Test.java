@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.TextNode;
 
 public class QueryParserV3Test {
 
@@ -44,8 +45,7 @@ public class QueryParserV3Test {
         QueryNode result = parserV3.parseQuery( "test" );
 
         // assert
-        // assertThat( result, is( instanceOf( TextNode.class ) ) );
-
+        assertThat( result, is( instanceOf( TextNode.class ) ) );
     }
 
     @Test
