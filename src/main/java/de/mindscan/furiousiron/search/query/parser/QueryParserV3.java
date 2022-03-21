@@ -27,6 +27,7 @@ package de.mindscan.furiousiron.search.query.parser;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProvider;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenType;
@@ -49,8 +50,6 @@ public class QueryParserV3 implements SearchQueryParser {
         setTokenProvider( SearchQueryTokenizerFactory.getTokenizer(), queryString );
 
         return parseSearchTextTerm();
-
-//        return new EmptyNode();
     }
 
     void setTokenProvider( SearchQueryTokenizer tokenizer, String queryString ) {
@@ -67,6 +66,11 @@ public class QueryParserV3 implements SearchQueryParser {
         // if it is an exact Term, then it must not be followed by double colon
 
         // else if it is a textTerm
+        if (tryAndAcceptType( SearchQueryTokenType.SEARCHTERM )) {
+            SearchQueryToken term = tokens.last();
+            return new TextNode( term.getValue() );
+        }
+
         if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_DOUBLECOLON )) {
             // TODO:
             // if we have a double colon here, then we  
@@ -99,7 +103,15 @@ public class QueryParserV3 implements SearchQueryParser {
         return false;
     }
 
-    private boolean tryAndAcceptType( String acceptableType ) {
-        return false;
+    private boolean tryAndAcceptType( SearchQueryTokenType acceptableType ) {
+        SearchQueryToken la = tokens.lookahead();
+
+        if (la.getType() != acceptableType) {
+            return false;
+        }
+
+        tokens.next();
+
+        return true;
     }
 }
