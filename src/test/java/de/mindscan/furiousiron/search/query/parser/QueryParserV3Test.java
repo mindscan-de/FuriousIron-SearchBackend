@@ -63,6 +63,19 @@ public class QueryParserV3Test {
     }
 
     @Test
+    public void testParseQuery_StringContainsWordDifferentWord_returnsTextNodeContainingDifferentWord() {
+        // Arrange
+        QueryParserV3 parserV3 = new QueryParserV3();
+
+        // Act
+        QueryNode result = parserV3.parseQuery( "differentword" );
+
+        // Assert
+        String content = result.getContent();
+        assertThat( content, equalTo( "differentword" ) );
+    }
+
+    @Test
     public void testParseQuery_testExactQuery_() throws Exception {
         // arrange
         QueryParserV3 parserV3 = new QueryParserV3();
