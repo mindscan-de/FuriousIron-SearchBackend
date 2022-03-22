@@ -99,7 +99,11 @@ public class QueryParserV3Test {
 
         // assert
         assertThat( result, is( instanceOf( ExactMatchingTextNode.class ) ) );
-
     }
+
+    // TODO: OR of two terms (result.toString -> equalto)
+    // TODO: AND of two terms (result.toString -> equalto)
+    // TODO: INCLUDING
+    // TODO: EXCLUDING
 
 }
