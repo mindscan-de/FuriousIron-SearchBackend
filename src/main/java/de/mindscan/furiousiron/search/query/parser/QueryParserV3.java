@@ -26,6 +26,7 @@
 package de.mindscan.furiousiron.search.query.parser;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
@@ -63,10 +64,12 @@ public class QueryParserV3 implements SearchQueryParser {
 
     QueryNode parseSearchTextTerm() {
 
-        // if it is an exact Term, then it must not be followed by double colon
-
-        // else if it is a textTerm
-        if (tryAndAcceptType( SearchQueryTokenType.SEARCHTERM )) {
+        if (tryAndAcceptType( SearchQueryTokenType.EXACTSEARCHTERM )) {
+            // TODO: if it is an exact Term, then it must not be followed by double colon
+            SearchQueryToken term = tokens.last();
+            return new ExactMatchingTextNode( term.getValue() );
+        }
+        else if (tryAndAcceptType( SearchQueryTokenType.SEARCHTERM )) {
             SearchQueryToken term = tokens.last();
             return new TextNode( term.getValue() );
         }
