@@ -27,6 +27,7 @@ package de.mindscan.furiousiron.search.query.parser;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
+import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
@@ -71,6 +72,14 @@ public class QueryParserV3 implements SearchQueryParser {
         }
         else if (tryAndAcceptType( SearchQueryTokenType.SEARCHTERM )) {
             SearchQueryToken term = tokens.last();
+
+            if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_DOUBLECOLON )) {
+                SearchQueryToken key = term;
+                QueryNode value = parseSearchTextTerm();
+
+                return new MetaDataTextNode( key.getValue(), value.getContent() );
+            }
+
             return new TextNode( term.getValue() );
         }
 
@@ -95,7 +104,18 @@ public class QueryParserV3 implements SearchQueryParser {
     }
 
     private boolean tryAndAcceptToken( SearchQueryToken acceptableToken ) {
-        return false;
+        if (acceptableToken == null) {
+            throw new IllegalArgumentException( " acceptableToken must not be null " );
+        }
+
+        SearchQueryToken la = tokens.lookahead();
+
+        if (!acceptableToken.equals( la )) {
+            return false;
+        }
+        tokens.next();
+
+        return true;
     }
 
     private boolean tryAndConsumeAsString( String acceptableString ) {
