@@ -153,6 +153,18 @@ public class QueryParserV3Test {
         assertThat( result, equalTo( "java" ) );
     }
 
+    @Test
+    public void testParseQuery_testMetaDataFiletypeIsExacltyJava_returnsMetaData() {
+        // Arrange
+        QueryParserV3 parserV3 = new QueryParserV3();
+
+        // Act
+        QueryNode result = parserV3.parseQuery( "filetype:\"java\"" );
+
+        // Assert
+        assertThat( result, is( instanceOf( MetaDataTextNode.class ) ) );
+    }
+
     // TODO: OR of two terms (result.toString -> equalto)
     // TODO: AND of two terms (result.toString -> equalto)
     // TODO: INCLUDING
