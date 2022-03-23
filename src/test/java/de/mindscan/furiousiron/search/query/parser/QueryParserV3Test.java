@@ -77,7 +77,7 @@ public class QueryParserV3Test {
     }
 
     @Test
-    public void testParseQuery_StringContainsWordTestWithSpaces_returnsTextNodeContainsHasWordTest() {
+    public void testParseQuery_StringContainsWordTestWithSpaces_returnsTextNodeContainsWordTest() {
         // Arrange
         QueryParserV3 parserV3 = new QueryParserV3();
 
@@ -90,7 +90,7 @@ public class QueryParserV3Test {
     }
 
     @Test
-    public void testParseQuery_testExactQuery_() throws Exception {
+    public void testParseQuery_testExactQuery_returnsExactMatchingTextNode() throws Exception {
         // arrange
         QueryParserV3 parserV3 = new QueryParserV3();
 
@@ -99,6 +99,19 @@ public class QueryParserV3Test {
 
         // assert
         assertThat( result, is( instanceOf( ExactMatchingTextNode.class ) ) );
+    }
+
+    @Test
+    public void testParseQuery_testExactQuery__returnsExactTextNodeContainsWordTest() {
+        // Arrange
+        QueryParserV3 parserV3 = new QueryParserV3();
+
+        // Act
+        QueryNode result = parserV3.parseQuery( "\"test\"" );
+
+        // Assert
+        String content = result.getContent();
+        assertThat( content, equalTo( "test" ) );
     }
 
     // TODO: OR of two terms (result.toString -> equalto)
