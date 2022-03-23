@@ -127,6 +127,19 @@ public class QueryParserV3Test {
         assertThat( result, is( instanceOf( MetaDataTextNode.class ) ) );
     }
 
+    @Test
+    public void testParseQuery_testMetaDataFiletypeIsJava_returnsMetaDataKeyIsFiletype() {
+        // Arrange
+        QueryParserV3 parserV3 = new QueryParserV3();
+
+        // Act
+        MetaDataTextNode node = (MetaDataTextNode) parserV3.parseQuery( "filetype:java" );
+
+        // Assert
+        String result = node.getKey();
+        assertThat( result, equalTo( "filetype" ) );
+    }
+
     // TODO: OR of two terms (result.toString -> equalto)
     // TODO: AND of two terms (result.toString -> equalto)
     // TODO: INCLUDING
