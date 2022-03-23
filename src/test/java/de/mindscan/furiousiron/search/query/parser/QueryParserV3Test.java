@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
+import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 
@@ -102,7 +103,7 @@ public class QueryParserV3Test {
     }
 
     @Test
-    public void testParseQuery_testExactQuery__returnsExactTextNodeContainsWordTest() {
+    public void testParseQuery_testExactQuery_returnsExactTextNodeContainsWordTest() {
         // Arrange
         QueryParserV3 parserV3 = new QueryParserV3();
 
@@ -112,6 +113,18 @@ public class QueryParserV3Test {
         // Assert
         String content = result.getContent();
         assertThat( content, equalTo( "test" ) );
+    }
+
+    @Test
+    public void testParseQuery_testMetaDataFiletypeIsJava_returnsMetaData() {
+        // Arrange
+        QueryParserV3 parserV3 = new QueryParserV3();
+
+        // Act
+        QueryNode result = parserV3.parseQuery( "filetype:java" );
+
+        // Assert
+        assertThat( result, is( instanceOf( MetaDataTextNode.class ) ) );
     }
 
     // TODO: OR of two terms (result.toString -> equalto)
