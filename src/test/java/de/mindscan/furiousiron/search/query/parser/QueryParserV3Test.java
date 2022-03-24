@@ -165,6 +165,18 @@ public class QueryParserV3Test {
         assertThat( result, is( instanceOf( MetaDataTextNode.class ) ) );
     }
 
+    @Test
+    public void testParseQuery_EmptyString_expectASTSerializationIsOnlyEmptyNode() {
+        // Arrange
+        QueryParserV3 queryParser = new QueryParserV3();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "" );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'EMPTY' ]" ) );
+    }
+
     // TODO: OR of two terms (result.toString -> equalto)
     // TODO: AND of two terms (result.toString -> equalto)
     // TODO: INCLUDING
