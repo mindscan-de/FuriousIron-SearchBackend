@@ -190,6 +190,18 @@ public class QueryParserV3Test {
     }
 
     // TODO: OR of two terms (result.toString -> equalto)
+    @Test
+    public void testParseQuery_TwoWordsOR_expectASTSerialization() {
+        // Arrange
+        QueryParserV3 queryParser = new QueryParserV3();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "first second" );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'OR', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
+    }
+
     // TODO: AND of two terms (result.toString -> equalto)
     // TODO: INCLUDING
     // TODO: EXCLUDING
