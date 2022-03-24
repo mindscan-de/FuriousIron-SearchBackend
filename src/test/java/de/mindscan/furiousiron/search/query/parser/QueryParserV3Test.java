@@ -202,8 +202,30 @@ public class QueryParserV3Test {
         assertThat( result.toString(), equalTo( "[ 'OR', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
     }
 
-    // TODO: AND of two terms (result.toString -> equalto)
-    // TODO: INCLUDING
-    // TODO: EXCLUDING
+    // TODO: AND of two terms (result.toString -> equalto) (INCLUDING)
+    @Test
+    public void testParseQuery_TwoWordsAND_expectOnlyASTSerializationOfFirstElement() {
+        // Arrange
+        QueryParserV3 queryParser = new QueryParserV3();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "first +second" );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'INCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
+    }
+
+    // TODO: AND of two terms (result.toString -> equalto) (EXCLUDING)
+    @Test
+    public void testParseQuery_TwoWordsButNotSecond_expectOnlyASTSerializationOfFirstElement() {
+        // Arrange
+        QueryParserV3 queryParser = new QueryParserV3();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "first -second" );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'EXCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
+    }
 
 }
