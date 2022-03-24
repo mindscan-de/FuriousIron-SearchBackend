@@ -51,7 +51,7 @@ public class QueryParserV3 implements SearchQueryParser {
 
         setTokenProvider( SearchQueryTokenizerFactory.getTokenizer(), queryString );
 
-        return parseSearchTextTerm();
+        return parseSearchTerminalTextTerm();
     }
 
     void setTokenProvider( SearchQueryTokenizer tokenizer, String queryString ) {
@@ -61,10 +61,10 @@ public class QueryParserV3 implements SearchQueryParser {
     // +
     // -
     // (
+
     // Term
 
-    QueryNode parseSearchTextTerm() {
-
+    QueryNode parseSearchTerminalTextTerm() {
         if (tryAndAcceptType( SearchQueryTokenType.EXACTSEARCHTERM )) {
             // TODO: if it is an exact Term, then it must not be followed by double colon
             SearchQueryToken term = tokens.last();
@@ -75,17 +75,13 @@ public class QueryParserV3 implements SearchQueryParser {
 
             if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_DOUBLECOLON )) {
                 SearchQueryToken key = term;
-                QueryNode value = parseSearchTextTerm();
+                QueryNode value = parseSearchTerminalTextTerm();
 
+                // TODO: maybe rewrite this MetaDataTextNode-Value with a QueryNode Type.
                 return new MetaDataTextNode( key.getValue(), value.getContent() );
             }
 
             return new TextNode( term.getValue() );
-        }
-
-        if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_DOUBLECOLON )) {
-            // TODO:
-            // if we have a double colon here, then we  
         }
 
         return null;
