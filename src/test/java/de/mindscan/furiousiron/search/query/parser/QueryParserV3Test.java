@@ -177,6 +177,18 @@ public class QueryParserV3Test {
         assertThat( result.toString(), equalTo( "[ 'EMPTY' ]" ) );
     }
 
+    @Test
+    public void testParseQuery_nullAsString_expectASTSerializationIsOnlyEmptyNode() {
+        // Arrange
+        QueryParserV3 queryParser = new QueryParserV3();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( null );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'EMPTY' ]" ) );
+    }
+
     // TODO: OR of two terms (result.toString -> equalto)
     // TODO: AND of two terms (result.toString -> equalto)
     // TODO: INCLUDING
