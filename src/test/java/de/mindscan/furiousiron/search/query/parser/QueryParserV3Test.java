@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
@@ -203,6 +204,7 @@ public class QueryParserV3Test {
     }
 
     // TODO: AND of two terms (result.toString -> equalto) (INCLUDING)
+    @Disabled
     @Test
     public void testParseQuery_TwoWordsAND_expectOnlyASTSerializationOfFirstElement() {
         // Arrange
@@ -216,6 +218,7 @@ public class QueryParserV3Test {
     }
 
     // TODO: AND of two terms (result.toString -> equalto) (EXCLUDING)
+    @Disabled
     @Test
     public void testParseQuery_TwoWordsButNotSecond_expectOnlyASTSerializationOfFirstElement() {
         // Arrange
