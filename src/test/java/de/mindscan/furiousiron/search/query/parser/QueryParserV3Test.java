@@ -190,7 +190,20 @@ public class QueryParserV3Test {
         assertThat( result.toString(), equalTo( "[ 'EMPTY' ]" ) );
     }
 
+    @Test
+    public void testParseQuery_PlusAndOneWord_expectASTSerialization() {
+        // Arrange
+        QueryParserV3 queryParser = new QueryParserV3();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "+first" );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ] ] ]" ) );
+    }
+
     // TODO: OR of two terms (result.toString -> equalto)
+    @Disabled
     @Test
     public void testParseQuery_TwoWordsOR_expectASTSerialization() {
         // Arrange
