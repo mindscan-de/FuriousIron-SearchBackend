@@ -51,7 +51,7 @@ public class QueryParserV3 implements SearchQueryParser {
 
         setTokenProvider( SearchQueryTokenizerFactory.getTokenizer(), queryString );
 
-        return parseSearchTerminalTextTerm();
+        return parseSearchOperators();
     }
 
     void setTokenProvider( SearchQueryTokenizer tokenizer, String queryString ) {
@@ -61,9 +61,19 @@ public class QueryParserV3 implements SearchQueryParser {
     // +
     // -
     // (
+    QueryNode parseSearchOperators() {
+        if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_PLUS )) {
+            throw new RuntimeException( "Not Yet implemented." );
+        }
+        else if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_MINUS )) {
+            throw new RuntimeException( "Not Yet implemented." );
+        }
+        else {
+            return parseSearchTerminalTextTerm();
+        }
+    }
 
     // Term
-
     QueryNode parseSearchTerminalTextTerm() {
         if (tryAndAcceptType( SearchQueryTokenType.EXACTSEARCHTERM )) {
             // TODO: if it is an exact Term, then it must not be followed by double colon
