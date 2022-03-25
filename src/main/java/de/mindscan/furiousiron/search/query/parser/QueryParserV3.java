@@ -62,6 +62,9 @@ public class QueryParserV3 implements SearchQueryParser {
     // -
     // (
     QueryNode parseSearchOperators() {
+        if (tryType( SearchQueryTokenType.SEARCHTERM ) || tryType( SearchQueryTokenType.EXACTSEARCHTERM )) {
+            return parseSearchTerminalTextTerm();
+        }
         if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_PLUS )) {
             throw new RuntimeException( "Not Yet implemented." );
         }
@@ -69,7 +72,7 @@ public class QueryParserV3 implements SearchQueryParser {
             throw new RuntimeException( "Not Yet implemented." );
         }
         else {
-            return parseSearchTerminalTextTerm();
+            throw new RuntimeException( "Not Yet implemented." );
         }
     }
 
@@ -129,7 +132,9 @@ public class QueryParserV3 implements SearchQueryParser {
     }
 
     private boolean tryType( SearchQueryTokenType acceptableType ) {
-        return false;
+        SearchQueryToken la = tokens.lookahead();
+
+        return la.getType() == acceptableType;
     }
 
     private boolean tryAndAcceptType( SearchQueryTokenType acceptableType ) {
