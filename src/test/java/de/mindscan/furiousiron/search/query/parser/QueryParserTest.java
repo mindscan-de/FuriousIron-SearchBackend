@@ -237,5 +237,17 @@ public class QueryParserTest {
         assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ] ] ]" ) );
     }
 
+    @Test
+    public void testParseQuery_MinusAndOneWord_expectASTSerialization() {
+        // Arrange
+        QueryParser queryParser = new QueryParser();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "-first" );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'EXCLUDING', [ [ 'TEXT', 'first' ] ] ] ] ]" ) );
+    }
+
 // tpxu_method
 }
