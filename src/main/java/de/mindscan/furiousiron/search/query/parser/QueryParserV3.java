@@ -25,8 +25,10 @@
  */
 package de.mindscan.furiousiron.search.query.parser;
 
+import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
+import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
@@ -66,7 +68,8 @@ public class QueryParserV3 implements SearchQueryParser {
             return parseSearchTerminalTextTerm();
         }
         if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_PLUS )) {
-            throw new RuntimeException( "Not Yet implemented." );
+            QueryNode postPlusAST = parseSearchOperators();
+            return new AndNode( new IncludingNode( postPlusAST ) );
         }
         else if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_MINUS )) {
             throw new RuntimeException( "Not Yet implemented." );
