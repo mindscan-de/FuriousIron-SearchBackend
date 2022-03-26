@@ -215,7 +215,6 @@ public class QueryParserV3Test {
     }
 
     // TODO: OR of two terms (result.toString -> equalto)
-    @Disabled
     @Test
     public void testParseQuery_TwoWordsOR_expectASTSerialization() {
         // Arrange
