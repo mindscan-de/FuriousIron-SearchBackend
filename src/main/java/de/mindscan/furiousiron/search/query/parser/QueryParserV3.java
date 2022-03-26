@@ -25,6 +25,9 @@
  */
 package de.mindscan.furiousiron.search.query.parser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
@@ -54,7 +57,13 @@ public class QueryParserV3 implements SearchQueryParser {
 
         setTokenProvider( SearchQueryTokenizerFactory.getTokenizer(), queryString );
 
-        return parseSearchOperators();
+        List<QueryNode> astList = new ArrayList<>();
+
+        while (tokens.hasNext()) {
+            astList.add( parseSearchOperators() );
+        }
+
+        return compileASTList( astList );
     }
 
     void setTokenProvider( SearchQueryTokenizer tokenizer, String queryString ) {
@@ -153,4 +162,19 @@ public class QueryParserV3 implements SearchQueryParser {
 
         return true;
     }
+
+    // compile the list
+
+    private QueryNode compileASTList( List<QueryNode> astList ) {
+        if (astList.size() == 0) {
+            return new EmptyNode();
+        }
+
+        if (astList.size() == 1) {
+            return astList.get( 0 );
+        }
+
+        return null;
+    }
+
 }
