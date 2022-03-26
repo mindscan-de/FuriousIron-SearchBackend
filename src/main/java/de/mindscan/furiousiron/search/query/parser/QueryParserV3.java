@@ -73,8 +73,8 @@ public class QueryParserV3 implements SearchQueryParser {
             return new AndNode( new IncludingNode( postPlusAST ) );
         }
         else if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_MINUS )) {
-            QueryNode postPlusAST = parseSearchOperators();
-            return new AndNode( new ExcludingNode( postPlusAST ) );
+            QueryNode postMinusAST = parseSearchOperators();
+            return new AndNode( new ExcludingNode( postMinusAST ) );
         }
         else {
             throw new RuntimeException( "Not Yet implemented." );
