@@ -62,6 +62,18 @@ public class SearchQueryTokenProvider {
         return this.value;
     }
 
+    public boolean hasNext() {
+        SearchQueryToken nextValue;
+        try {
+            nextValue = this.tokenList.get( this.currentPosition );
+        }
+        catch (IndexOutOfBoundsException ioobe) {
+            nextValue = this.defaultToken;
+        }
+
+        return (nextValue != null) && (SearchQueryTokens.END_OF_INPUT != nextValue);
+    }
+
     public SearchQueryToken next() {
         try {
             this.value = this.tokenList.get( this.currentPosition );
