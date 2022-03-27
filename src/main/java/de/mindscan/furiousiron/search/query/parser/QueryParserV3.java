@@ -126,7 +126,8 @@ public class QueryParserV3 implements SearchQueryParser {
             throw new IllegalArgumentException( "The acceptableToken must not be null." );
         }
 
-        return false;
+        SearchQueryToken la = tokens.lookahead();
+        return acceptableToken.equals( la );
     }
 
     private boolean tryAndAcceptToken( SearchQueryToken acceptableToken ) {
