@@ -144,8 +144,16 @@ public class QueryParserV3 implements SearchQueryParser {
         return true;
     }
 
-    private boolean tryAndConsumeAsString( String acceptableString ) {
-        return false;
+    private boolean tryAndAcceptAsString( String acceptableString ) {
+        SearchQueryToken la = tokens.lookahead();
+
+        if (!la.getValue().equals( acceptableString )) {
+            return false;
+        }
+
+        tokens.next();
+
+        return true;
     }
 
     private boolean tryType( SearchQueryTokenType acceptableType ) {
