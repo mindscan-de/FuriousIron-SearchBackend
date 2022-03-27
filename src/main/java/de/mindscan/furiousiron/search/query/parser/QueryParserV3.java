@@ -166,15 +166,14 @@ public class QueryParserV3 implements SearchQueryParser {
     // compile the list
 
     private QueryNode compileASTList( List<QueryNode> astList ) {
-        if (astList.size() == 0) {
-            return new EmptyNode();
+        switch (astList.size()) {
+            case 0:
+                return new EmptyNode();
+            case 1:
+                return astList.get( 0 );
+            default:
+                return null;
         }
-
-        if (astList.size() == 1) {
-            return astList.get( 0 );
-        }
-
-        return null;
     }
 
 }
