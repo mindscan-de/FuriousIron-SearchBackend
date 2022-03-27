@@ -26,7 +26,9 @@
 package de.mindscan.furiousiron.search.query.parser;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
@@ -34,6 +36,7 @@ import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
+import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
@@ -163,7 +166,9 @@ public class QueryParserV3 implements SearchQueryParser {
         return true;
     }
 
-    // compile the list
+    // ----------------------------
+    // compile the query from parts
+    // ----------------------------    
 
     private QueryNode compileASTList( List<QueryNode> astList ) {
         switch (astList.size()) {
@@ -172,8 +177,57 @@ public class QueryParserV3 implements SearchQueryParser {
             case 1:
                 return astList.get( 0 );
             default:
-                return null;
+                return buildOptimizedTree( astList );
         }
+    }
+
+    // -----------------------
+    // copied from QueryParser
+    // -----------------------
+
+    private QueryNode buildOptimizedTree( List<QueryNode> astCollector ) {
+        List<QueryNode> textNodes = astCollector.stream().filter( x -> (x instanceof TextNode) ).collect( Collectors.toList() );
+        List<QueryNode> orNodes = astCollector.stream().filter( x -> (x instanceof OrNode) ).collect( Collectors.toList() );
+        List<QueryNode> andNodes = astCollector.stream().filter( x -> (x instanceof AndNode) ).collect( Collectors.toList() );
+
+        if (!andNodes.isEmpty()) {
+            // And is active must be combined with or and text Nodes inside
+            List<QueryNode> resultAndList = new LinkedList<>();
+
+            if (textNodes.size() > 0 || orNodes.size() > 0) {
+                if ((textNodes.size() + orNodes.size()) == 1) {
+                    resultAndList.add( new IncludingNode( textNodes.get( 0 ) ) );
+                }
+                else {
+                    OrNode orNode = new OrNode( buildOrNode( textNodes, orNodes ) );
+                    resultAndList.add( new IncludingNode( orNode ) );
+                }
+
+            }
+
+            for (QueryNode andNode : andNodes) {
+                resultAndList.addAll( andNode.getChildren() );
+            }
+
+            return new AndNode( resultAndList );
+        }
+        else {
+            return new OrNode( buildOrNode( textNodes, orNodes ) );
+        }
+
+    }
+
+    private List<QueryNode> buildOrNode( List<QueryNode> textNodes, List<QueryNode> orNodes ) {
+        List<QueryNode> resultOrList = new LinkedList<>();
+        // No AndNode available only TextNodes or OrNodes avail...
+        for (QueryNode textNode : textNodes) {
+            resultOrList.add( new IncludingNode( textNode ) );
+        }
+
+        for (QueryNode orNode : orNodes) {
+            resultOrList.addAll( orNode.getChildren() );
+        }
+        return resultOrList;
     }
 
 }
