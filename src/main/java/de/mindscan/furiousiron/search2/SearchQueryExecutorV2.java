@@ -46,7 +46,7 @@ import de.mindscan.furiousiron.wordlists.wordorder.TrigramPenaltyStrategy;
 /**
  * This is a different implementation using a different search strategy.  
  */
-public class QueryParser2 {
+public class SearchQueryExecutorV2 {
 
     private List<String> collectedTextTokens;
 

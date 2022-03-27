@@ -14,12 +14,12 @@ import de.mindscan.furiousiron.core.ast.CoreQueryNode;
 import de.mindscan.furiousiron.core.ast.TrigramsCoreNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 
-public class QueryParser2Test {
+public class SearchQueryExecutorV2Test {
 
     @Test
     public void testCompile_OneSearchQuerySearchTerm_expectTrigramsCoreNode() throws Exception {
         // arrange
-        QueryParser2 parser2 = new QueryParser2();
+        SearchQueryExecutorV2 parser2 = new SearchQueryExecutorV2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "searchquery" );
 
         // act
@@ -32,7 +32,7 @@ public class QueryParser2Test {
     @Test
     public void testCompile_TwoSearchQuerySearchTerms_expect() throws Exception {
         // arrange
-        QueryParser2 parser2 = new QueryParser2();
+        SearchQueryExecutorV2 parser2 = new SearchQueryExecutorV2();
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+searchquery +performance" );
 
         // act
@@ -50,7 +50,7 @@ public class QueryParser2Test {
     @Test
     public void testCompile_TwoSearchQuerySearchTermsMixedCase_expect() throws Exception {
         // arrange
-        QueryParser2 parser2 = new QueryParser2();
+        SearchQueryExecutorV2 parser2 = new SearchQueryExecutorV2();
         // problem is, we actually have mixed case here...
         QueryNode ast = parser2.compileSearchTreeFromQuery( "+SEARCHquery +PERFORMance" );
 
