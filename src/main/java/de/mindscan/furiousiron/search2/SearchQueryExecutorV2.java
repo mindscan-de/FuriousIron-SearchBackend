@@ -44,7 +44,10 @@ import de.mindscan.furiousiron.wordlists.WordlistCompilerFactory;
 import de.mindscan.furiousiron.wordlists.wordorder.TrigramPenaltyStrategy;
 
 /**
- * This is a different implementation using a different search strategy.  
+ * This is a different implementation using a different search strategy.
+ * 
+ * The Problem is the Collected TextTokens, is not yet part of the 
+ * new QueryParserV3. Idea is to replace the original QueryParser.
  */
 public class SearchQueryExecutorV2 {
 
@@ -208,6 +211,7 @@ public class SearchQueryExecutorV2 {
         QueryParser queryParser = new QueryParser();
         QueryNode parsedAST = queryParser.parseQuery( query );
 
+        // TODO: replace collection of text tokens by parsedAST, by reading the AST
         setCollectedTextTokens( queryParser.getCollectedTextTokens() );
 
         return parsedAST;
