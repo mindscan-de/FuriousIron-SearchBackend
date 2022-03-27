@@ -68,8 +68,8 @@ public class SearchRESTfulService {
             StopWatch optimizedResultStopwatch = StopWatch.createStarted();
 
             Search search = new Search( indexFolder );
-            SearchQueryExecutorV2 queryParser = new SearchQueryExecutorV2();
-            Collection<SearchResultCandidates> resultCandidates = queryParser.search( search, query );
+            SearchQueryExecutorV2 queryExecutor = new SearchQueryExecutorV2();
+            Collection<SearchResultCandidates> resultCandidates = queryExecutor.search( search, query );
 
             QueryResultJsonModel jsonResult = convertResultsToOutputModel( resultCandidates );
 

@@ -19,8 +19,8 @@ public class SearchQueryExecutorV2Test {
     @Test
     public void testCompile_OneSearchQuerySearchTerm_expectTrigramsCoreNode() throws Exception {
         // arrange
-        SearchQueryExecutorV2 parser2 = new SearchQueryExecutorV2();
-        QueryNode ast = parser2.compileSearchTreeFromQuery( "searchquery" );
+        SearchQueryExecutorV2 queryExecutor2 = new SearchQueryExecutorV2();
+        QueryNode ast = queryExecutor2.compileSearchTreeFromQuery( "searchquery" );
 
         // act
         CoreQueryNode result = CoreSearchCompiler.compile( ast );
@@ -32,8 +32,8 @@ public class SearchQueryExecutorV2Test {
     @Test
     public void testCompile_TwoSearchQuerySearchTerms_expect() throws Exception {
         // arrange
-        SearchQueryExecutorV2 parser2 = new SearchQueryExecutorV2();
-        QueryNode ast = parser2.compileSearchTreeFromQuery( "+searchquery +performance" );
+        SearchQueryExecutorV2 queryExecutor2 = new SearchQueryExecutorV2();
+        QueryNode ast = queryExecutor2.compileSearchTreeFromQuery( "+searchquery +performance" );
 
         // act
         CoreQueryNode result = CoreSearchCompiler.compile( ast );
@@ -50,9 +50,9 @@ public class SearchQueryExecutorV2Test {
     @Test
     public void testCompile_TwoSearchQuerySearchTermsMixedCase_expect() throws Exception {
         // arrange
-        SearchQueryExecutorV2 parser2 = new SearchQueryExecutorV2();
+        SearchQueryExecutorV2 queryExecutor2 = new SearchQueryExecutorV2();
         // problem is, we actually have mixed case here...
-        QueryNode ast = parser2.compileSearchTreeFromQuery( "+SEARCHquery +PERFORMance" );
+        QueryNode ast = queryExecutor2.compileSearchTreeFromQuery( "+SEARCHquery +PERFORMance" );
 
         // act
         CoreQueryNode result = CoreSearchCompiler.compile( ast );
