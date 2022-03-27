@@ -226,7 +226,7 @@ public class QueryParserV3Test {
     }
 
     @Test
-    public void testParseQuery_TwoWordsAND_expectOnlyASTSerializationOfFirstElement() {
+    public void testParseQuery_TwoWordsAND_expectASTSerializationContainsAndFirstSecond() {
         // Arrange
         QueryParserV3 queryParser = new QueryParserV3();
 
@@ -238,7 +238,7 @@ public class QueryParserV3Test {
     }
 
     @Test
-    public void testParseQuery_TwoWordsButNotSecond_expectOnlyASTSerializationOfFirstElement() {
+    public void testParseQuery_TwoWordsButNotSecond_expectASTSerializationAndFirstWithOutSecond() {
         // Arrange
         QueryParserV3 queryParser = new QueryParserV3();
 
@@ -247,6 +247,18 @@ public class QueryParserV3Test {
 
         // Assert
         assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'first' ] ] ], [ 'EXCLUDING', [ [ 'TEXT', 'second' ] ] ] ] ]" ) );
+    }
+
+    @Test
+    public void testParseQuery_TwoWordsButNotExactSecond_expectASTSerializationAndFirstWithoutSecond() {
+        // Arrange
+        QueryParserV3 queryParser = new QueryParserV3();
+
+        // Act
+        QueryNode result = queryParser.parseQuery( "+test -\"test\"" );
+
+        // Assert
+        assertThat( result.toString(), equalTo( "[ 'AND', [ [ 'INCLUDING', [ [ 'TEXT', 'test' ] ] ], [ 'EXCLUDING', [ [ 'EXACTTEXT', 'test' ] ] ] ] ]" ) );
     }
 
 }
