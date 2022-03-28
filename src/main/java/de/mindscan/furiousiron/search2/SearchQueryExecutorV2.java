@@ -212,6 +212,7 @@ public class SearchQueryExecutorV2 {
         QueryNode parsedAST = queryParser.parseQuery( query );
 
         // TODO: replace collection of text tokens by parsedAST, by reading the AST
+        // TODO: setCollectedTextTokens( parsedAST );
         setCollectedTextTokens( queryParser.getCollectedTextTokens() );
 
         return parsedAST;
@@ -221,6 +222,13 @@ public class SearchQueryExecutorV2 {
         return coreCandidatesDocumentIDs.stream()
                         .filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentId ) ) )
                         .collect( Collectors.toList() );
+    }
+
+    private void setCollectedTextTokens( QueryNode queryAST ) {
+        SearchQueryTextTokenCollector collector = new SearchQueryTextTokenCollector();
+
+        Collection<String> collected = collector.collectAllTextTokens( queryAST );
+        setCollectedTextTokens( List.copyOf( collected ) );
     }
 
     private void setCollectedTextTokens( List<String> collectedTextTokens ) {
