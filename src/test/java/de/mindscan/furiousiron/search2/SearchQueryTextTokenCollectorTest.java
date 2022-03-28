@@ -7,6 +7,8 @@ import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
 
+import de.mindscan.furiousiron.query.ast.EmptyNode;
+
 public class SearchQueryTextTokenCollectorTest {
 
     @Test
@@ -16,6 +18,18 @@ public class SearchQueryTextTokenCollectorTest {
 
         // act
         Collection<String> result = collector.collectAllTextTokens( null );
+
+        // assert
+        assertThat( result, empty() );
+    }
+
+    @Test
+    public void testCollectAllTextTokens_EmptyNode_returnsEmptyList() throws Exception {
+        // arrange
+        SearchQueryTextTokenCollector collector = new SearchQueryTextTokenCollector();
+
+        // act
+        Collection<String> result = collector.collectAllTextTokens( new EmptyNode() );
 
         // assert
         assertThat( result, empty() );

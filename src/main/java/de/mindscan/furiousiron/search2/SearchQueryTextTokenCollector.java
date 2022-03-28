@@ -28,6 +28,7 @@ package de.mindscan.furiousiron.search2;
 import java.util.Collection;
 import java.util.HashSet;
 
+import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 
 /**
@@ -38,7 +39,7 @@ public class SearchQueryTextTokenCollector {
     public Collection<String> collectAllTextTokens( QueryNode queryAST ) {
         Collection<String> result = new HashSet<String>();
 
-        if (queryAST == null) {
+        if (queryAST == null || queryAST instanceof EmptyNode) {
             return result;
         }
 
