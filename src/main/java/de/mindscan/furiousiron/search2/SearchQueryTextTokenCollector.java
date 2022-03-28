@@ -31,6 +31,7 @@ import java.util.function.Function;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.TextNode;
 
 /**
  * 
@@ -50,7 +51,18 @@ public class SearchQueryTextTokenCollector {
     }
 
     private void collectTextTokens( Function<String, Boolean> consumer, QueryNode queryAST ) {
+        if (queryAST == null) {
+            return;
+        }
+        else if (queryAST instanceof EmptyNode) {
+            return;
+        }
+        else if (queryAST instanceof TextNode) {
+            consumer.apply( queryAST.getContent().toLowerCase() );
+            return;
+        }
 
+        throw new RuntimeException( "Not yet implemented" );
     }
 
 }
