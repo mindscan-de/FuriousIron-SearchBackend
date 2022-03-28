@@ -54,15 +54,22 @@ public class SearchQueryTextTokenCollector {
         if (queryAST == null) {
             return;
         }
-        else if (queryAST instanceof EmptyNode) {
-            return;
-        }
-        else if (queryAST instanceof TextNode) {
-            consumer.apply( queryAST.getContent().toLowerCase() );
-            return;
-        }
 
-        throw new RuntimeException( "Not yet implemented" );
+        if (!queryAST.hasChildren()) {
+            if (queryAST instanceof EmptyNode) {
+                return;
+            }
+            else if (queryAST instanceof TextNode) {
+                consumer.apply( queryAST.getContent().toLowerCase() );
+                return;
+            }
+
+            throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
+        }
+        else {
+            // we have child nodes: we must iterate over them...
+            throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
+        }
     }
 
 }
