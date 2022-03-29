@@ -30,6 +30,8 @@ import java.util.HashSet;
 import java.util.function.Function;
 
 import de.mindscan.furiousiron.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.ExcludingNode;
+import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 
@@ -67,7 +69,19 @@ public class SearchQueryTextTokenCollector {
             throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
         }
         else {
-            // we have child nodes: we must iterate over them...
+            if (queryAST instanceof IncludingNode) {
+                Collection<QueryNode> c = queryAST.getChildren();
+                for (QueryNode queryNode : c) {
+                    collectTextTokens( consumer, queryNode );
+                }
+            }
+            else if (queryAST instanceof ExcludingNode) {
+                Collection<QueryNode> c = queryAST.getChildren();
+                for (QueryNode queryNode : c) {
+                    collectTextTokens( consumer, queryNode );
+                }
+            }
+
             throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
         }
     }
