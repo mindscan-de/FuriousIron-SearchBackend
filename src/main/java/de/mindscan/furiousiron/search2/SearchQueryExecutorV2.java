@@ -211,9 +211,7 @@ public class SearchQueryExecutorV2 {
         QueryParser queryParser = new QueryParser();
         QueryNode parsedAST = queryParser.parseQuery( query );
 
-        // TODO: replace collection of text tokens by parsedAST, by reading the AST
-        // TODO: setCollectedTextTokens( parsedAST );
-        setCollectedTextTokens( queryParser.getCollectedTextTokens() );
+        setCollectedTextTokens( parsedAST );
 
         return parsedAST;
     }

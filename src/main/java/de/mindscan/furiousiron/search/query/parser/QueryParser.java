@@ -64,8 +64,6 @@ import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
  */
 public class QueryParser implements SearchQueryParser {
 
-    private List<String> collectedTextTokens = new ArrayList<>();
-
     /**
      * Parses the given query String.
      * @param queryString the query string which needs to be parsed
@@ -76,15 +74,7 @@ public class QueryParser implements SearchQueryParser {
             return new EmptyNode();
         }
 
-        collectedTextTokens = new ArrayList<>();
         return parseQueryTokens( QueryTokenizerFactory.getTokenizer().tokenize( queryString ) );
-    }
-
-    /**
-     * @return the collectedTextTokens Text Values, (may contain phrases)
-     */
-    public List<String> getCollectedTextTokens() {
-        return collectedTextTokens;
     }
 
     QueryNode parseQueryTokens( List<QueryToken> tokenizedQuery ) {
@@ -155,12 +145,10 @@ public class QueryParser implements SearchQueryParser {
             // TODO: check whether this is a word, or whether it is a phrase, both are differently handled in the 
             //       search execution stage.
 
-            this.collectedTextTokens.add( queryToken.getTokenValue().toLowerCase() );
             return new ExactMatchingTextNode( queryToken.getTokenValue() );
         }
 
         // do the simple text query tokens second
-        this.collectedTextTokens.add( queryToken.getTokenValue().toLowerCase() );
         return new TextNode( queryToken.getTokenValue() );
     }
 
