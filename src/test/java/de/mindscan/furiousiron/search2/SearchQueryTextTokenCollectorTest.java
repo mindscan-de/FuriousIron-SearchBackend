@@ -3,6 +3,7 @@ package de.mindscan.furiousiron.search2;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collection;
 
@@ -120,6 +121,60 @@ public class SearchQueryTextTokenCollectorTest {
 
         // assert
         assertThat( result, hasSize( 2 ) );
+    }
+
+    @Test
+    public void testCollectAllTextTokens_unknownQueryNodeTypeWithoutChildren_ThrowsException() throws Exception {
+        // arrange
+        SearchQueryTextTokenCollector collector = new SearchQueryTextTokenCollector();
+        QueryNode unknownQueryNodeTypeWithNoChildren = new QueryNode() {
+            @Override
+            public boolean hasChildren() {
+                return false;
+            }
+
+            @Override
+            public String getContent() {
+                return null;
+            }
+
+            @Override
+            public Collection<QueryNode> getChildren() {
+                return null;
+            }
+        };
+
+        // act + assert
+        assertThrows( RuntimeException.class, () -> {
+            collector.collectAllTextTokens( unknownQueryNodeTypeWithNoChildren );
+        } );
+    }
+
+    @Test
+    public void testCollectAllTextTokens_unknownQueryNodeTypeWithChildren_ThrowsException() throws Exception {
+        // arrange
+        SearchQueryTextTokenCollector collector = new SearchQueryTextTokenCollector();
+        QueryNode unknownQueryNodeTypeWithChildren = new QueryNode() {
+            @Override
+            public boolean hasChildren() {
+                return true;
+            }
+
+            @Override
+            public String getContent() {
+                return null;
+            }
+
+            @Override
+            public Collection<QueryNode> getChildren() {
+                return null;
+            }
+        };
+
+        // act + assert
+        assertThrows( RuntimeException.class, () -> {
+            collector.collectAllTextTokens( unknownQueryNodeTypeWithChildren );
+        } );
     }
 
 }
