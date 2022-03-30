@@ -47,10 +47,6 @@ public class SearchQueryTextTokenCollector {
     public Collection<String> collectAllTextTokens( QueryNode queryAST ) {
         Collection<String> result = new HashSet<String>();
 
-        if (queryAST == null || queryAST instanceof EmptyNode) {
-            return result;
-        }
-
         collectTextTokens( result::add, queryAST );
 
         return result;
