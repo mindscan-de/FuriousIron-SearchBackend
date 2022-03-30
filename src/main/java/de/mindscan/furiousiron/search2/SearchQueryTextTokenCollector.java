@@ -29,9 +29,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.function.Function;
 
+import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
+import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
+import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 
@@ -53,36 +56,44 @@ public class SearchQueryTextTokenCollector {
     }
 
     private void collectTextTokens( Function<String, Boolean> consumer, QueryNode queryAST ) {
-        if (queryAST == null) {
+        if (queryAST == null || queryAST instanceof EmptyNode) {
             return;
         }
 
         if (!queryAST.hasChildren()) {
-            if (queryAST instanceof EmptyNode) {
-                return;
-            }
-            else if (queryAST instanceof TextNode) {
+            if (queryAST instanceof TextNode) {
                 consumer.apply( queryAST.getContent().toLowerCase() );
-                return;
             }
-
-            throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
+            else if (queryAST instanceof ExactMatchingTextNode) {
+                consumer.apply( queryAST.getContent().toLowerCase() );
+            }
+            else {
+                throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
+            }
         }
         else {
             if (queryAST instanceof IncludingNode) {
-                Collection<QueryNode> c = queryAST.getChildren();
-                for (QueryNode queryNode : c) {
-                    collectTextTokens( consumer, queryNode );
-                }
+                collectChildren( consumer, queryAST );
             }
             else if (queryAST instanceof ExcludingNode) {
-                Collection<QueryNode> c = queryAST.getChildren();
-                for (QueryNode queryNode : c) {
-                    collectTextTokens( consumer, queryNode );
-                }
+                collectChildren( consumer, queryAST );
             }
+            else if (queryAST instanceof AndNode) {
+                collectChildren( consumer, queryAST );
+            }
+            else if (queryAST instanceof OrNode) {
+                collectChildren( consumer, queryAST );
+            }
+            else {
+                throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
+            }
+        }
+    }
 
-            throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
+    private void collectChildren( Function<String, Boolean> consumer, QueryNode queryAST ) {
+        Collection<QueryNode> c = queryAST.getChildren();
+        for (QueryNode queryNode : c) {
+            collectTextTokens( consumer, queryNode );
         }
     }
 
