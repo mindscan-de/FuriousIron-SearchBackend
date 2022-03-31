@@ -75,7 +75,7 @@ public class QueryParserV3 implements SearchQueryParser {
 
     // +
     // -
-    // (
+    // ( - parenthesis not yet implemented. (not so easy either.)
     QueryNode parseSearchOperators() {
         if (tryType( SearchQueryTokenType.SEARCHTERM ) || tryType( SearchQueryTokenType.EXACTSEARCHTERM )) {
             return parseSearchTerminalTextTerm();
@@ -117,6 +117,7 @@ public class QueryParserV3 implements SearchQueryParser {
         return null;
     }
 
+    // TODO: extract this detail code into a SearchQueryTokenProcessor
     // -------------------
     // parser support code
     // -------------------    
