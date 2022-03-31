@@ -208,6 +208,8 @@ public class SearchQueryExecutorV2 {
     }
 
     public QueryNode compileSearchTreeFromQuery( String query ) {
+        // TODO: replace parser with V3 parser.
+        // TODO: make old QueryParser and related classes obsolete
         QueryParser queryParser = new QueryParser();
         QueryNode parsedAST = queryParser.parseQuery( query );
 
