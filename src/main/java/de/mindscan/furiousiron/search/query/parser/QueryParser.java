@@ -60,7 +60,9 @@ import de.mindscan.furiousiron.search.query.tokenizer.TextQueryToken;
  * Maybe later will go for a more sophisticated way, like using a parser generator, and write an 
  * EBNF grammar. But for the moment a handwritten parser looks like the way to go. Since i want 
  * later to describe properties of the source code I am searching for, I might need a different 
- * EBNF grammar anyway. 
+ * EBNF grammar anyway.
+ * 
+ * TODO: make this usage obsolete, if SearchQueyParserV3 is stable enough.
  */
 public class QueryParser implements SearchQueryParser {
 
