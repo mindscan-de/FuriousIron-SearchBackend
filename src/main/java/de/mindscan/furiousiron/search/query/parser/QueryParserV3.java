@@ -40,6 +40,8 @@ import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
+import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessor;
+import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessorImpl;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProvider;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenType;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokens;
@@ -51,7 +53,7 @@ import de.mindscan.furiousiron.search.query.tokenizer.SearchQueryTokenizerFactor
  */
 public class QueryParserV3 implements SearchQueryParser {
 
-    private SearchQueryTokenProvider tokens;
+    private SearchQueryTokenProcessor tokenProcessor;
 
     public QueryNode parseQuery( String queryString ) {
         if (queryString == null || queryString.isEmpty()) {
@@ -62,7 +64,7 @@ public class QueryParserV3 implements SearchQueryParser {
 
         List<QueryNode> astList = new ArrayList<>();
 
-        while (tokens.hasNext()) {
+        while (tokenProcessor.hasNext()) {
             astList.add( parseSearchOperators() );
         }
 
@@ -70,21 +72,22 @@ public class QueryParserV3 implements SearchQueryParser {
     }
 
     void setTokenProvider( SearchQueryTokenizer tokenizer, String queryString ) {
-        this.tokens = new SearchQueryTokenProvider( tokenizer.parse( queryString ) );
+        SearchQueryTokenProvider provider = new SearchQueryTokenProvider( tokenizer.parse( queryString ) );
+        this.tokenProcessor = new SearchQueryTokenProcessorImpl( provider );
     }
 
     // +
     // -
     // ( - parenthesis not yet implemented. (not so easy either.)
     QueryNode parseSearchOperators() {
-        if (tryType( SearchQueryTokenType.SEARCHTERM ) || tryType( SearchQueryTokenType.EXACTSEARCHTERM )) {
+        if (tokenProcessor.tryType( SearchQueryTokenType.SEARCHTERM ) || tokenProcessor.tryType( SearchQueryTokenType.EXACTSEARCHTERM )) {
             return parseSearchTerminalTextTerm();
         }
-        if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_PLUS )) {
+        if (tokenProcessor.tryAndAcceptToken( SearchQueryTokens.OPERATOR_PLUS )) {
             QueryNode postPlusAST = parseSearchOperators();
             return new AndNode( new IncludingNode( postPlusAST ) );
         }
-        else if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_MINUS )) {
+        else if (tokenProcessor.tryAndAcceptToken( SearchQueryTokens.OPERATOR_MINUS )) {
             QueryNode postMinusAST = parseSearchOperators();
             return new AndNode( new ExcludingNode( postMinusAST ) );
         }
@@ -95,15 +98,15 @@ public class QueryParserV3 implements SearchQueryParser {
 
     // Term
     QueryNode parseSearchTerminalTextTerm() {
-        if (tryAndAcceptType( SearchQueryTokenType.EXACTSEARCHTERM )) {
+        if (tokenProcessor.tryAndAcceptType( SearchQueryTokenType.EXACTSEARCHTERM )) {
             // TODO: if it is an exact Term, then it must not be followed by double colon
-            SearchQueryToken term = tokens.last();
+            SearchQueryToken term = tokenProcessor.last();
             return new ExactMatchingTextNode( term.getValue() );
         }
-        else if (tryAndAcceptType( SearchQueryTokenType.SEARCHTERM )) {
-            SearchQueryToken term = tokens.last();
+        else if (tokenProcessor.tryAndAcceptType( SearchQueryTokenType.SEARCHTERM )) {
+            SearchQueryToken term = tokenProcessor.last();
 
-            if (tryAndAcceptToken( SearchQueryTokens.OPERATOR_DOUBLECOLON )) {
+            if (tokenProcessor.tryAndAcceptToken( SearchQueryTokens.OPERATOR_DOUBLECOLON )) {
                 SearchQueryToken key = term;
                 QueryNode value = parseSearchTerminalTextTerm();
 
@@ -115,65 +118,6 @@ public class QueryParserV3 implements SearchQueryParser {
         }
 
         return null;
-    }
-
-    // TODO: extract this detail code into a SearchQueryTokenProcessor
-    // -------------------
-    // parser support code
-    // -------------------    
-
-    private boolean tryToken( SearchQueryToken acceptableToken ) {
-        if (acceptableToken == null) {
-            throw new IllegalArgumentException( "The acceptableToken must not be null." );
-        }
-
-        SearchQueryToken la = tokens.lookahead();
-        return acceptableToken.equals( la );
-    }
-
-    private boolean tryAndAcceptToken( SearchQueryToken acceptableToken ) {
-        if (acceptableToken == null) {
-            throw new IllegalArgumentException( " acceptableToken must not be null " );
-        }
-
-        SearchQueryToken la = tokens.lookahead();
-
-        if (!acceptableToken.equals( la )) {
-            return false;
-        }
-        tokens.next();
-
-        return true;
-    }
-
-    private boolean tryAndAcceptAsString( String acceptableString ) {
-        SearchQueryToken la = tokens.lookahead();
-
-        if (!la.getValue().equals( acceptableString )) {
-            return false;
-        }
-
-        tokens.next();
-
-        return true;
-    }
-
-    private boolean tryType( SearchQueryTokenType acceptableType ) {
-        SearchQueryToken la = tokens.lookahead();
-
-        return la.getType() == acceptableType;
-    }
-
-    private boolean tryAndAcceptType( SearchQueryTokenType acceptableType ) {
-        SearchQueryToken la = tokens.lookahead();
-
-        if (la.getType() != acceptableType) {
-            return false;
-        }
-
-        tokens.next();
-
-        return true;
     }
 
     // ----------------------------
