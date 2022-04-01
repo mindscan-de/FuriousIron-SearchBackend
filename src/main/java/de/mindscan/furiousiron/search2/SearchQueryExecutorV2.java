@@ -38,7 +38,7 @@ import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.rank.TtfIdfRanking;
 import de.mindscan.furiousiron.search.Search;
 import de.mindscan.furiousiron.search.SearchResultCandidates;
-import de.mindscan.furiousiron.search.query.parser.QueryParser;
+import de.mindscan.furiousiron.search.query.parser.QueryParserV3;
 import de.mindscan.furiousiron.util.StopWatch;
 import de.mindscan.furiousiron.wordlists.WordlistCompilerFactory;
 import de.mindscan.furiousiron.wordlists.wordorder.TrigramPenaltyStrategy;
@@ -208,9 +208,7 @@ public class SearchQueryExecutorV2 {
     }
 
     public QueryNode compileSearchTreeFromQuery( String query ) {
-        // TODO: replace parser with V3 parser.
-        // TODO: make old QueryParser and related classes obsolete
-        QueryParser queryParser = new QueryParser();
+        QueryParserV3 queryParser = new QueryParserV3();
         QueryNode parsedAST = queryParser.parseQuery( query );
 
         setCollectedTextTokens( parsedAST );
