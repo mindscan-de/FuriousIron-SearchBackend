@@ -78,7 +78,7 @@ public class QueryParserV3 implements SearchQueryParser {
 
     // +
     // -
-    // ( - parenthesis not yet implemented. (not so easy either.)
+    // TODO: '(',')' - parenthesis not yet implemented. (not so easy either.)
     QueryNode parseSearchOperators() {
         if (tokenProcessor.tryType( SearchQueryTokenType.SEARCHTERM ) || tokenProcessor.tryType( SearchQueryTokenType.EXACTSEARCHTERM )) {
             return parseSearchTerminalTextTerm();
