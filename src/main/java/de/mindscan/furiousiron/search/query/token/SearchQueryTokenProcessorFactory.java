@@ -26,6 +26,7 @@
 package de.mindscan.furiousiron.search.query.token;
 
 import de.mindscan.furiousiron.search.query.tokenizer.SearchQueryTokenizer;
+import de.mindscan.furiousiron.search.query.tokenizer.SearchQueryTokenizerFactory;
 
 /**
  * 
@@ -38,6 +39,10 @@ public class SearchQueryTokenProcessorFactory {
 
     public static SearchQueryTokenProcessor create( SearchQueryTokenizer tokenizer, String queryString ) {
         return create( new SearchQueryTokenProvider( tokenizer.parse( queryString ) ) );
+    }
+
+    public static SearchQueryTokenProcessor create( String queryString ) {
+        return create( SearchQueryTokenizerFactory.getTokenizer(), queryString );
     }
 
 }
