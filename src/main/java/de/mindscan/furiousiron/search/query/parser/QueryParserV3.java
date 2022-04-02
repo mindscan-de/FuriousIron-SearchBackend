@@ -41,12 +41,9 @@ import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessor;
-import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessorImpl;
-import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProvider;
+import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessorFactory;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenType;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokens;
-import de.mindscan.furiousiron.search.query.tokenizer.SearchQueryTokenizer;
-import de.mindscan.furiousiron.search.query.tokenizer.SearchQueryTokenizerFactory;
 
 /**
  * 
@@ -60,7 +57,7 @@ public class QueryParserV3 implements SearchQueryParser {
             return new EmptyNode();
         }
 
-        setTokenProvider( SearchQueryTokenizerFactory.getTokenizer(), queryString );
+        setTokenProcessor( SearchQueryTokenProcessorFactory.create( queryString ) );
 
         List<QueryNode> astList = new ArrayList<>();
 
@@ -71,9 +68,8 @@ public class QueryParserV3 implements SearchQueryParser {
         return compileASTList( astList );
     }
 
-    void setTokenProvider( SearchQueryTokenizer tokenizer, String queryString ) {
-        SearchQueryTokenProvider provider = new SearchQueryTokenProvider( tokenizer.parse( queryString ) );
-        this.tokenProcessor = new SearchQueryTokenProcessorImpl( provider );
+    void setTokenProcessor( SearchQueryTokenProcessor tokenProcessor ) {
+        this.tokenProcessor = tokenProcessor;
     }
 
     // +
