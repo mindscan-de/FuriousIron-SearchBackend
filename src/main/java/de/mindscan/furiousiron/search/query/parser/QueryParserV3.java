@@ -116,6 +116,8 @@ public class QueryParserV3 implements SearchQueryParser {
         return null;
     }
 
+    // TODO: extract an ASTTransformer, and compile that AST into a proper AND/OR/INCLUDE/EXCLUDE tree without list nodes
+
     // ----------------------------
     // compile the query from parts
     // ----------------------------    
