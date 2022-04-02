@@ -37,6 +37,7 @@ import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.QueryNodeListNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 
 /**
@@ -67,6 +68,9 @@ public class SearchQueryTextTokenCollector {
             else if (queryAST instanceof MetaDataTextNode) {
                 consumer.apply( queryAST.getContent().toLowerCase() );
             }
+            else if (queryAST instanceof QueryNodeListNode) {
+                // intentionally left blank
+            }
             else {
                 throw new RuntimeException( "Not yet implemented: " + queryAST.getClass().getSimpleName() );
             }
@@ -82,6 +86,9 @@ public class SearchQueryTextTokenCollector {
                 collectChildren( consumer, queryAST );
             }
             else if (queryAST instanceof OrNode) {
+                collectChildren( consumer, queryAST );
+            }
+            else if (queryAST instanceof QueryNodeListNode) {
                 collectChildren( consumer, queryAST );
             }
             else {
