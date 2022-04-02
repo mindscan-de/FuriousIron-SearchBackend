@@ -25,7 +25,6 @@
  */
 package de.mindscan.furiousiron.search.query.parser;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +37,7 @@ import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
+import de.mindscan.furiousiron.query.ast.QueryNodeListNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessor;
@@ -59,13 +59,13 @@ public class QueryParserV3 implements SearchQueryParser {
 
         setTokenProcessor( SearchQueryTokenProcessorFactory.create( queryString ) );
 
-        List<QueryNode> astList = new ArrayList<>();
+        QueryNodeListNode listNode = new QueryNodeListNode();
 
         while (tokenProcessor.hasNext()) {
-            astList.add( parseSearchOperators() );
+            listNode.addNode( parseSearchOperators() );
         }
 
-        return compileASTList( astList );
+        return compileASTList( listNode );
     }
 
     void setTokenProcessor( SearchQueryTokenProcessor tokenProcessor ) {
@@ -120,7 +120,9 @@ public class QueryParserV3 implements SearchQueryParser {
     // compile the query from parts
     // ----------------------------    
 
-    private QueryNode compileASTList( List<QueryNode> astList ) {
+    private QueryNode compileASTList( QueryNodeListNode listNode ) {
+        List<QueryNode> astList = listNode.getChildrenAsList();
+
         switch (astList.size()) {
             case 0:
                 return new EmptyNode();
