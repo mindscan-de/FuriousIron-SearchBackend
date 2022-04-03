@@ -48,7 +48,16 @@ import de.mindscan.furiousiron.search.query.token.SearchQueryTokens;
 public class QueryParserV3 implements SearchQueryParser {
 
     private SearchQueryTokenProcessor tokenProcessor;
-    private ASTTransformer listPhase = new QueryParserListToAndOrAstTransformer();
+
+    // AST Transformer ("List Phase") - which will compile QueryNodeListNodes into complete AND/OR trees. 
+    private ASTTransformer listPhase;
+
+    /**
+     * 
+     */
+    public QueryParserV3() {
+        this.listPhase = new QueryParserListToAndOrAstTransformer();
+    }
 
     public QueryNode parseQuery( String queryString ) {
         if (queryString == null || queryString.isEmpty()) {
@@ -57,9 +66,7 @@ public class QueryParserV3 implements SearchQueryParser {
 
         setTokenProcessor( SearchQueryTokenProcessorFactory.create( queryString ) );
 
-        QueryNodeListNode listNode = parseSearchTermList();
-
-        return listPhase.transform( listNode );
+        return listPhase.transform( parseSearchTermList() );
     }
 
     void setTokenProcessor( SearchQueryTokenProcessor tokenProcessor ) {
