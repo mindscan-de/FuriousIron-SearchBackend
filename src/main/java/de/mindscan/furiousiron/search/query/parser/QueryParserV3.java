@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import de.mindscan.furiousiron.query.ASTTransformer;
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
@@ -39,6 +40,7 @@ import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.QueryNodeListNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
+import de.mindscan.furiousiron.search.query.parser.transform.QueryParserListToAndOrAstTransformer;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessor;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessorFactory;
@@ -51,6 +53,7 @@ import de.mindscan.furiousiron.search.query.token.SearchQueryTokens;
 public class QueryParserV3 implements SearchQueryParser {
 
     private SearchQueryTokenProcessor tokenProcessor;
+    private ASTTransformer listPhase = new QueryParserListToAndOrAstTransformer();
 
     public QueryNode parseQuery( String queryString ) {
         if (queryString == null || queryString.isEmpty()) {
@@ -59,16 +62,16 @@ public class QueryParserV3 implements SearchQueryParser {
 
         setTokenProcessor( SearchQueryTokenProcessorFactory.create( queryString ) );
 
-        QueryNodeListNode listNode = parseAllSearchTerms();
+        QueryNodeListNode listNode = parseSearchTermList();
 
-        return compileASTList( listNode );
+        return listPhase.transform( compileASTList( listNode ) );
     }
 
     void setTokenProcessor( SearchQueryTokenProcessor tokenProcessor ) {
         this.tokenProcessor = tokenProcessor;
     }
 
-    QueryNodeListNode parseAllSearchTerms() {
+    QueryNodeListNode parseSearchTermList() {
         QueryNodeListNode listNode = new QueryNodeListNode();
 
         while (tokenProcessor.hasNext()) {
