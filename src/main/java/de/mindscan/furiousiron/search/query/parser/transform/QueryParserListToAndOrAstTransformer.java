@@ -48,6 +48,10 @@ public class QueryParserListToAndOrAstTransformer implements ASTTransformer {
      */
     @Override
     public QueryNode transform( QueryNode input ) {
+        if (input instanceof QueryNodeListNode) {
+            return compileASTList( (QueryNodeListNode) input );
+        }
+
         return input;
     }
 
