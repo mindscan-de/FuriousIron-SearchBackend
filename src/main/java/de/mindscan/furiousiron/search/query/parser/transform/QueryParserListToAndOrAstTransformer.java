@@ -39,7 +39,12 @@ import de.mindscan.furiousiron.query.ast.QueryNodeListNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
 
 /**
+ * Implementation of an AST-Transformer.
  * 
+ * This ASTTransformer implementation will combine / calculate the AND OR tree from the terms, 
+ * which do not have a correct order, but an order which the user selected. Therefore we don't
+ * want to overly complicate the parser nor we want to solve this complex problem in the parser
+ * itself.  
  */
 public class QueryParserListToAndOrAstTransformer implements ASTTransformer {
 

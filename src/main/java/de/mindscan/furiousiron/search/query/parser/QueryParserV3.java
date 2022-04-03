@@ -66,6 +66,10 @@ public class QueryParserV3 implements SearchQueryParser {
 
         setTokenProcessor( SearchQueryTokenProcessorFactory.create( queryString ) );
 
+        // TODO: actually it 
+        // 1.: parses the query and 
+        // 2.: then solves the AST and replaces all ListNodes 
+        // 3.: this phases should be split and should be outside of this parser. The AST transformation should not be here or configured outside. 
         return listPhase.transform( parseSearchTermList() );
     }
 
