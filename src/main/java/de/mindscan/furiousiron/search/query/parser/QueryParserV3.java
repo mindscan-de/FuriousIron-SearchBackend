@@ -59,17 +59,22 @@ public class QueryParserV3 implements SearchQueryParser {
 
         setTokenProcessor( SearchQueryTokenProcessorFactory.create( queryString ) );
 
-        QueryNodeListNode listNode = new QueryNodeListNode();
-
-        while (tokenProcessor.hasNext()) {
-            listNode.addNode( parseSearchOperators() );
-        }
+        QueryNodeListNode listNode = parseAllSearchTerms();
 
         return compileASTList( listNode );
     }
 
     void setTokenProcessor( SearchQueryTokenProcessor tokenProcessor ) {
         this.tokenProcessor = tokenProcessor;
+    }
+
+    QueryNodeListNode parseAllSearchTerms() {
+        QueryNodeListNode listNode = new QueryNodeListNode();
+
+        while (tokenProcessor.hasNext()) {
+            listNode.addNode( parseSearchOperators() );
+        }
+        return listNode;
     }
 
     // +
