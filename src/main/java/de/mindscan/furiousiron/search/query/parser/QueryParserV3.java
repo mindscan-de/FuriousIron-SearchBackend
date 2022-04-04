@@ -43,6 +43,16 @@ import de.mindscan.furiousiron.search.query.token.SearchQueryTokenType;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokens;
 
 /**
+ * This class implements a simple parser for the search query string. 
+ * 
+ * It will compile a query string into an query AST representation. The same AST will be 
+ * later used for ranking and for calculations of the query strategy.
+ * 
+ * This thing is using classic parser stuff
+ * - use a lexxer/tokenizer to create lexical tokens of the input (in our case a query string)
+ * - parse the lexxed tokens and build an AST from it (using a higher level "token processor")
+ * - after first pass (reading a simple AST with groups) it gets translated into "and"- and "or"-nodes
+ * - this AST is later interpreted and used to build search execution strategies, and filter strategies and so on.
  * 
  */
 public class QueryParserV3 implements SearchQueryParser {
