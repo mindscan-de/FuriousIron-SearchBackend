@@ -45,7 +45,7 @@ import de.mindscan.furiousiron.search.SearchResultCandidates;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultItemJsonModel;
 import de.mindscan.furiousiron.search.outputmodel.QueryResultJsonModel;
 import de.mindscan.furiousiron.search.query.executor.QueryExecutor;
-import de.mindscan.furiousiron.search.query.parser.QueryParser;
+import de.mindscan.furiousiron.search.query.parser.QueryParserV3;
 import de.mindscan.furiousiron.search2.SearchQueryExecutorV2;
 import de.mindscan.furiousiron.util.StopWatch;
 
@@ -89,7 +89,7 @@ public class SearchRESTfulService {
             StopWatch unoptimizedResultStopWatch = StopWatch.createStarted();
 
             Search search = new Search( indexFolder );
-            QueryParser queryParser = new QueryParser();
+            QueryParserV3 queryParser = new QueryParserV3();
             QueryNode parsedAST = queryParser.parseQuery( query.toLowerCase() );
             Collection<SearchResultCandidates> resultCandidates = QueryExecutor.execute( search, parsedAST );
 
