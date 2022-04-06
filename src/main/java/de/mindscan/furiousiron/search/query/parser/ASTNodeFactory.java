@@ -25,6 +25,7 @@
  */
 package de.mindscan.furiousiron.search.query.parser;
 
+import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
@@ -46,6 +47,10 @@ public class ASTNodeFactory {
 
     public static QueryNode createMetaDataTextNode( SearchQueryToken key, QueryNode value ) {
         return new MetaDataTextNode( key.getValue(), value.getContent() );
+    }
+
+    public static QueryNode createEmptyNode() {
+        return new EmptyNode();
     }
 
 }

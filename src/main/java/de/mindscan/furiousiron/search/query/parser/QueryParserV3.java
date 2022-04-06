@@ -27,7 +27,6 @@ package de.mindscan.furiousiron.search.query.parser;
 
 import de.mindscan.furiousiron.query.ASTTransformer;
 import de.mindscan.furiousiron.query.ast.AndNode;
-import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
@@ -68,7 +67,7 @@ public class QueryParserV3 implements SearchQueryParser {
 
     public QueryNode parseQuery( String queryString ) {
         if (queryString == null || queryString.isEmpty()) {
-            return new EmptyNode();
+            return ASTNodeFactory.createEmptyNode();
         }
 
         setTokenProcessor( SearchQueryTokenProcessorFactory.create( queryString ) );
@@ -137,7 +136,7 @@ public class QueryParserV3 implements SearchQueryParser {
             return ASTNodeFactory.createTextNode( current );
         }
 
-        return new EmptyNode();
+        return ASTNodeFactory.createEmptyNode();
     }
 
 }
