@@ -28,7 +28,6 @@ package de.mindscan.furiousiron.search.query.parser;
 import de.mindscan.furiousiron.query.ASTTransformer;
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
-import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.QueryNodeListNode;
 import de.mindscan.furiousiron.search.query.parser.transform.QueryParserListToAndOrAstTransformer;
@@ -76,14 +75,14 @@ public class QueryParserV3 implements SearchQueryParser {
         // 1.: parses the query and 
         // 2.: then solves the AST and replaces all ListNodes 
         // 3.: this phases should be split and should be outside of this parser. The AST transformation should not be here or configured outside. 
-        return listPhase.transform( parseSearchTermList() );
+        return listPhase.transform( parseSearchTermListRoot() );
     }
 
     void setTokenProcessor( SearchQueryTokenProcessor tokenProcessor ) {
         this.tokenProcessor = tokenProcessor;
     }
 
-    QueryNodeListNode parseSearchTermList() {
+    QueryNodeListNode parseSearchTermListRoot() {
         QueryNodeListNode listNode = new QueryNodeListNode();
 
         while (tokenProcessor.hasNext()) {
@@ -101,7 +100,7 @@ public class QueryParserV3 implements SearchQueryParser {
         }
         if (tokenProcessor.tryAndAcceptToken( SearchQueryTokens.OPERATOR_PLUS )) {
             QueryNode postPlusAST = parseSearchOperators();
-            return new AndNode( new IncludingNode( postPlusAST ) );
+            return ASTNodeFactory.createAndIncludingNode( postPlusAST );
         }
         else if (tokenProcessor.tryAndAcceptToken( SearchQueryTokens.OPERATOR_MINUS )) {
             QueryNode postMinusAST = parseSearchOperators();
