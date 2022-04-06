@@ -28,13 +28,10 @@ package de.mindscan.furiousiron.search.query.parser;
 import de.mindscan.furiousiron.query.ASTTransformer;
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
-import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
-import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.QueryNodeListNode;
-import de.mindscan.furiousiron.query.ast.TextNode;
 import de.mindscan.furiousiron.search.query.parser.transform.QueryParserListToAndOrAstTransformer;
 import de.mindscan.furiousiron.search.query.token.SearchQueryToken;
 import de.mindscan.furiousiron.search.query.token.SearchQueryTokenProcessor;
@@ -118,28 +115,26 @@ public class QueryParserV3 implements SearchQueryParser {
 
     // ---------------------------------------------------------------------------------------------------
     // SearchTerminalTextTerm :=
-    //    {ExactMatchingTextNode} term=EXACTSEARCHTERM | 
-    //    {TextNode} term=SEARCHTERM ( {MetaDataTextNode} =>?':' key=current value=SearchTerminalTextTerm ) )
+    //    {ExactMatchingTextNode} current=EXACTSEARCHTERM | 
+    //    {TextNode} current=SEARCHTERM ( {MetaDataTextNode} =>?':' key=current value=SearchTerminalTextTerm ) )
     // ---------------------------------------------------------------------------------------------------
 
     QueryNode parseSearchTerminalTextTerm() {
         if (tokenProcessor.tryAndAcceptType( SearchQueryTokenType.EXACTSEARCHTERM )) {
-            // TODO: if it is an exact Term, then it must not be followed by double colon
-            SearchQueryToken term = tokenProcessor.last();
-            return new ExactMatchingTextNode( term.getValue() );
+            SearchQueryToken current = tokenProcessor.last();
+            return ASTNodeFactory.createExactMatchingTextNode( current );
         }
         else if (tokenProcessor.tryAndAcceptType( SearchQueryTokenType.SEARCHTERM )) {
-            SearchQueryToken term = tokenProcessor.last();
+            SearchQueryToken current = tokenProcessor.last();
 
             if (tokenProcessor.tryAndAcceptToken( SearchQueryTokens.OPERATOR_DOUBLECOLON )) {
-                SearchQueryToken key = term;
+                SearchQueryToken key = current;
                 QueryNode value = parseSearchTerminalTextTerm();
 
-                // TODO: maybe rewrite this MetaDataTextNode-Value with a QueryNode Type.
-                return new MetaDataTextNode( key.getValue(), value.getContent() );
+                return ASTNodeFactory.createMetaDataTextNode( key, value );
             }
 
-            return new TextNode( term.getValue() );
+            return ASTNodeFactory.createTextNode( current );
         }
 
         return new EmptyNode();
