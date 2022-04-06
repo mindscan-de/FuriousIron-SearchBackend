@@ -44,11 +44,13 @@ import java.util.Set;
 public class TopKScoreList {
 
     private final int maxElementsInList;
+    private final int lastValidIndex;
     private final ArrayList<Integer> backingArrayList;
     private final Set<Integer> backingSet;
 
     public TopKScoreList( int maxElementsInList ) {
         this.maxElementsInList = maxElementsInList;
+        this.lastValidIndex = maxElementsInList - 1;
         this.backingSet = new HashSet<>();
         this.backingArrayList = new ArrayList<>();
         for (int i = 0; i < maxElementsInList; i++) {
@@ -57,8 +59,6 @@ public class TopKScoreList {
     }
 
     public boolean isCandidateTopK( int score ) {
-        int lastValidIndex = maxElementsInList - 1;
-
         if (lastValidIndex < 0) {
             return false;
         }
