@@ -59,6 +59,7 @@ public class TopKScoreList {
     }
 
     public boolean isCandidateTopK( int score ) {
+        // TODO:  MAYBE we simply don't support maxElementsInList == 0 in constructor using an IllegalArgumentException
         if (lastValidIndex < 0) {
             return false;
         }
