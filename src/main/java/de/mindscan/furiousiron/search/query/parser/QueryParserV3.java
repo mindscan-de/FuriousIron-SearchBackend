@@ -137,7 +137,7 @@ public class QueryParserV3 implements SearchQueryParser {
             return new TextNode( term.getValue() );
         }
 
-        return null;
+        return new EmptyNode();
     }
 
 }
