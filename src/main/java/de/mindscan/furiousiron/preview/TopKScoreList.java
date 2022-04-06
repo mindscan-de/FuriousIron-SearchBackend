@@ -57,7 +57,13 @@ public class TopKScoreList {
     }
 
     public boolean isCandidateTopK( int score ) {
-        if (backingArrayList.get( maxElementsInList - 1 ) > score) {
+        int lastValidIndex = maxElementsInList - 1;
+
+        if (lastValidIndex < 0) {
+            return false;
+        }
+
+        if (backingArrayList.get( lastValidIndex ) > score) {
             return false;
         }
 
@@ -65,7 +71,7 @@ public class TopKScoreList {
             return true;
         }
 
-        if (backingArrayList.get( maxElementsInList - 1 ) < score) {
+        if (backingArrayList.get( lastValidIndex ) < score) {
             // find position to insert...
             for (int i = 0; i < backingArrayList.size(); i++) {
                 if (backingArrayList.get( i ) < score) {
