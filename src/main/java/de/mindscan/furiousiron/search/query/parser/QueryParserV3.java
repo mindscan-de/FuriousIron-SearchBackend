@@ -116,7 +116,12 @@ public class QueryParserV3 implements SearchQueryParser {
         }
     }
 
-    // Term
+    // ---------------------------------------------------------------------------------------------------
+    // SearchTerminalTextTerm :=
+    //    {ExactMatchingTextNode} term=EXACTSEARCHTERM | 
+    //    {TextNode} term=SEARCHTERM ( {MetaDataTextNode} =>?':' key=current value=SearchTerminalTextTerm ) )
+    // ---------------------------------------------------------------------------------------------------
+
     QueryNode parseSearchTerminalTextTerm() {
         if (tokenProcessor.tryAndAcceptType( SearchQueryTokenType.EXACTSEARCHTERM )) {
             // TODO: if it is an exact Term, then it must not be followed by double colon
