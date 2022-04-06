@@ -112,7 +112,7 @@ public class QueryParserV3 implements SearchQueryParser {
     // ---------------------------------------------------------------------------------------------------
     // SearchTerminalTextTerm :=
     //    {ExactMatchingTextNode} current=EXACTSEARCHTERM | 
-    //    {TextNode} current=SEARCHTERM ( {MetaDataTextNode} =>?':' key=current value=SearchTerminalTextTerm ) )
+    //    {TextNode} current=SEARCHTERM ( ':'? => {MetaDataTextNode} key=current value=SearchTerminalTextTerm ) )
     // ---------------------------------------------------------------------------------------------------
 
     QueryNode parseSearchTerminalTextTerm() {
