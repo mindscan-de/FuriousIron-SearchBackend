@@ -109,4 +109,30 @@ public class TopKScoreListTest {
         assertThat( result, equalTo( false ) );
     }
 
+    @Test
+    public void testIsCandidateTopK_OneWithTwoInteractions11_returnsTrueOnSecond() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+
+        // act
+        scoreList.isCandidateTopK( 1 );
+        boolean result = scoreList.isCandidateTopK( 1 );
+
+        // assert
+        assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testIsCandidateTopK_OneWithTwoInteractions22_returnsTrueOnSecond() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+
+        // act
+        scoreList.isCandidateTopK( 1 );
+        boolean result = scoreList.isCandidateTopK( 1 );
+
+        // assert
+        assertThat( result, equalTo( true ) );
+    }
+
 }

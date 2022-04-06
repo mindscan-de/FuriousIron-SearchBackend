@@ -36,7 +36,7 @@ import java.util.Set;
  * and in case a new candidate is found, it will update its current top k score and drop the lowest score 
  * from the current backing set. 
  * 
- * That will move the goalpost higher and higher, so less and less times the insertion is happening. Anyhow
+ * That will move the goal post higher and higher, so less and less times the insertion is happening. Anyhow
  * this should have a good enough performance and it avoids later calculation of the top k score. We want to
  * avoid storing and processing data, which we would discard anyways.  
  * 
@@ -63,10 +63,13 @@ public class TopKScoreList {
             return false;
         }
 
+        // it is more likely that a score is not high enough, 
+        // therefore this operation will stop any further useless calculations earlier, even though it is more complex
         if (backingArrayList.get( lastValidIndex ) > score) {
             return false;
         }
 
+        // if we know this particular score, we are complete
         if (backingSet.contains( score )) {
             return true;
         }
@@ -83,6 +86,8 @@ public class TopKScoreList {
             }
         }
 
+        // this line will actually never been reached / maybe we don't need the last
+        // if (backingArrayList.get( lastValidIndex ) < score) comparison at all..
         return true;
     }
 
