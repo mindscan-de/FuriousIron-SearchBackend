@@ -28,6 +28,7 @@ package de.mindscan.furiousiron.search.query.parser;
 import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
+import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
 import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
@@ -57,6 +58,10 @@ public class ASTNodeFactory {
 
     public static QueryNode createAndIncludingNode( QueryNode astNode ) {
         return new AndNode( new IncludingNode( astNode ) );
+    }
+
+    public static QueryNode createAndExcludingNode( QueryNode astNode ) {
+        return new AndNode( new ExcludingNode( astNode ) );
     }
 
 }

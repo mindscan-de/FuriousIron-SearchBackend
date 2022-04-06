@@ -26,8 +26,6 @@
 package de.mindscan.furiousiron.search.query.parser;
 
 import de.mindscan.furiousiron.query.ASTTransformer;
-import de.mindscan.furiousiron.query.ast.AndNode;
-import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.QueryNodeListNode;
 import de.mindscan.furiousiron.search.query.parser.transform.QueryParserListToAndOrAstTransformer;
@@ -104,7 +102,7 @@ public class QueryParserV3 implements SearchQueryParser {
         }
         else if (tokenProcessor.tryAndAcceptToken( SearchQueryTokens.OPERATOR_MINUS )) {
             QueryNode postMinusAST = parseSearchOperators();
-            return new AndNode( new ExcludingNode( postMinusAST ) );
+            return ASTNodeFactory.createAndExcludingNode( postMinusAST );
         }
         else {
             throw new RuntimeException( "Not Yet implemented." );
