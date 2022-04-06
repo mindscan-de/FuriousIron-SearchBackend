@@ -70,4 +70,43 @@ public class TopKScoreListTest {
         assertThat( result, equalTo( true ) );
     }
 
+    @Test
+    public void testIsCandidateTopK_OneWithTwoInteractions12_returnsTrueOnFirst() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+
+        // act
+        boolean result = scoreList.isCandidateTopK( 1 );
+        scoreList.isCandidateTopK( 2 );
+
+        // assert
+        assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testIsCandidateTopK_OneWithTwoInteractions12_returnsTrueOnSecond() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+
+        // act
+        scoreList.isCandidateTopK( 1 );
+        boolean result = scoreList.isCandidateTopK( 2 );
+
+        // assert
+        assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testIsCandidateTopK_OneWithTwoInteractions21_returnsFalseOnSecond() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+
+        // act
+        scoreList.isCandidateTopK( 2 );
+        boolean result = scoreList.isCandidateTopK( 1 );
+
+        // assert
+        assertThat( result, equalTo( false ) );
+    }
+
 }
