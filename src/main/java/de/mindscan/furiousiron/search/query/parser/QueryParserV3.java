@@ -73,14 +73,14 @@ public class QueryParserV3 implements SearchQueryParser {
         // 1.: parses the query and 
         // 2.: then solves the AST and replaces all ListNodes 
         // 3.: this phases should be split and should be outside of this parser. The AST transformation should not be here or configured outside. 
-        return listPhase.transform( parseSearchTermListRoot() );
+        return listPhase.transform( parseSearchTermsRoot() );
     }
 
     void setTokenProcessor( SearchQueryTokenProcessor tokenProcessor ) {
         this.tokenProcessor = tokenProcessor;
     }
 
-    QueryNodeListNode parseSearchTermListRoot() {
+    QueryNodeListNode parseSearchTermsRoot() {
         QueryNodeListNode listNode = new QueryNodeListNode();
 
         while (tokenProcessor.hasNext()) {
