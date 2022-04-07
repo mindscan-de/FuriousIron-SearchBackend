@@ -60,41 +60,46 @@ public class WordPreview {
         int maxDocumentsToAnalyze = Math.min( queryDocumentIds.size(), MAX_DOCUMENTS_TO_ANALYZE );
 
         for (String documentIdMD5 : queryDocumentIds.subList( 0, maxDocumentsToAnalyze )) {
-            TopKScoreList topKScoreList = new TopKScoreList( MAX_K_SCORES );
-            TreeMap<Integer, String> lineContents = new TreeMap<>();
-            TreeMap<Integer, Integer> lineScores = new TreeMap<>();
-
-            int currentLineNumber = 0;
-            for (String lineContent : search.getDocumentContentLines( documentIdMD5 )) {
-
-                currentLineNumber++;
-
-                String shortenedLineContent = lineContent;
-                if (lineContent.length() > 512) {
-                    shortenedLineContent = lineContent.substring( 0, 509 ) + "...";
-                }
-
-                Collection<String> filteredLineTrigrams = SimpleWordUtils.getTrigramsFromLineFiltered( shortenedLineContent.toLowerCase(), theTrigrams );
-
-                // avoid littering the preview with worthless lines, which yield a score of zero 
-                if (filteredLineTrigrams.isEmpty()) {
-                    continue;
-                }
-
-                int currentLineScore = calculateLineScore( filteredLineTrigrams );
-
-                // only further process lines, which have a (currently) good enough score and 
-                // move the goal post in case of a new good score - this reduces compute and memory usage in later stages
-                if (topKScoreList.isCandidateTopK( currentLineScore )) {
-                    lineContents.put( currentLineNumber, shortenedLineContent );
-                    lineScores.put( currentLineNumber, currentLineScore );
-                }
-            }
-
-            documentLinePreviews.put( documentIdMD5, getTopScoredLinesInDocument( lineContents, lineScores, topKScoreList.getSet() ) );
+            List<String> documentContent = search.getDocumentContentLines( documentIdMD5 );
+            documentLinePreviews.put( documentIdMD5, extractTopScoringLinesForDocument( documentContent ) );
         }
 
         return documentLinePreviews;
+    }
+
+    private Map<Integer, String> extractTopScoringLinesForDocument( List<String> documentContent ) {
+        TopKScoreList topKScoreList = new TopKScoreList( MAX_K_SCORES );
+        TreeMap<Integer, String> lineContents = new TreeMap<>();
+        TreeMap<Integer, Integer> lineScores = new TreeMap<>();
+
+        int currentLineNumber = 0;
+        for (String lineContent : documentContent) {
+
+            currentLineNumber++;
+
+            String shortenedLineContent = lineContent;
+            if (lineContent.length() > 512) {
+                shortenedLineContent = lineContent.substring( 0, 509 ) + "...";
+            }
+
+            Collection<String> filteredLineTrigrams = SimpleWordUtils.getTrigramsFromLineFiltered( shortenedLineContent.toLowerCase(), theTrigrams );
+
+            // avoid littering the preview with worthless lines, which yield a score of zero 
+            if (filteredLineTrigrams.isEmpty()) {
+                continue;
+            }
+
+            int currentLineScore = calculateLineScore( filteredLineTrigrams );
+
+            // only further process lines, which have a (currently) good enough score and 
+            // move the goal post in case of a new good score - this reduces compute and memory usage in later stages
+            if (topKScoreList.isCandidateTopK( currentLineScore )) {
+                lineContents.put( currentLineNumber, shortenedLineContent );
+                lineScores.put( currentLineNumber, currentLineScore );
+            }
+        }
+
+        return filterTopScoredLines( lineContents, lineScores, topKScoreList.getSet() );
     }
 
     private int calculateLineScore( Collection<String> filteredLineTrigrams ) {
@@ -102,7 +107,7 @@ public class WordPreview {
         return filteredLineTrigrams.size();
     }
 
-    private Map<Integer, String> getTopScoredLinesInDocument( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScores,
+    private Map<Integer, String> filterTopScoredLines( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScores,
                     Set<Integer> topKScores ) {
         Map<Integer, String> contentResult = new TreeMap<>();
 
