@@ -112,11 +112,11 @@ public class WordPreview {
         return filteredLineTrigrams.size();
     }
 
-    private Map<Integer, String> filterTopScoredLines( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScores, Set<Integer> topKScores ) {
+    private Map<Integer, String> filterTopScoredLines( Map<Integer, String> lineContents, Map<Integer, Integer> scores, Set<Integer> topK ) {
         Map<Integer, String> contentResult = new TreeMap<>();
 
-        for (Entry<Integer, Integer> entry : lineScores.entrySet()) {
-            if (topKScores.contains( entry.getValue() )) {
+        for (Entry<Integer, Integer> entry : scores.entrySet()) {
+            if (topK.contains( entry.getValue() )) {
                 Integer line = entry.getKey();
                 contentResult.put( line, lineContents.get( line ) );
             }
