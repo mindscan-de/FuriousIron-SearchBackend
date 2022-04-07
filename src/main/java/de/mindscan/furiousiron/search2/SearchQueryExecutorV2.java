@@ -189,8 +189,6 @@ public class SearchQueryExecutorV2 {
     }
 
     private SearchResultCandidates convertToSearchResultCandidate( Search search, String documentId ) {
-        // ATTN: don't like it but let's leave it like this until it works.
-        // This is currently a proof of concept.
         SearchResultCandidates result = new SearchResultCandidates( documentId );
         result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
 
@@ -198,8 +196,6 @@ public class SearchQueryExecutorV2 {
     }
 
     private SearchResultCandidates convertToSearchResultCandidate( Search search, String documentId, Map<String, Map<Integer, String>> documentPreviews ) {
-        // ATTN: don't like it but let's leave it like this until it works.
-        // This is currently a proof of concept.
         SearchResultCandidates result = new SearchResultCandidates( documentId );
         result.loadFrom( search.getMetaDataCache(), search.getWordlistCache() );
         result.setPreview( documentPreviews.get( documentId ) );
