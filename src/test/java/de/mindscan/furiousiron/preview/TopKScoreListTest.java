@@ -3,6 +3,7 @@ package de.mindscan.furiousiron.preview;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 
 import java.util.Set;
 
@@ -97,6 +98,20 @@ public class TopKScoreListTest {
     }
 
     @Test
+    public void testGetSet_OneWithTwoInteractions12_returnsTwo() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+        scoreList.isCandidateTopK( 1 );
+        scoreList.isCandidateTopK( 2 );
+
+        // act
+        Set<Integer> result = scoreList.getSet();
+
+        // assert
+        assertThat( result, contains( 2 ) );
+    }
+
+    @Test
     public void testIsCandidateTopK_OneWithTwoInteractions21_returnsFalseOnSecond() throws Exception {
         // arrange
         TopKScoreList scoreList = new TopKScoreList( 1 );
@@ -107,6 +122,20 @@ public class TopKScoreListTest {
 
         // assert
         assertThat( result, equalTo( false ) );
+    }
+
+    @Test
+    public void testGetSet_OneWithTwoInteractions21_returnsTwo() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+        scoreList.isCandidateTopK( 2 );
+        scoreList.isCandidateTopK( 1 );
+
+        // act
+        Set<Integer> result = scoreList.getSet();
+
+        // assert
+        assertThat( result, contains( 2 ) );
     }
 
     @Test
@@ -123,16 +152,44 @@ public class TopKScoreListTest {
     }
 
     @Test
+    public void testGetSet_OneWithTwoInteractions11_returnsOne() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+        scoreList.isCandidateTopK( 1 );
+        scoreList.isCandidateTopK( 1 );
+
+        // act
+        Set<Integer> result = scoreList.getSet();
+
+        // assert
+        assertThat( result, contains( 1 ) );
+    }
+
+    @Test
     public void testIsCandidateTopK_OneWithTwoInteractions22_returnsTrueOnSecond() throws Exception {
         // arrange
         TopKScoreList scoreList = new TopKScoreList( 1 );
 
         // act
-        scoreList.isCandidateTopK( 1 );
-        boolean result = scoreList.isCandidateTopK( 1 );
+        scoreList.isCandidateTopK( 2 );
+        boolean result = scoreList.isCandidateTopK( 2 );
 
         // assert
         assertThat( result, equalTo( true ) );
+    }
+
+    @Test
+    public void testGetSet_OneWithTwoInteractions22_returnsTwo() throws Exception {
+        // arrange
+        TopKScoreList scoreList = new TopKScoreList( 1 );
+        scoreList.isCandidateTopK( 2 );
+        scoreList.isCandidateTopK( 2 );
+
+        // act
+        Set<Integer> result = scoreList.getSet();
+
+        // assert
+        assertThat( result, contains( 2 ) );
     }
 
 }
