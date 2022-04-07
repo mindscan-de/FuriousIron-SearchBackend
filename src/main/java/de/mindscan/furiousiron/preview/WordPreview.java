@@ -49,6 +49,11 @@ public class WordPreview {
     private final int MAX_K_SCORES = 5;
     private final int MAX_DOCUMENTS_TO_ANALYZE = 35;
 
+    private final String CLIPPING_INDICATOR = "...";
+
+    private final int MAX_LINE_LENGTH = 512;
+    private final int MAX_LINE_LENGTH_CLIPPED = MAX_LINE_LENGTH - CLIPPING_INDICATOR.length();
+
     public WordPreview( QueryNode ast, Collection<String> theTrigrams ) {
         this.ast = ast;
         this.theTrigrams = theTrigrams;
@@ -78,8 +83,8 @@ public class WordPreview {
             currentLineNumber++;
 
             String shortenedLineContent = lineContent;
-            if (lineContent.length() > 512) {
-                shortenedLineContent = lineContent.substring( 0, 509 ) + "...";
+            if (lineContent.length() > MAX_LINE_LENGTH) {
+                shortenedLineContent = lineContent.substring( 0, MAX_LINE_LENGTH_CLIPPED ) + CLIPPING_INDICATOR;
             }
 
             Collection<String> filteredLineTrigrams = SimpleWordUtils.getTrigramsFromLineFiltered( shortenedLineContent.toLowerCase(), theTrigrams );
@@ -107,8 +112,7 @@ public class WordPreview {
         return filteredLineTrigrams.size();
     }
 
-    private Map<Integer, String> filterTopScoredLines( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScores,
-                    Set<Integer> topKScores ) {
+    private Map<Integer, String> filterTopScoredLines( TreeMap<Integer, String> lineContents, TreeMap<Integer, Integer> lineScores, Set<Integer> topKScores ) {
         Map<Integer, String> contentResult = new TreeMap<>();
 
         for (Entry<Integer, Integer> entry : lineScores.entrySet()) {
