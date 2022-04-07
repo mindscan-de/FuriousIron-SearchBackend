@@ -49,6 +49,9 @@ public class TopKScoreList {
     private final Set<Integer> backingSet;
 
     public TopKScoreList( int maxElementsInList ) {
+        if (maxElementsInList == 0) {
+            throw new IllegalArgumentException( "A top k score of zero elements is not supported." );
+        }
         this.maxElementsInList = maxElementsInList;
         this.lastValidIndex = maxElementsInList - 1;
         this.backingSet = new HashSet<>();
@@ -59,11 +62,6 @@ public class TopKScoreList {
     }
 
     public boolean isCandidateTopK( int score ) {
-        // TODO:  MAYBE we simply don't support maxElementsInList == 0 in constructor using an IllegalArgumentException
-        if (lastValidIndex < 0) {
-            return false;
-        }
-
         // it is more likely that a score is not high enough, 
         // therefore this operation will stop any further useless calculations earlier, even though it is more complex
         if (backingArrayList.get( lastValidIndex ) > score) {

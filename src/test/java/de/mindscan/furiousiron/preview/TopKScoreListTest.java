@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Set;
 
@@ -12,15 +13,13 @@ import org.junit.jupiter.api.Test;
 public class TopKScoreListTest {
 
     @Test
-    public void testTopKScoreList_ZeroAndNoInteraction_expectEmptySet() throws Exception {
+    public void testTopKScoreList_UseASetSizeOfZero_throwsIllegalArgumentException() throws Exception {
         // arrange
-        TopKScoreList scoreList = new TopKScoreList( 0 );
 
-        // act
-        Set<Integer> result = scoreList.getSet();
-
-        // assert
-        assertThat( result, empty() );
+        // act + assert
+        assertThrows( IllegalArgumentException.class, () -> {
+            new TopKScoreList( 0 );
+        } );
     }
 
     @Test
@@ -33,18 +32,6 @@ public class TopKScoreListTest {
 
         // assert
         assertThat( result, empty() );
-    }
-
-    @Test
-    public void testIsCandidateTopK_ZeroWithOneInteraction21_returnsFalse() throws Exception {
-        // arrange
-        TopKScoreList scoreList = new TopKScoreList( 0 );
-
-        // act
-        boolean result = scoreList.isCandidateTopK( 21 );
-
-        // assert
-        assertThat( result, equalTo( false ) );
     }
 
     @Test
