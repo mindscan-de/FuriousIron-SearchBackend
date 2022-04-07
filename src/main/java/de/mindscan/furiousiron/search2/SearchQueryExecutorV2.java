@@ -150,7 +150,10 @@ public class SearchQueryExecutorV2 {
             System.out.println( "size: 3-gram: " + queryDocumentIds.size() );
         }
 
-        // TODO: predict the order of this documentlist according to the query.
+        // TODO: predict the order of this document list according to the query.
+        // This would be a nice candidate for machine learning - to try
+        // How can this be achieved? We might have an document vector and a query vector and then we train
+        // a model, to predict the position in the result set.
 
         // Now rank (improve the ranking of) the results 
         List<String> ranked = queryDocumentIds;
