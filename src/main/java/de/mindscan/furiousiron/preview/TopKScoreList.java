@@ -92,7 +92,7 @@ public class TopKScoreList {
         return true;
     }
 
-    public void removeLast() {
+    private void removeLast() {
         Integer removed = backingArrayList.remove( maxElementsInList );
         backingSet.remove( removed );
     }
