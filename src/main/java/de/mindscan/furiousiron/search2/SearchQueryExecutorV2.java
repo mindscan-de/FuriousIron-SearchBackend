@@ -188,7 +188,7 @@ public class SearchQueryExecutorV2 {
     private List<String> ttfidfRank( Search search, List<String> queryDocumentIds ) {
         TtfIdfRanking ttfIdfRanking = new TtfIdfRanking();
 
-        return ttfIdfRanking.rank( search, search.getLastQueryTrigramOccurences(), queryDocumentIds );
+        return ttfIdfRanking.rank( search, search.getSearchDetails().getLastQueryTrigramOccurences(), queryDocumentIds );
     }
 
     private SearchResultCandidates convertToSearchResultCandidate( Search search, String documentId ) {
