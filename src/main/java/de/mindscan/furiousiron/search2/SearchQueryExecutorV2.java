@@ -99,7 +99,7 @@ public class SearchQueryExecutorV2 {
             // better to just determine the final word order and use a compiler bringing them in that order.
             StopWatch optimizeWordOrderStopWatch = StopWatch.createStarted();
             TrigramPenaltyStrategy penaltyStrategy = new TrigramPenaltyStrategy();
-            Collection<String> orderedWordlist = penaltyStrategy.buildWordlist( getCollectedTextTokens(), search.getTrigramUsage() );
+            Collection<String> orderedWordlist = penaltyStrategy.buildWordlist( getCollectedTextTokens(), search.getSearchDetails().getTrigramUsage() );
             optimizeWordOrderStopWatch.stop();
 
             // filterW - Step
