@@ -38,6 +38,7 @@ import de.mindscan.furiousiron.query.ast.EmptyNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
+import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
@@ -85,7 +86,11 @@ public class QueryExecutor {
             return processAndNode( search, (AndNode) node );
         }
 
-        throw new RuntimeException( "The Tree is not well formatted." );
+        if (node instanceof MetaDataTextNode) {
+            return processMetaDataTextNode( search, (MetaDataTextNode) node );
+        }
+
+        throw new RuntimeException( "The Tree is not well formatted." + String.valueOf( node ) );
     }
 
     private static Map<String, SearchResultCandidates> processAndNode( Search search, AndNode parsedAST ) {
@@ -163,6 +168,11 @@ public class QueryExecutor {
 
     private static Map<String, SearchResultCandidates> processExactTextNode( Search search, ExactMatchingTextNode parsedAST ) {
         return search.searchToMap( parsedAST.getContent() );
+    }
+
+    private static Map<String, SearchResultCandidates> processMetaDataTextNode( Search search, MetaDataTextNode parsedAST ) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     private static void unionMaps( Map<String, SearchResultCandidates> orMap, Map<String, SearchResultCandidates> nodeResults ) {
