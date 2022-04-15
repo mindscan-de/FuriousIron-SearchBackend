@@ -133,7 +133,7 @@ public class AstBasedWordlistFilter {
             }
         }
 
-        throw new RuntimeException( "This Node type is not supported: " + ast.toString() );
+        throw new RuntimeException( "This Node type is not supported: " + String.valueOf( ast ) );
     }
 
 }
