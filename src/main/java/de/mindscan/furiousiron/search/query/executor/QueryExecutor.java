@@ -171,8 +171,7 @@ public class QueryExecutor {
     }
 
     private static Map<String, SearchResultCandidates> processMetaDataTextNode( Search search, MetaDataTextNode parsedAST ) {
-        // TODO Auto-generated method stub
-        return null;
+        return search.searchMetadataToMap( parsedAST.getContent() );
     }
 
     private static void unionMaps( Map<String, SearchResultCandidates> orMap, Map<String, SearchResultCandidates> nodeResults ) {
