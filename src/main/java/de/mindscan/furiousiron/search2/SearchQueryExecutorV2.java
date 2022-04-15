@@ -26,6 +26,7 @@
 package de.mindscan.furiousiron.search2;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,8 +73,10 @@ public class SearchQueryExecutorV2 {
             CoreQueryNode coreSearchAST = CoreSearchCompiler.compile( ast );
             compileCoreSearchASTStopWatch.stop();
 
-            // get the trigrams from AST
+            // TODO: integrate metadatasearch. 
+            // get the trigrams from AST for 
             Collection<String> theTrigrams = coreSearchAST.getTrigrams();
+            Collection<String> theMetadataTrigrams = Collections.emptySet();
 
             // result is DocumentIDs candidate list
             // ----------------------------------------------------------------------
@@ -83,10 +86,16 @@ public class SearchQueryExecutorV2 {
             // performance-wise, to cut them further down.
             // ----------------------------------------------------------------------
 
-            // search3 - Step
+            // search - Step 3.1 ContentSearch
             StopWatch searchTrigramStopWatch = StopWatch.createStarted();
-            Set<String> coreCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
+            Set<String> coreContentCandidatesDocumentIDs = search.collectDocumentIdsForTrigramsOpt( theTrigrams );
             searchTrigramStopWatch.stop();
+
+            // search - Step 3.2 MetadataSearch
+            // TODO: only if there is a metadata query is available.
+            StopWatch searchMetadataTrigramStopWatch = StopWatch.createStarted();
+            Set<String> coreMetadataCandidatesCodumentIDs = search.collectDocumentIdsForMetadataTrigramsOpt( theMetadataTrigrams );
+            searchMetadataTrigramStopWatch.stop();
 
             // TODO: if we have exact matches, we might be interested in the trigrams of the candidates,
             //       and check whether all other trigrams are fulfilled, in case we have exact matches, which 
@@ -104,7 +113,7 @@ public class SearchQueryExecutorV2 {
 
             // filterW - Step
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
-            queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreCandidatesDocumentIDs, orderedWordlist );
+            queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreContentCandidatesDocumentIDs, orderedWordlist );
             filterWordsStopWatch.stop();
 
             // rank - Step (1st rank) 
