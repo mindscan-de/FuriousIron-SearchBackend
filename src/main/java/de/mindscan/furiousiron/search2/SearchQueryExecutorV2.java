@@ -73,9 +73,9 @@ public class SearchQueryExecutorV2 {
             CoreQueryNode coreSearchAST = CoreSearchCompiler.compile( ast );
             compileCoreSearchASTStopWatch.stop();
 
-            // TODO: integrate metadatasearch. 
             // get the trigrams from AST for 
             Collection<String> theTrigrams = coreSearchAST.getTrigrams();
+            // TODO: integrate metadatasearch. 
             Collection<String> theMetadataTrigrams = Collections.emptySet();
 
             // result is DocumentIDs candidate list
@@ -92,9 +92,13 @@ public class SearchQueryExecutorV2 {
             searchTrigramStopWatch.stop();
 
             // search - Step 3.2 MetadataSearch
-            // TODO: only if there is a metadata query is available.
             StopWatch searchMetadataTrigramStopWatch = StopWatch.createStarted();
-            Set<String> coreMetadataCandidatesCodumentIDs = search.collectDocumentIdsForMetadataTrigramsOpt( theMetadataTrigrams );
+            if (!theMetadataTrigrams.isEmpty()) {
+                Set<String> coreMetadataCandidatesCodumentIDs = search.collectDocumentIdsForMetadataTrigramsOpt( theMetadataTrigrams );
+
+                // combine the documents here in case the metadata trigrams are available  
+                coreContentCandidatesDocumentIDs.retainAll( coreMetadataCandidatesCodumentIDs );
+            }
             searchMetadataTrigramStopWatch.stop();
 
             // TODO: if we have exact matches, we might be interested in the trigrams of the candidates,
