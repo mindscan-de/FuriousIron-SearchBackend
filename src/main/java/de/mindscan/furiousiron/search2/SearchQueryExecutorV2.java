@@ -26,7 +26,6 @@
 package de.mindscan.furiousiron.search2;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,10 +72,10 @@ public class SearchQueryExecutorV2 {
             CoreQueryNode coreSearchAST = CoreSearchCompiler.compile( ast );
             compileCoreSearchASTStopWatch.stop();
 
-            // get the trigrams from AST for 
+            // get the trigrams from AST
             Collection<String> theTrigrams = coreSearchAST.getTrigrams();
-            // TODO: integrate metadatasearch. 
-            Collection<String> theMetadataTrigrams = Collections.emptySet();
+            // get the metadata trigrams from AST 
+            Collection<String> theMetadataTrigrams = coreSearchAST.getMetadataTrigrams();
 
             // result is DocumentIDs candidate list
             // ----------------------------------------------------------------------
