@@ -32,6 +32,7 @@ import de.mindscan.furiousiron.query.ast.AndNode;
 import de.mindscan.furiousiron.query.ast.ExactMatchingTextNode;
 import de.mindscan.furiousiron.query.ast.ExcludingNode;
 import de.mindscan.furiousiron.query.ast.IncludingNode;
+import de.mindscan.furiousiron.query.ast.MetaDataTextNode;
 import de.mindscan.furiousiron.query.ast.OrNode;
 import de.mindscan.furiousiron.query.ast.QueryNode;
 import de.mindscan.furiousiron.query.ast.TextNode;
@@ -131,6 +132,12 @@ public class AstBasedWordlistFilter {
             else {
                 return false;
             }
+        }
+
+        // TODO: implement Wordlist / metawordlist matching...
+        if (ast instanceof MetaDataTextNode) {
+            // just do the right thing at this moment - should be improved soon.
+            return true;
         }
 
         throw new RuntimeException( "This Node type is not supported: " + String.valueOf( ast ) );
