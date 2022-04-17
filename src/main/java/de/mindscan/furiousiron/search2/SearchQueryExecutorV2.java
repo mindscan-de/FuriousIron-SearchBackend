@@ -96,7 +96,10 @@ public class SearchQueryExecutorV2 {
                 Set<String> coreMetadataCandidatesCodumentIDs = search.collectDocumentIdsForMetadataTrigramsOpt( theMetadataTrigrams );
 
                 // combine the documents here in case the metadata trigrams are available  
+                System.out.println( "Reduction starts from: " + coreContentCandidatesDocumentIDs.size() + " with " + coreMetadataCandidatesCodumentIDs.size()
+                                + " metadata candidates" );
                 coreContentCandidatesDocumentIDs.retainAll( coreMetadataCandidatesCodumentIDs );
+                System.out.println( "Reduction to: " + coreContentCandidatesDocumentIDs.size() + " elements using metadata filtering." );
             }
             searchMetadataTrigramStopWatch.stop();
 
