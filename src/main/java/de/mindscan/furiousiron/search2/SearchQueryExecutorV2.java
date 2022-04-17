@@ -232,6 +232,7 @@ public class SearchQueryExecutorV2 {
 
     private List<String> filterByDocumentWordlists( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         return coreCandidatesDocumentIDs.stream()
+                        // TODO: add metadata wordlist here as well?
                         .filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentId ) ) )
                         .collect( Collectors.toList() );
     }
