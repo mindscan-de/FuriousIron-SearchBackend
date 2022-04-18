@@ -118,6 +118,9 @@ public class SearchQueryExecutorV2 {
             optimizeWordOrderStopWatch.stop();
 
             // filterW - Step
+            // TODO: use one of two strategies, 
+            // ** in case we have no metadatasearch, we should avoid reading it from disk 
+            // ** in case we have metadatasearch in query, we actually must read it from disk using another filter method.
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
             queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreContentCandidatesDocumentIDs, orderedWordlist );
             filterWordsStopWatch.stop();
@@ -232,7 +235,8 @@ public class SearchQueryExecutorV2 {
 
     private List<String> filterByDocumentWordlists( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         return coreCandidatesDocumentIDs.stream()
-                        // TODO: add metadata wordlist here as well?
+                        // TODO: add metadata wordlist here as well
+                        // , search.getMetaDataCache().loadMetadata( documentId )
                         .filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentId ) ) )
                         .collect( Collectors.toList() );
     }
