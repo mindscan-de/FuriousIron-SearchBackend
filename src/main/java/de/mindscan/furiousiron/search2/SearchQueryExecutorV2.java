@@ -67,6 +67,9 @@ public class SearchQueryExecutorV2 {
             resultPreviews = queryCache.loadSearchResultPreview( ast );
         }
         else {
+            // Evaluate the AST for metadata modifiers
+            boolean hasMetaDataTextNode = CoreSearchCompiler.hasMetaDataTextNode( ast );
+
             // Compile the AST
             StopWatch compileCoreSearchASTStopWatch = StopWatch.createStarted();
             CoreQueryNode coreSearchAST = CoreSearchCompiler.compile( ast );
@@ -122,7 +125,12 @@ public class SearchQueryExecutorV2 {
             // ** in case we have no metadatasearch, we should avoid reading it from disk 
             // ** in case we have metadatasearch in query, we actually must read it from disk using another filter method.
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
-            queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreContentCandidatesDocumentIDs, orderedWordlist );
+            if (hasMetaDataTextNode) {
+                queryDocumentIds = filterWordsAndMetadatByGenericWordOrder( search, ast, coreContentCandidatesDocumentIDs, orderedWordlist );
+            }
+            else {
+                queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreContentCandidatesDocumentIDs, orderedWordlist );
+            }
             filterWordsStopWatch.stop();
 
             // rank - Step (1st rank) 
@@ -200,7 +208,14 @@ public class SearchQueryExecutorV2 {
                     Collection<String> orderedWordlist ) {
         QueryNode wordlistSearchAST = WordlistCompilerFactory.createOrderedWordlistCompiler( orderedWordlist ).compile( ast, search );
 
-        return filterByDocumentWordlists( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+        return filterByDocumentWordlistsOnly( search, wordlistSearchAST, coreCandidatesDocumentIDs );
+    }
+
+    private List<String> filterWordsAndMetadatByGenericWordOrder( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs,
+                    Collection<String> orderedWordlist ) {
+        QueryNode wordlistSearchAST = WordlistCompilerFactory.createOrderedWordlistCompiler( orderedWordlist ).compile( ast, search );
+
+        return filterByDocumentWordlistsAndMetadata( search, wordlistSearchAST, coreCandidatesDocumentIDs );
     }
 
     private List<String> ttfidfRank( Search search, List<String> queryDocumentIds ) {
@@ -233,7 +248,13 @@ public class SearchQueryExecutorV2 {
         return parsedAST;
     }
 
-    private List<String> filterByDocumentWordlists( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
+    private List<String> filterByDocumentWordlistsOnly( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
+        return coreCandidatesDocumentIDs.stream()
+                        .filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentId ) ) )
+                        .collect( Collectors.toList() );
+    }
+
+    private List<String> filterByDocumentWordlistsAndMetadata( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
         return coreCandidatesDocumentIDs.stream()
                         // TODO: add metadata wordlist here as well
                         // , search.getMetaDataCache().loadMetadata( documentId )
