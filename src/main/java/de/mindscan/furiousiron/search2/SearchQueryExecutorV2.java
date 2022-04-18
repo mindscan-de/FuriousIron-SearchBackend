@@ -123,11 +123,12 @@ public class SearchQueryExecutorV2 {
             // filterW - Step
             StopWatch filterWordsStopWatch = StopWatch.createStarted();
             if (!hasMetaDataTextNode) {
-                // in case we have no metadata search, we should avoid reading metadata from disk 
+                // in case we have no metadata search, we should avoid reading metadata (while filtering) from disk 
                 queryDocumentIds = filterWordsByGenericWordOrder( search, ast, coreContentCandidatesDocumentIDs, orderedWordlist );
             }
             else {
-                // in case we have metadata search in query, we actually must read metadata from disk and use a more expensive filter method.
+                // in case we have metadata search in query, we actually must read metadata (while filtering) from disk and therefore 
+                // use a more expensive filter method (on already fewer elements)
                 queryDocumentIds = filterWordsAndMetadatByGenericWordOrder( search, ast, coreContentCandidatesDocumentIDs, orderedWordlist );
             }
             filterWordsStopWatch.stop();
