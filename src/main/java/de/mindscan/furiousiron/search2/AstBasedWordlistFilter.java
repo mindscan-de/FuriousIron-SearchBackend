@@ -54,7 +54,6 @@ public class AstBasedWordlistFilter {
      * @return <code>true</code> iff the AST matches a given word list.
      */
     static boolean isAstMatchingToWordlist( QueryNode ast, List<String> documentWordlist ) {
-        // TODO maybe add the metadata wordlist here as well.
         if (ast instanceof TextNode) {
             String wordToSearch = ast.getContent();
 
@@ -135,8 +134,8 @@ public class AstBasedWordlistFilter {
             }
         }
 
-        // TODO: implement Wordlist / metawordlist matching...
-        // problem is that we can not handle the metadata wordlist correctly here....
+        // because we test the AST, this condition should not be triggered... 
+        // but in case of "-filtype:java" it won't execute well and filter everything. 
         if (ast instanceof MetaDataTextNode) {
             // depending of whether we are in an excluide node we should basically return false and oherwise true
             // just do the right thing at this moment - should be improved soon.
@@ -157,7 +156,6 @@ public class AstBasedWordlistFilter {
      * @return <code>true</code> iff the AST matches a given word list.
      */
     static boolean isAstMatchingToWordlistAndMetadata( QueryNode ast, List<String> documentWordlist, Map<String, String> metadata ) {
-        // TODO maybe add the metadata wordlist here as well.
         if (ast instanceof TextNode) {
             String wordToSearch = ast.getContent();
 
