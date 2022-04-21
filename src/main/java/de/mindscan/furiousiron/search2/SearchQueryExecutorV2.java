@@ -255,10 +255,9 @@ public class SearchQueryExecutorV2 {
     }
 
     private List<String> filterByDocumentWordlistsAndMetadata( Search search, QueryNode ast, Set<String> coreCandidatesDocumentIDs ) {
-        return coreCandidatesDocumentIDs.stream()
-                        // TODO: add metadata wordlist here as well
-                        // , search.getMetaDataCache().loadMetadata( documentId )
-                        .filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlist( ast, search.getDocumentWordlist( documentId ) ) )
+        return coreCandidatesDocumentIDs
+                        .stream().filter( documentId -> AstBasedWordlistFilter.isAstMatchingToWordlistAndMetadata( ast,
+                                        search.getDocumentWordlist( documentId ), search.getDocumentMetadataMap( documentId ) ) )
                         .collect( Collectors.toList() );
     }
 
