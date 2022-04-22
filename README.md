@@ -95,9 +95,16 @@ The idea here is to implement a QueryParser which is able to parse exact matches
 metadata modifiers, like: 
   * +test -"@test"
   * +test -unittest:unittest
+  
+## MVP V - Build Metadata Index and Search Metadata
+
+The idea is to build an inverse index for the document metadata and modify the search strategy
+to combine content searches with metadata searches.
+
 
 ## Nice to have
 
+* exact searches
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 * Support more than a single search, single query, single threaded environment.
   * many of the objects involved share some information which are not meant to be stored there, but currently are convinient
