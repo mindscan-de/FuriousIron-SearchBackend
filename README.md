@@ -89,11 +89,15 @@ the disappointment in the expected result quality might be bigger if you are for
 click on a result. But scanning results in a glimpse may help to better satisfy the programmer's
 needs.
 
+## MVP IV - Improved Query Parsing
+
+The idea here is to implement a QueryParser which is able to parse exact matches and parse 
+metadata modifiers, like: 
+  * +test -"@test"
+  * +test -unittest:unittest
+
 ## Nice to have
 
-* Query Parsing: Exact Searches and exact matches
-  * implement something +test -"@test"
-* Implement a new QueryParser
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 * Support more than a single search, single query, single threaded environment.
   * many of the objects involved share some information which are not meant to be stored there, but currently are convinient
