@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  */
 public class SearchQueryTokenizerTerminals {
 
-    //Operators
+    // Operators
     public final static String[] TERMINAL_OPERATORS = new String[] { "+", "-", ":" };
     public final static Set<String> TERMINAL_OPERATORS_WITH_1_CHAR = filteredByLength( 1, TERMINAL_OPERATORS );
     public final static char[] TERMINAL_OPERATORS_FIRST = firstMenge( TERMINAL_OPERATORS );
@@ -48,7 +48,7 @@ public class SearchQueryTokenizerTerminals {
     // Quotes
     public final static char[] TERMINAL_QUOTES = new char[] { '\'', '"' };
 
-    // TODO: calculate the 
+    // Follow-Menge of a terminal token. (Operators, Whitespaces and Parenthesis) 
     public final static char[] TERMINAL_TERM_FOLLOW_MENGE = new char[] { '+', '-', ':', ' ', '\t', '\r', '\n', '(', ')' };
 
     // ----------------
