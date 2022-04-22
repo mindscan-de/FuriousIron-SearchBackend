@@ -32,8 +32,6 @@ public class SearchQueryTokenFactory {
     public static SearchQueryToken createToken( SearchQueryTokenType tokenType, String valueString ) {
         switch (tokenType) {
             case OPERATOR:
-                // TODO: handle different operators... and then return the static
-                //       instances from SearchQueryTokens.
                 return new SearchQueryTokenImpl( tokenType, valueString );
             default:
                 return new SearchQueryTokenImpl( tokenType, valueString );
