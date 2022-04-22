@@ -101,10 +101,9 @@ metadata modifiers, like:
 The idea is to build an inverse index for the document metadata and modify the search strategy
 to combine content searches with metadata searches.
 
-
 ## Nice to have
 
-* exact searches
+* exact searches (works already somehow - it is not able to filter out single words in double qoutes)
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 * Support more than a single search, single query, single threaded environment.
   * many of the objects involved share some information which are not meant to be stored there, but currently are convinient
