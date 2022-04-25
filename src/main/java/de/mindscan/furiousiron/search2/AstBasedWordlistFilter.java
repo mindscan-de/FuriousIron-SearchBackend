@@ -178,6 +178,11 @@ public class AstBasedWordlistFilter {
         }
 
         if (ast instanceof ExactMatchingTextNode) {
+            // since we don't have phrases available here, this is a bit more complicated.
+            // in case the ast has a phrase, it should be split, and each word must be in the list instead.
+
+            // but also interpreting this AST and split the same string over and over again is expensive as f.ck.
+
             // TODO: implement a correct strategy to handle exact matching text nodes
             // TODO: we must distinguish between a phrase containing WS and such, then this is more complicated.
 
