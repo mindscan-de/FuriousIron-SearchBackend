@@ -76,15 +76,31 @@ public class AstBasedWordlistFilter {
         }
 
         if (ast instanceof ExactMatchingTextNode) {
-            // since we don't have phrases available here, this is a bit more complicated.
+            // since we don't have phrases in the wordlist present, 
+            // it's a bit more complicated in case a user looks for phrases
+
+            if (!((ExactMatchingTextNode) ast).isPhrase()) {
+                return documentWordlist.contains( ast.getContent() );
+            }
+
             // in case the ast has a phrase, it should be split, and each word must be in the list instead.
+            Collection<String> wordsInPhrase = ((ExactMatchingTextNode) ast).getUniqueWordlist();
 
-            // but also interpreting this AST and split the same string over and over again is expensive as f.ck.
+            if (wordsInPhrase.size() == 0) {
+                return false;
+            }
 
-            // TODO: implement a correct strategy to handle exact matching text nodes
-            // TODO: we must distinguish between a phrase containing WS and such, then this is more complicated.
+            for (String singleWord : wordsInPhrase) {
+                // check that every word is included perfectly.
 
-            return documentWordlist.contains( ast.getContent() );
+                // actually it is not that easy.... some special things apply, 
+                // TODO: last and first word would be ok to match partially.
+                if (!documentWordlist.contains( singleWord )) {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         if (ast instanceof AndNode) {
