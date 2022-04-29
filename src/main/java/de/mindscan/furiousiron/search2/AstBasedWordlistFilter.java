@@ -90,12 +90,9 @@ public class AstBasedWordlistFilter {
                 return false;
             }
 
+            // check that every word is included
             for (String singleWord : wordsInPhrase) {
-                // check that every word is included perfectly.
-
-                // actually it is not that easy.... some special things apply, 
-                // TODO: last and first word would be ok to match partially.
-                if (!documentWordlist.contains( singleWord )) {
+                if (!isFullOrStartOrEndString( singleWord, documentWordlist )) {
                     return false;
                 }
             }
@@ -166,6 +163,30 @@ public class AstBasedWordlistFilter {
         throw new RuntimeException( "This Node type is not supported: " + String.valueOf( ast ) );
     }
 
+    static boolean isFullOrStartOrEndString( String singleWord, List<String> documentWordlist ) {
+        if (documentWordlist.contains( singleWord )) {
+            return true;
+        }
+
+        int wordlistLength = singleWord.length();
+
+        for (String documentWord : documentWordlist) {
+            if (documentWord.length() <= wordlistLength) {
+                continue;
+            }
+
+            if (documentWord.startsWith( singleWord )) {
+                return true;
+            }
+
+            if (documentWord.endsWith( singleWord )) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * This method tests whether the given AST of QueryNodes matches a wordlist (e.g. a wordlist of an indexed document)
      * This is a word-based filtering mechanism, which is slightly more expensive in terms of compute costs after the 
@@ -214,11 +235,7 @@ public class AstBasedWordlistFilter {
             }
 
             for (String singleWord : wordsInPhrase) {
-                // check that every word is included perfectly.
-
-                // actually it is not that easy.... some special things apply, 
-                // TODO: last and first word would be ok to match partially.
-                if (!documentWordlist.contains( singleWord )) {
+                if (!isFullOrStartOrEndString( singleWord, documentWordlist )) {
                     return false;
                 }
             }
