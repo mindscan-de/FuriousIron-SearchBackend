@@ -101,12 +101,18 @@ metadata modifiers, like:
 The idea is to build an inverse index for the document metadata and modify the search strategy
 to combine content searches with metadata searches.
 
+## MVP VI - Phrase based searches
+
+The idea is to allow phrase based searches. It is still not perfect but leads to good enough 
+results. Phrases can only be filtered and found on the full document level. That should be 
+another filter and ranking mechanism, after calculating the preview or while calculating the
+preview. 
+
 ## Nice to have
 
-* exact searches (works already somehow - it is not able to filter out single words in double qoutes)
 * Works completely in memory and indexes are read on startup [Not needed yet, because access to index via SSD is currently fast enough]
 * Support more than a single search, single query, single threaded environment.
-  * many of the objects involved share some information which are not meant to be stored there, but currently are convinient
+  * many of the objects involved share some information which are not meant to be stored there, but currently are convenient
   * introduce a query-environment/query-workspace/query workflow, where the query can work on, to not share data with other queries at the same time
 * implement a configurable pipeline of search, and search environment, to make search multiclient and multithreaded
 
