@@ -96,7 +96,7 @@ public class SearchQueryExecutorV2 {
             // search - Step 3.2 MetadataSearch
             StopWatch searchMetadataTrigramStopWatch = StopWatch.createStarted();
             if (!theMetadataTrigrams.isEmpty()) {
-                Set<String> coreMetadataCandidatesCodumentIDs = search.collectDocumentIdsForMetadataTrigramsOpt( theMetadataTrigrams );
+                Set<String> coreMetadataCandidatesCodumentIDs = search.collectDocumentIdsForMetadataTrigramsOptV2( theMetadataTrigrams );
 
                 // combine the documents here in case the metadata trigrams are available  
                 System.out.println( "Reduction starts from: " + coreContentCandidatesDocumentIDs.size() + " with " + coreMetadataCandidatesCodumentIDs.size()
