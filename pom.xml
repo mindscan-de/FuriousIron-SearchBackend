@@ -22,6 +22,14 @@
 	  		<artifactId>FuriousIron-Indexer</artifactId>
 	  		<version>0.0.1-SNAPSHOT</version>
 	  	</dependency>
+	  	
+	  	<!-- Integrate FuriousIron-HFB (Hash Free Bloom Filter) / transitive dependency -->
+	  	<dependency>
+		  	<groupId>de.mindscan.furiousiron</groupId>
+		  	<artifactId>FuriousIron-HFB</artifactId>
+		  	<version>0.0.1-SNAPSHOT</version>
+	  	</dependency>
+	  	
   	
   		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
         <dependency>
